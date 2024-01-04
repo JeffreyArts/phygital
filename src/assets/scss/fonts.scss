@@ -1,0 +1,19 @@
+body {
+    font-family: $defaultFont, sans-serif;
+    font-size: 16px;
+}
+
+
+@font-face {
+    font-family: 'SpaceXNoid';
+    font-weight: normal;
+    font-style: normal;
+    src: url("/fonts/SpaceXNoid-Regular.otf");
+}
+
+@font-face {
+    font-family: 'Fixedsys';
+    font-weight: normal;
+    font-style: normal;
+    src: url("/fonts/fixed-sys.otf");
+}

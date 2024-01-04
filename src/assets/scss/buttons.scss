@@ -1,0 +1,131 @@
+@import './variables.scss';
+
+.button {
+    background-color: transparent;
+    border: 1px solid $light-grey;
+    border-radius: 32px;
+    background-color: $light-grey;
+    height: 36px;
+    display: inline-block;
+    align-items: center;
+    padding: 0 32px;
+    transition: $transitionFast;
+    cursor: pointer;
+    
+    &.small {
+        height: 28px;
+        padding: 0 24px;
+        font-weight: 300;
+    }
+
+    &.large {
+        height: 48px;
+        padding: 0 36px;
+        border-width:2px;
+        font-size: 24px;
+    }
+    
+
+    &.c-accent {
+        background-color: $accentColor;
+        border-color: $accentColor;
+        color: $white;
+        &.ghost {
+            color: $accentColor;
+        }
+    }
+    
+    &.c-blue {
+        background-color: $blue;
+        border-color: $blue;
+        color: $white;
+        &.ghost {
+            color: $blue;
+        }
+    }
+
+    &.c-pink {
+        background-color: $pink;
+        border-color: $pink;
+        color: $white;
+        &.ghost {
+            color: $pink;
+        }
+    }
+
+    &.c-red {
+        background-color: $red;
+        border-color: $red;
+        color: $white;
+        &.ghost {
+            color: $red;
+        }
+    }
+    &.c-green {
+        background-color: $green;
+        border-color: $green;
+        color: $white;
+        &.ghost {
+            color: $green;
+        }
+    }
+
+    &.ghost {
+        border: 1px solid currentColor;
+        background-color: transparent;
+        color: $dark-grey;
+    }
+    
+    &:hover {
+        background-color: $dark-grey2;
+        border-color: $dark-grey2;
+        color: $white;
+        
+        &.ghost {
+            color: $white;
+        }
+
+        &.c-blue {
+            background-color: $white;
+            color: $blue;
+            border-color: $blue;
+            &.ghost {
+                background-color: $blue;
+            }
+        }
+        &.c-pink {
+            background-color: $white;
+            color: $pink;
+            border-color: $pink;
+            &.ghost {
+                background-color: $pink;
+            }
+        }
+        &.c-red {
+            background-color: $white;
+            color: $red;
+            border-color: $red;
+            &.ghost {
+                background-color: $red;
+            }
+        }
+        &.c-accent {
+            background-color: $white;
+            color: $accentColor;
+            border-color: $accentColor;
+            &.ghost {
+                background-color: $accentColor;
+                color: $white;
+            }
+        }
+        &.c-green {
+            background-color: $white;
+            color: $green;
+            border-color: $green;
+            &.ghost {
+                background-color: $green;
+            }
+        }
+        
+    }
+}

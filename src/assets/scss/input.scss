@@ -1,0 +1,28 @@
+@import './variables.scss';
+
+.input {
+    border-radius: 8px;
+    border: 1px solid #ECECEC;
+    padding: 4px 16px;
+    background-color: #fff;
+    max-width: 100%;
+
+    &::placeholder  {
+        font-style: italic;
+    }
+    
+    &:focus {
+        outline: none;
+        border: 1px solid $primaryColor;
+    }
+
+    &.large {
+        font-size: 24px;
+        border-radius:8px;
+        padding: 8px 24px;
+    }
+}
+
+textarea.input {
+    padding: 16px;
+}
