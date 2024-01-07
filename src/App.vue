@@ -54,7 +54,6 @@ export default defineComponent ({
             container.clientHeight > container.clientWidth ? this.app.orientation = "portrait" : this.app.orientation = "landscape"
             const mainElement = this.$refs["main"] as HTMLElement
             const sidebarElement = container.querySelector(".dashboard-sidebar") as HTMLElement
-            console.log(mainElement  )
             const sidebarContainerElement = container.querySelector(".dashboard-sidebar-container") as HTMLElement
 	
             if (!mainElement ) {

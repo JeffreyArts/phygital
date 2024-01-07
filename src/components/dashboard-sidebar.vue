@@ -5,13 +5,13 @@
                 <main-cube-faces/>
             </section> -->
             <section id="s-seed">
-                <cube-seed/>
+                <section-seed/>
             </section>
-            <section id="s-surfaces" @click="select('cube-faces')" @mousedown="setSelection">
-                <!-- <section-surfaces :activeView="activeView"/> -->
+            <section id="s-surfaces">
+                <section-surfaces :activeView="activeView"/>
             </section>
             <section id="s-dimensions">
-                <!-- <section-meta-dimensions /> -->
+                <section-meta-dimensions />
             </section>
             <section id="s-cube3d" @click="select('cube-3d')" @mousedown="setSelection" @mousemove="cancelSelection">
                 <!-- <section-cube3d name="sidebar" />
@@ -42,11 +42,17 @@ import { defineComponent } from "vue"
 import _ from "lodash"
 import gsap from "gsap"
 import App from "@/stores/app"
-import cubeSeed from "@/components/sections/cube-seed.vue"
+import sectionSeed from "@/components/sections/cube-seed.vue"
+import sectionMetaDimensions from "@/components/sections/meta-dimensions.vue"
+import sectionSurfaces from "@/components/sections/surfaces-grid.vue"
 
 export default defineComponent({
     name: "dashboard-sidebar",
-    components: {cubeSeed},
+    components: {
+        sectionSeed,
+        sectionSurfaces,
+        sectionMetaDimensions
+    },
     setup() {
         const app = App()
 
@@ -79,6 +85,17 @@ export default defineComponent({
 
 <style lang="scss">
 @import "./../assets/scss/variables.scss";
+.dashboard-sidebar-container[data-grid="3x8"] {
+
+    overflow: visible;
+    
+    .dashboard-sidebar {
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+
 #s-seed {
     background-color: rgba(255,255,0,.32);
 }

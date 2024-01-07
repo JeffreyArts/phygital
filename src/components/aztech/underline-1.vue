@@ -75,9 +75,6 @@ export default defineComponent({
         })
         window.addEventListener("resize", this.updateLine)    
     },
-    updated() {
-        console.log("$EL", this.$el, this.$el.clientWidth)
-    },
     
     unmounted() {
         window.removeEventListener("resize", this.updateLine)
@@ -89,8 +86,6 @@ export default defineComponent({
                 let el = this.$el as HTMLElement
                 if (!el) return
 
-
-                console.log("el.clientWidth", el.clientWidth)
                 this.startX = this.slots * 8 + 8
                 this.svgWidth = el.clientWidth
                 const startSectionWidth = this.slots * 8 + 2

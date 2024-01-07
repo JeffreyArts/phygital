@@ -1,6 +1,8 @@
 <template>
     <div class="view-3d">
         <h1>View 3D</h1>
+        <h2>{{ phygital.seed }}</h2>
+        <h2>{{ app }}</h2>
     </div>
 </template>
 
@@ -8,6 +10,7 @@
 <script lang="ts">
 import {defineComponent} from "vue"
 import App from "@/stores/app"
+import PhygitalStore from "@/stores/phygital"
 import _ from "lodash"
 
 export default defineComponent ({ 
@@ -16,8 +19,9 @@ export default defineComponent ({
     props: [],
     setup() {
         const app = App()
+        const phygital = PhygitalStore()
 
-        return { app}
+        return { app, phygital}
     },
     data() {
         return {
@@ -32,7 +36,7 @@ export default defineComponent ({
         }
     },
     mounted() {
-        //
+        this.app.activeView = "cube-3d"
     },
     methods: {
         

@@ -23,7 +23,9 @@ export default defineComponent({
         }
     },
     mounted() {
-        this.updateLine()
+        setTimeout(() => {
+            this.updateLine()
+        })
         window.addEventListener("resize", this.updateLine)    
     },
     unmounted() {
@@ -32,6 +34,7 @@ export default defineComponent({
     methods: {
         updateLine() {
             const el = this.$el as HTMLElement
+            console.log(el)
             if (!el) return
             this.svgWidth = el.clientWidth
             const startSectionWidth = 4

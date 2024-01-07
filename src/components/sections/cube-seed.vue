@@ -46,8 +46,8 @@ export default defineComponent({
         return {
             regenerating: false,
             seed: "a-" +_.random(100000, 999999).toString(),
-            randomSeedInterval: 0,
-            slots: 2
+            slots: 2,
+            seedGenerationInterval: 0 as number | timeout
         }
     },
     computed: {
@@ -81,6 +81,7 @@ export default defineComponent({
             this.slots = 1
         }
         this.phygital.setSeed(this.seed)
+        window.addEventListener("phygital:seed", this.seedChange)
         
         // this.phygital.generateDimensions()
         // this.updateSurfaces()
@@ -93,17 +94,13 @@ export default defineComponent({
         // window.addEventListener("appState", this.handleAppState)
     },
     methods: {
-        resizeEvent(e) {
+        seedChange(e) {
+            console.log(e.detail)
+            if (e.detail == "processed") {
+                // Update the data and finish animations
+                clearInterval(this.seedGenerationInterval)
+                this.seed = this.phygital.seed
 
-            if (window.innerWidth> 512) {
-                this.slots = 4
-            } else {
-                this.slots = 1
-            }
-        },
-        handleAppState(event: CustomEvent) {
-            // console.log(event)
-            if (event.detail == "activated") {
                 if (!this.$refs["generateButton"]) {
                     return
                 }
@@ -115,9 +112,6 @@ export default defineComponent({
                 }
 
                 const target = currentTarget.querySelector("g")
-
-                clearInterval(this.randomSeedInterval)
-                this.seed =  this.phygital.seed + ""
                 // kill slots animation
                 gsap.killTweensOf(target)
                 gsap.to(target, {
@@ -138,6 +132,20 @@ export default defineComponent({
                     // console.log("A")
                     // App.activated()
                 }, 0)
+            }
+        },
+        resizeEvent(e) {
+
+            if (window.innerWidth> 512) {
+                this.slots = 4
+            } else {
+                this.slots = 1
+            }
+        },
+        handleAppState(event: CustomEvent) {
+            // console.log(event)
+            if (event.detail == "activated") {
+                
             }
         },
         mountedAnimations() {
@@ -165,7 +173,8 @@ export default defineComponent({
         },
         regenerateSeed(event:MouseEvent) {
             const currentTarget = event.currentTarget as HTMLElement
-            // console.log(currentTarget, this.$refs["generateButton"])
+            const newSeed = "a-" +_.random(0, 1000000).toString()
+
             if (this.regenerating) { 
                 return
             }
@@ -176,9 +185,6 @@ export default defineComponent({
 
             this.regenerating = true
 
-            
-            window.dispatchEvent(new CustomEvent("appState:sidebar", { detail: "fadeOut" }))
-            window.dispatchEvent(new CustomEvent("appState:main", { detail: "fadeOut" }))
 
             currentTarget.classList.add("__isGenerating")
             const target = currentTarget.querySelector("g")
@@ -196,7 +202,7 @@ export default defineComponent({
 
 
 
-            this.randomSeedInterval = setInterval(() => {
+            this.seedGenerationInterval = setInterval(() => {
                 this.seed = "a-" +_.random(0, 1000000).toString()
             }, 64)
 
@@ -207,32 +213,7 @@ export default defineComponent({
                 ease: "none",
             })
             
-            // this.animateDisapearingMainSandbox().then(() => {
-            //     clearInterval(randomSeedInterval)
-            //     this.seed =  this.phygital.seed + ""
-            //     // kill slots animation
-            //     gsap.killTweensOf(target)
-            //     gsap.to(target, {
-            //         duration: .64,
-            //         rotate: 560,
-            //         ease: "elastic.out(1, .4)",
-            //     })
-            //     setTimeout(() => {
-
-            //         slotsAnimation.kill()
-
-            //         gsap.to(this, {
-            //             slots: 4,
-            //             duration: .8,
-            //         })
-            //         this.regenerating = false
-            //         currentTarget.classList.remove("__isGenerating")
-            //         gsap.set(target, {rotate: 0})
-
-            //         App.activate()
-            //     }, 0)
-                    
-            // })
+            this.phygital.updateSeed(newSeed, "changed")
             
             
         },

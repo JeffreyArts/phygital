@@ -8,15 +8,15 @@ const routes = [
         path: "/",
         name: "Home",
         component: Home,
-        redirect: "/3D-View",
+        redirect: "/3D-view",
     },
     {
-        path: "/3D-View",
+        path: "/3D-view",
         name: "3D View",
         component: view3D
     },
     {
-        path: "/Sections-View",
+        path: "/sections-view",
         name: "Sections View",
         component: viewSections,
     }

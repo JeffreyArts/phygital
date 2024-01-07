@@ -32,7 +32,7 @@ export default defineComponent ({
         }
     },
     mounted() {
-        //
+        this.app.activeView = "cube-faces"
     },
     methods: {
         

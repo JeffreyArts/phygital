@@ -68,7 +68,7 @@ export const PhygitalStore = defineStore({
           back: Surface,
           front: Surface,
         },
-        seed: null as null | string,
+        seed: "",
         blockSize: 4,
     }),
     actions: {
@@ -76,10 +76,18 @@ export const PhygitalStore = defineStore({
             this.seed = seed
             this.updateSurfaces()
         },
+        updateSeed(seed:string, state: "changed" | "processed") {
+            this.seed = seed
+            window.dispatchEvent(new CustomEvent("phygital:seed", { detail: "change" }))
+            
+            setTimeout(() => {
+                window.dispatchEvent(new CustomEvent("phygital:seed", { detail: "processed" }))
+            },1000)
+        },
         updateSurfaces() {
             return new Promise ((resolve, reject) => {
                     
-                if (!this.seed || _.isNull(this.seed)) {
+                if (!this.seed) {
                     return reject(new Error("No seed"))
                 }
 
