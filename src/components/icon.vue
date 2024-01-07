@@ -8,8 +8,13 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
-import iconCross from "./../assets/icons/cross.svg?raw"
-import iconCalendar from "./../assets/icons/calendar.svg?raw"
+import save from "@/assets/icons/save.svg?raw"
+import loaderCross from "@/assets/icons/loader.svg?raw"
+import chevronDown from "@/assets/icons/chevron-down.svg?raw"
+import chevronUp from "@/assets/icons/chevron-up.svg?raw"
+import chevronLeft from "@/assets/icons/chevron-left.svg?raw"
+import chevronRight from "@/assets/icons/chevron-right.svg?raw"
+import iconCalendar from "@/assets/icons/calendar.svg?raw"
 
 export default defineComponent({
     name: "icon",
@@ -26,7 +31,16 @@ export default defineComponent({
     data: () => {
         return {
             iconList: {
-                cross: iconCross,
+                save: save,
+                loader: loaderCross,
+                arrowDown: chevronDown,
+                chevronDown: chevronDown,
+                arrowUp: chevronUp,
+                chevronUp: chevronUp,
+                arrowLeft: chevronLeft,
+                chevronLeft: chevronLeft,
+                arrowRight: chevronRight,
+                chevronRight: chevronRight,
                 calendar: iconCalendar,
             } as { [key: string]: string}
         }

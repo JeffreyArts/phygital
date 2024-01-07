@@ -5,7 +5,7 @@
                 <main-cube-faces/>
             </section> -->
             <section id="s-seed">
-                <!-- <section-seed/> -->
+                <cube-seed/>
             </section>
             <section id="s-surfaces" @click="select('cube-faces')" @mousedown="setSelection">
                 <!-- <section-surfaces :activeView="activeView"/> -->
@@ -42,9 +42,11 @@ import { defineComponent } from "vue"
 import _ from "lodash"
 import gsap from "gsap"
 import App from "@/stores/app"
+import cubeSeed from "@/components/sections/cube-seed.vue"
 
 export default defineComponent({
     name: "dashboard-sidebar",
+    components: {cubeSeed},
     setup() {
         const app = App()
 
@@ -52,7 +54,7 @@ export default defineComponent({
     },
     data: () => {
         return {
-            fadedOut: false
+            
         }
     },
     computed: {
@@ -67,149 +69,10 @@ export default defineComponent({
     
     },
     mounted() {
-        if (!this.isDev) {
-            this.startAnimation()
-        }
+        //
     },
     methods: {
-        startAnimation() {
-            gsap.set(".do-c", {
-                opacity: 0
-            })
-            gsap.set(".dashboard-overlay-container", {
-                scale: .96,
-                opacity: 1
-            })
-
-
-            gsap.to(".do-c",{
-                opacity: 1,
-                duration: .24,
-                ease: "linear"
-            })
-            
-            gsap.fromTo(".dashboard-overlay-by",{
-                scale: .3,
-            },{
-                scale: 1,
-                duration: 1.08,
-                // delay: .64,
-            })
-
-            const timeline = gsap.timeline({
-                onComplete: () => {
-                    setTimeout(() => {
-                        if (this.fadedOut) return
-                        this.fadeOut()
-                    }, 800)
-                }
-            })
-
-            timeline.to(".dashboard-overlay-container", {
-                scale: 1,
-                opacity: 1,
-                duration: .32,
-                ease: "linear"
-            })
-        },
-        killAll() {
-            gsap.killTweensOf(".do-c")
-            gsap.killTweensOf(".do-c line")
-            gsap.killTweensOf(".do-c polyline")
-            gsap.killTweensOf(".dashboard-overlay-container")
-            gsap.killTweensOf(".dashboard-overlay-header")
-            gsap.killTweensOf(".dashboard-overlay-footer")
-        },
-        fadeOut(immediate=false) {
-            this.killAll()
-            this.fadedOut = true
-            // let delay = 
-            
-            const timeline = gsap.timeline({
-                onComplete: () => {
-                    // this.fadeOut()
-                }
-            })
-
-            if (!immediate) {
-                timeline.to(".do-c line", {
-                    duration: 1.08,
-                    strokeDashoffset: 128,
-                    delay: 1,
-                    ease: "power2.out"
-                })
-                timeline.to(".do-c polyline", {
-                    duration: 1.44,
-                    delay: -1.08,
-                    strokeDashoffset: 390,
-                    ease: "power4.out"
-                })
-            } else {
-                gsap.to(".do-c line", {
-                    duration: 1.08,
-                    strokeDashoffset: 128,
-                    strokeWidth: 32,
-                    ease: "power2.out"
-                })
-                gsap.to(".do-c polyline", {
-                    duration: 1.44,
-                    strokeDashoffset: 390,
-                    strokeWidth: 32,
-                    ease: "power4.out"
-                })
-            }
-
-
-            gsap.to(".dashboard-overlay-by", {
-                scale: 0.3,
-                opacity: 0,
-                duration: .96,
-                delay: 2.28,
-                ease: "power4.inOut"
-            })
-
-            timeline.to(".dashboard-overlay-container", {
-                height: "100vh",
-                delay: .16,
-                duration: 1.28,
-                fontSize: 16,
-                paddingTop: 8,
-                paddingBottom: 8,
-                ease: "power2.out"
-            })
-            timeline.to(".dashboard-overlay-footer", {
-                fontSize: 12,
-                duration: 1.28,
-                delay: -1.28,
-                ease: "power2.out"
-            })
-            timeline.to(".do-c", {
-                duration: 1.44,
-                width: 64,
-                height: 64,
-                padding: 4,
-                delay: -1.28,
-                strokeDashoffset: 390,
-                ease: "power4.out"
-            })
-            timeline.to(".do-c polyline, .do-c line", {
-                duration: 1.44,
-                strokeWidth: 24,
-                delay: -1.28,
-                ease: "power4.out"
-            })
-
-            if (this.$el.querySelector(".dashboard-overlay")) {
-                timeline.to(".dashboard-overlay", {
-                    duration: 0.8,
-                    pointerEvents:"none",
-                    backgroundColor: "transparent",
-                    delay: -1.08,
-                    strokeDashoffset: 390,
-                    ease: "power4.out"
-                })
-            }
-        }
+        
     }
 })
 </script>
@@ -236,6 +99,7 @@ export default defineComponent({
 }
 .dashboard-sidebar {
     display: grid;
+    
 
     // &.__2Columns {
     //     grid-template-columns: 1fr 1fr;
@@ -274,31 +138,31 @@ export default defineComponent({
 .dashboard-sidebar-container[data-grid="3x8"] {
 
     #s-surfaces {
-        grid-column: 2/3;
+        grid-column: 2/4;
         grid-row: 2/4;
     }
     #s-dimensions {
-        grid-column: 2/3;
+        grid-column: 2/4;
         grid-row: 4/5;
     }
     
     #s-cube3d {
-        grid-column: 2/3;
+        grid-column: 2/4;
         grid-row: 5/7;
     }
 
     #s-seed {
-        grid-column: 2/3;
+        grid-column: 2/4;
         grid-row: 1/2;
     }
     
     #s-download {
-        grid-column: 2/3;
+        grid-column: 2/4;
         grid-row: 7/8;
     }
 
     #s-links {
-        grid-column: 2/3;
+        grid-column: 2/4;
         grid-row: 8/9;
     }
 
@@ -308,7 +172,7 @@ export default defineComponent({
     }
     #s-surface-dimensions {
         grid-column: 1/2;
-        grid-row: 2/3;
+        grid-row: 2/4;
     }
 }
 
@@ -356,7 +220,7 @@ export default defineComponent({
 // .dashboard-sidebar[data-grid="6x6"] {
 //     #s-seed {
 //         grid-column: 3/7;
-//         grid-row: 2/3;
+//         grid-row: 2/4;
 //     }
 //     #s-surfaces {
 //         grid-column: 3/7;

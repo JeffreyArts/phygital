@@ -27,3 +27,7 @@ dist-ssr
 # Other relevant files
 .env
 *.log
+gsap-bonus.tgz
+*.ai
+*.pages
+.env.*

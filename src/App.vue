@@ -1,7 +1,9 @@
 <template >
     <dashboard-overlay />
-    <router-view class="dashboard-main" />
-    <dashboard-sidebar class="dashboard-sidebar-container" :data-grid="grid"/>
+    <div ref="main" class="dashboard-main">
+        <router-view />
+    </div>
+    <dashboard-sidebar class="dashboard-sidebar-container" :data-grid="grid" ref="sidebar"/>
 </template>
 
 
@@ -26,11 +28,6 @@ export default defineComponent ({
 		
     data: () => {
         return {
-            orientation: "portrait" as "portrait" | "landscape",
-            activeComponent: "cube-3d" as "cube-3d" | "cube-faces",
-            elements: [] as HTMLElement[],
-            activeIndex: 0 as null | number,
-            activeElement: null as null | HTMLElement,
             cellSize:128,
             grid: "3x8"
         }
@@ -44,11 +41,7 @@ export default defineComponent ({
         }
     },
     mounted() {
-        //
-        console.log("thiS",this)
-        setTimeout(() => {
-            this.updateDashboard()
-        })
+        this.updateDashboard()
         window.addEventListener("resize", this.updateDashboard)
     },
     unmounted() {
@@ -59,9 +52,9 @@ export default defineComponent ({
             const container = this.$el.parentElement as HTMLElement
             if (!container)  return 
             container.clientHeight > container.clientWidth ? this.app.orientation = "portrait" : this.app.orientation = "landscape"
-            this.elements.length = 0
-            const mainElement = container.querySelector(".dashboard-main") as HTMLElement
+            const mainElement = this.$refs["main"] as HTMLElement
             const sidebarElement = container.querySelector(".dashboard-sidebar") as HTMLElement
+            console.log(mainElement  )
             const sidebarContainerElement = container.querySelector(".dashboard-sidebar-container") as HTMLElement
 	
             if (!mainElement ) {
@@ -84,7 +77,12 @@ export default defineComponent ({
             // Define grid and cell size
             if (this.app.orientation == "portrait") {
                 this.grid = "8x2"
-                this.cellSize = Math.floor(height/parseInt(this.grid.split("x")[0], 10))
+
+                if (window.innerWidth > 640) {
+                    this.cellSize = Math.floor(width/3.6)
+                } else {
+                    this.cellSize = Math.floor(width/2.4)
+                }
             } else if (this.app.orientation == "landscape") {
                 this.grid = "3x8"
                 this.cellSize = Math.floor(height/parseInt(this.grid.split("x")[1], 10))
@@ -102,8 +100,15 @@ export default defineComponent ({
                 sidebarContainerElement.style.top = `${ height- size}px`
                 sidebarContainerElement.style.left = "0px"
 
-                sidebarElement.style.width = `${ this.cellSize * parseInt(this.grid.split("x")[0], 10) }px`
                 sidebarElement.style.height = `${ size }px`
+                
+                if (window.innerWidth > 420) {
+                    sidebarElement.style.width = `${ this.cellSize * parseInt(this.grid.split("x")[0], 10) }px`
+                } else if (window.innerWidth > 360) {
+                    sidebarElement.style.width = `${ this.cellSize * parseInt(this.grid.split("x")[0], 10) *1.16}px`
+                } else {
+                    sidebarElement.style.width = `${ this.cellSize * parseInt(this.grid.split("x")[0], 10) *1.44}px`
+                }
             } else {
                 mainElement.style.top = "0px"
                 mainElement.style.left = "0px"
@@ -115,7 +120,7 @@ export default defineComponent ({
 
                 sidebarElement.style.width = "100%"
                 sidebarElement.style.height = "100%"
-
+                
                 sidebarContainerElement.style.top = "0px"
                 sidebarContainerElement.style.left = `${width - this.cellSize * parseInt(this.grid.split("x")[0], 10)}px`
                 sidebarContainerElement.style.width = `${this.cellSize * parseInt(this.grid.split("x")[0], 10)}px`
