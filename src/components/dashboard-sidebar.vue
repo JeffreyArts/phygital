@@ -21,7 +21,7 @@
 
             </section>
             <section id="s-download">
-                <!-- <section-download/> -->
+                <section-download/>
             </section>
             <section id="s-links">
                 <!-- <section-links/> -->
@@ -44,14 +44,16 @@ import gsap from "gsap"
 import App from "@/stores/app"
 import sectionSeed from "@/components/sections/cube-seed.vue"
 import sectionMetaDimensions from "@/components/sections/meta-dimensions.vue"
+import sectionDownload from "@/components/sections/download-model.vue"
 import sectionSurfaces from "@/components/sections/surfaces-grid.vue"
 
 export default defineComponent({
     name: "dashboard-sidebar",
     components: {
+        sectionDownload,
+        sectionMetaDimensions,
         sectionSeed,
         sectionSurfaces,
-        sectionMetaDimensions
     },
     setup() {
         const app = App()
@@ -86,12 +88,17 @@ export default defineComponent({
 <style lang="scss">
 @import "./../assets/scss/variables.scss";
 .dashboard-sidebar-container[data-grid="3x8"] {
-
     overflow: visible;
     
     .dashboard-sidebar {
         grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
         grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+.dashboard-sidebar-container[data-grid="8x2"] {
+    .dashboard-sidebar {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
     }
 }
 
@@ -195,8 +202,8 @@ export default defineComponent({
 
 .dashboard-sidebar-container[data-grid="8x2"] {
     #s-surfaces {
-        grid-column: 1/3;
-        grid-row:1/3;
+        grid-column: 1/2;
+        grid-row: 1/3;
     }
     #s-dimensions {
         grid-column: 3;

@@ -104,13 +104,10 @@ export default defineComponent({
 }
 
 
-@container meta-dimensions-section (min-height: 48px) {
-    .meta-dimensions-section {
-        .aztech-line-1 {
-            display: block;
-        }
-    }
-}
+// @container meta-dimensions-section (min-height: 48px) {
+//     .meta-dimensions-section {
+//     }
+// }
 
 @container meta-dimensions-section (min-height: 56px) {
     .meta-dimensions-section {
@@ -133,10 +130,11 @@ export default defineComponent({
 
 @container meta-dimensions-section (min-height: 72px) {
     // .meta-dimensions-section {
-    //     .aztech-line-1 {
-    //         margin-bottom: 12px;
-    //     }
-    // }
+        //     .aztech-line-1 {
+            //         margin-bottom: 12px;
+            //     }
+            // }
+            
 }
 
 @container meta-dimensions-section (min-height: 80px) {
@@ -145,8 +143,11 @@ export default defineComponent({
             font-size: 12px;
         }
     }
-    .meta-blocksize {
-        display: block;
+
+    .meta-dimensions-section {
+        .aztech-line-1 {
+            display: block;
+        }
     }
 }
 
@@ -156,13 +157,28 @@ export default defineComponent({
             font-size: 14px;
         }
     }
+
+    .meta-blocksize {
+        display: block;
+    }
+
+    .meta-dimensions-section {
+        .aztech-line-1 {
+            display: none;
+        }
+    }
 }
 @container meta-dimensions-section (min-height: 96px) {
     .meta-dimensions-section {
         .meta-blocksize {
             font-size: 16px;
         }
+
+        .aztech-line-1 {
+            display: block;
+        }
     }
+    
 }
 
 </style>

@@ -56,7 +56,9 @@ export default defineComponent({
     justify-content: center;
     flex-direction: column;
     text-decoration: none;
-
+    .icon-bg {
+        fill: transparent;   
+    }
     .icon-svg {
         display: inline-block;
         height: 100%;
