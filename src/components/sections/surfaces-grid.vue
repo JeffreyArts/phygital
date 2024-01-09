@@ -4,6 +4,7 @@
             <span class="cube-surfaces-cell">
                 <aztech-label class="cube-surfaces-label" :class="[
                     (app.activeSurface == 'top') && app.activeView == 'cube-faces' ? '__isSelected' : '',
+                    phygital.generatingSeed ? '__isForbidden' : '',
                     surface == 'top'  ? '__isHover': ''
                     ]"
                     @click="selectSurface('top')">
@@ -13,6 +14,7 @@
             <span class="cube-surfaces-cell">
                 <aztech-label class="cube-surfaces-label" :class="[
                     (app.activeSurface == 'front') && app.activeView == 'cube-faces' ? '__isSelected' : '',
+                    phygital.generatingSeed ? '__isForbidden' : '',
                     surface == 'front' ? '__isHover': ''
                     ]"
                     @click="selectSurface('front')" >
@@ -22,6 +24,7 @@
             <span class="cube-surfaces-cell">
                 <aztech-label class="cube-surfaces-label" :class="[
                     (app.activeSurface == 'left') && app.activeView == 'cube-faces' ? '__isSelected' : '',
+                    phygital.generatingSeed ? '__isForbidden' : '',
                     surface == 'left' ? '__isHover': ''
                     ]"
                     @click="selectSurface('left')" >
@@ -37,6 +40,7 @@
                 :class="[
                     (app.activeSurface == s) && app.activeView == 'cube-faces' ? '__isSelected' : '',
                     (surface == s && app.activeSurface !== s || app.activeView == 'cube-3d' && surface == s) ? '__isHover' : '',
+                    phygital.generatingSeed ? '__isForbidden' : '',
                 ]" 
                 @click="selectSurface(s)" 
                 @mouseover="hoverSurface(s)" 
@@ -48,6 +52,7 @@
             <span class="cube-surfaces-cell">
                 <aztech-label class="cube-surfaces-label" :class="[
                     (app.activeSurface == 'bottom') && app.activeView == 'cube-faces' ? '__isSelected' : '',
+                    phygital.generatingSeed ? '__isForbidden' : '',
                     surface == 'bottom' ? '__isHover': ''
                     ]"
                     @click="selectSurface('bottom')" >
@@ -57,6 +62,7 @@
             <span class="cube-surfaces-cell">
                 <aztech-label class="cube-surfaces-label" :class="[
                     (app.activeSurface == 'back') && app.activeView == 'cube-faces' ? '__isSelected' : '',
+                    phygital.generatingSeed ? '__isForbidden' : '',
                     surface == 'back' ? '__isHover': ''
                     ]"
                     @click="selectSurface('back')" >
@@ -66,6 +72,7 @@
             <span class="cube-surfaces-cell">
                 <aztech-label class="cube-surfaces-label" :class="[
                     (app.activeSurface == 'right') && app.activeView == 'cube-faces' ? '__isSelected' : '',
+                    phygital.generatingSeed ? '__isForbidden' : '',
                     surface == 'right' ? '__isHover': ''
                     ]"
                     @click="selectSurface('right')" >
@@ -108,6 +115,9 @@ export default defineComponent({
     },
     methods: {
         selectSurface(surface: "top" | "front" | "left" | "bottom" | "back" | "right") {
+            if (this.phygital.generatingSeed) {
+                return
+            }
             this.app.activeSurface = surface
             this.$router.push("/sections-view")
             // this.activeView = "cube-faces"
@@ -155,6 +165,26 @@ export default defineComponent({
     .cube-surfaces-cell {
         padding: 8px;
         transition: .24s ease all;
+        
+        &.__isForbidden {
+            cursor: not-allowed;
+            background-color: transparent;
+            
+            .vpg-svg {
+                opacity: 1;
+            }
+            
+            &:hover {
+                background-color: transparent !important;
+                .vpg-svg {
+                    opacity: 0.72;
+                    polyline {
+                        stroke: $black !important;
+                    }
+                }
+            }
+        }
+        
         &.__isSelected {
             background-color: #fff;
             opacity:1;
@@ -163,6 +193,9 @@ export default defineComponent({
                 polyline {
                     stroke: $dark-grey;
                 }
+            }
+            .aztech-label-svg {
+                fill: transparent !important; 
             }
         }
         &.__isHover {
@@ -192,6 +225,7 @@ export default defineComponent({
         }
     }
 }
+
 .cube-surfaces-label {
     &.aztech-label {
         color: $black;
@@ -212,6 +246,16 @@ export default defineComponent({
             }
         }
     }
+
+    &.__isForbidden {
+        &.aztech-label {
+            color: $black;
+            .aztech-label-svg {
+                fill: transparent;
+            }
+        }
+    }
+
     &.__isSelected {
         &.aztech-label {
             color: #fff;

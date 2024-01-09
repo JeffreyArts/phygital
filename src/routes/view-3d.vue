@@ -36,6 +36,7 @@ export default defineComponent ({
         }
     },
     mounted() {
+        document.title = "Phygital - 3D View" 
         this.app.activeView = "cube-3d"
     },
     methods: {

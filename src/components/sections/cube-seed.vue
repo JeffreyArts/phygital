@@ -21,6 +21,7 @@ import AztechUnderline from "@/components/aztech/underline-1.vue"
 import gsap from "gsap"
 import _ from "lodash"
 import App from "@/stores/app"
+import { phygitalSeedEvent } from "@/stores/phygital"
 import Phygital from "@/stores/phygital"
 import { runInThisContext } from "vm"
 
@@ -94,9 +95,10 @@ export default defineComponent({
         // window.addEventListener("appState", this.handleAppState)
     },
     methods: {
-        seedChange(e) {
-            console.log(e.detail)
-            if (e.detail == "processed") {
+        seedChange(e : Event) {
+            const event = e as phygitalSeedEvent
+            console.log(event.detail)
+            if (event.detail == "changed") {
                 // Update the data and finish animations
                 clearInterval(this.seedGenerationInterval)
                 this.seed = this.phygital.seed
@@ -213,7 +215,7 @@ export default defineComponent({
                 ease: "none",
             })
             
-            this.phygital.updateSeed(newSeed, "changed")
+            this.phygital.updateSeed(newSeed)
             
             
         },

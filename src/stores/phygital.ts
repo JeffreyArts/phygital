@@ -5,7 +5,7 @@ import _ from "lodash"
 import { saveAs } from "file-saver"
 import * as exportSTL  from "threejs-export-stl"
 
-type Surface = {
+export type Surface = {
   mirrorX: 0 | 1 | 2;
   mirrorY: 0 | 1 | 2;
   width: number;
@@ -13,6 +13,17 @@ type Surface = {
   polylines: Array<Array<{x:number, y:number}>>;
 }
 
+export interface phygitalSeedEvent extends Event {
+    detail: "prepareChange" | "changed" 
+}
+
+window.addEventListener("phygital:seed", (e : Event) => {
+    const event = e as phygitalSeedEvent
+    if (event.detail == "changed") {
+        PhygitalStore().updateSurfaces()
+        PhygitalStore().generatingSeed = false
+    }
+})
 
 export const PhygitalStore = defineStore({
     id: "phygital",
@@ -69,6 +80,7 @@ export const PhygitalStore = defineStore({
           front: Surface,
         },
         seed: "",
+        generatingSeed: false,
         blockSize: 4,
     }),
     actions: {
@@ -76,13 +88,11 @@ export const PhygitalStore = defineStore({
             this.seed = seed
             this.updateSurfaces()
         },
-        updateSeed(seed:string, state: "changed" | "processed") {
+        updateSeed(seed:string) {
             this.seed = seed
-            window.dispatchEvent(new CustomEvent("phygital:seed", { detail: "change" }))
-            
-            setTimeout(() => {
-                window.dispatchEvent(new CustomEvent("phygital:seed", { detail: "processed" }))
-            },1000)
+            this.generatingSeed = true
+            window.dispatchEvent(new CustomEvent("phygital:seed", { detail: "prepareChange" }))
+        
         },
         updateSurfaces() {
             return new Promise ((resolve, reject) => {
@@ -190,6 +200,7 @@ export const PhygitalStore = defineStore({
                         this.surfaces[oppositeSurface].polylines = _.cloneDeep(this.surfaces[surface].polylines)
                     })
 
+                    window.dispatchEvent(new CustomEvent("phygital:update"))
                     resolve(true)
                 })
                 
@@ -203,7 +214,11 @@ export const PhygitalStore = defineStore({
                     
             })
         },
+        addLine(newLine: Array<{x: number, y:number}>, surface: "top" | "bottom" | "left" | "right" | "front" | "back") {
+            this.surfaces[surface].polylines.push(newLine)
+            this.seed = "custom"
 
+        },
         getOppositeSurface(surface: "top" | "bottom" | "left" | "right" |  "front" | "back") {
             if (surface == "top") {
                 return "bottom"

@@ -1,21 +1,25 @@
 <template>
-    <div class="view-3d">
-        <h1>View Sections</h1>
+    <div class="view-section-container" ref="container">
+        <vpg-svg-editable class="svg-container" />
     </div>
 </template>
 
 
 <script lang="ts">
 import {defineComponent} from "vue"
-import App from "@/stores/app"
+import AppStore from "@/stores/app"
+import vpgSvgEditable from "@/components/vpg-svg-editable.vue"
+
 import _ from "lodash"
 
 export default defineComponent ({ 
-    name: "viewSections",
-    components: {},
+    name: "routeViewSection",
+    components: {
+        vpgSvgEditable
+    },
     props: [],
     setup() {
-        const app = App()
+        const app = AppStore()
 
         return { app}
     },
@@ -32,6 +36,7 @@ export default defineComponent ({
         }
     },
     mounted() {
+        document.title = "Phygital - Surface editor" 
         this.app.activeView = "cube-faces"
     },
     methods: {
@@ -45,6 +50,8 @@ export default defineComponent ({
 <style lang="scss">
 @import "@/assets/scss/variables.scss";
 
-
+.view-section-container {
+    height: 100%;
+}
 
 </style>
