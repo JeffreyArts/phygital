@@ -27,7 +27,7 @@
                 <!-- <section-links/> -->
             </section>
             <section id="s-view-edit" v-if="activeView === 'cube-faces'">
-                <!-- <section-view-edit-button /> -->
+                <section-view-edit-button />
             </section>
             <section id="s-surface-dimensions" v-if="activeView === 'cube-faces'">
                 <!-- <sectionSurfaceDimensions /> -->
@@ -40,12 +40,12 @@
 <script lang="ts">
 import { defineComponent } from "vue"
 import _ from "lodash"
-import gsap from "gsap"
 import App from "@/stores/app"
 import sectionSeed from "@/components/sections/cube-seed.vue"
 import sectionMetaDimensions from "@/components/sections/meta-dimensions.vue"
 import sectionDownload from "@/components/sections/download-model.vue"
 import sectionSurfaces from "@/components/sections/surfaces-grid.vue"
+import sectionViewEditButton from "@/components/sections/view-edit-button.vue"
 
 export default defineComponent({
     name: "dashboard-sidebar",
@@ -54,6 +54,7 @@ export default defineComponent({
         sectionMetaDimensions,
         sectionSeed,
         sectionSurfaces,
+        sectionViewEditButton,
     },
     setup() {
         const app = App()

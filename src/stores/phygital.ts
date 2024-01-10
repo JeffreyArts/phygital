@@ -197,7 +197,8 @@ export const PhygitalStore = defineStore({
                             return
                         }
                         this.surfaces[surface].polylines = polylines[index]
-                        this.surfaces[oppositeSurface].polylines = _.cloneDeep(this.surfaces[surface].polylines)
+
+                        this.surfaces[oppositeSurface].polylines = _.sortBy(_.cloneDeep(this.surfaces[surface].polylines), ["y", "x"])
                     })
 
                     window.dispatchEvent(new CustomEvent("phygital:update"))

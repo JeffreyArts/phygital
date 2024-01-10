@@ -18,7 +18,7 @@ export const AppState = defineStore({
         activeView: "cube-3d",
         orentation: "landscape",
         activeSurface: "front",
-        editMode: true
+        editMode: false
     }),
     actions: {
     },

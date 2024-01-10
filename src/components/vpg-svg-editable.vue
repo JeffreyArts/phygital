@@ -133,7 +133,7 @@ export default defineComponent({
         }
     },
     watch: {
-        "phygital.editMode": {
+        "app.editMode": {
             handler(editMode) {
                 const el = this.$el
                 if (!el || el.querySelectorAll(".vpg-line").length <=0) {
@@ -238,7 +238,7 @@ export default defineComponent({
     methods: {
         // Events
         phygitalSeedEvent(e : Event) {
-            const event = e as phygitalSeedEvent            
+            const event = e as phygitalSeedEvent   
             
             if (event.detail == "prepareChange") {   
                 Promise.all([
@@ -250,6 +250,7 @@ export default defineComponent({
             }
         },
         phygitalUpdateEvent(e : Event) {
+            console.log("phygitalUpdateEvent event")        
             this.updatePattern()
         },
         resizeEvent() {
