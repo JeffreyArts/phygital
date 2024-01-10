@@ -80,16 +80,19 @@ export const PhygitalStore = defineStore({
           front: Surface,
         },
         seed: "",
+        originalSeed: "",
         generatingSeed: false,
         blockSize: 4,
     }),
     actions: {
         setSeed(seed:string) {
             this.seed = seed
+            this.originalSeed = seed
             this.updateSurfaces()
         },
         updateSeed(seed:string) {
             this.seed = seed
+            this.originalSeed = seed
             this.generatingSeed = true
             window.dispatchEvent(new CustomEvent("phygital:seed", { detail: "prepareChange" }))
         

@@ -30,7 +30,7 @@
                 <section-view-edit-button />
             </section>
             <section id="s-surface-dimensions" v-if="activeView === 'cube-faces'">
-                <!-- <sectionSurfaceDimensions /> -->
+                <sectionSurfaceDimensions />
             </section>
         </aside>
     </div>
@@ -46,6 +46,7 @@ import sectionMetaDimensions from "@/components/sections/meta-dimensions.vue"
 import sectionDownload from "@/components/sections/download-model.vue"
 import sectionSurfaces from "@/components/sections/surfaces-grid.vue"
 import sectionViewEditButton from "@/components/sections/view-edit-button.vue"
+import sectionSurfaceDimensions from "@/components/sections/surface-dimensions.vue"
 
 export default defineComponent({
     name: "dashboard-sidebar",
@@ -55,6 +56,7 @@ export default defineComponent({
         sectionSeed,
         sectionSurfaces,
         sectionViewEditButton,
+        sectionSurfaceDimensions
     },
     setup() {
         const app = App()
