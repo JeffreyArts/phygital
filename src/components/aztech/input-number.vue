@@ -10,6 +10,7 @@
                 <span class="aztech-input-number-text-value">
                     {{ value }}
                 </span>
+                <input class="aztech-input-number-input" :disabled="disabled" type="number" @change="updateValue" v-model="modelValueClone" />
                 <span class="aztech-input-number-text-unit" v-if="unit">
                     {{ unit }}
                 </span>
@@ -45,11 +46,20 @@ export default defineComponent({
     },
     data: () => {
         return {
+            modelValueClone: "0" // Required because input makes it a string
         }
     },
     computed: {
         isDisabled() {
             return this.disabled
+        },
+        width() {
+            if (this.value.toString().length == 1) {
+                return 20
+            } else if (this.value.toString().length == 2) {
+                return 30
+            }
+            return 40
         },
         value() {
             if (this.modelValue === Math.floor(this.modelValue)) {
@@ -61,6 +71,14 @@ export default defineComponent({
             }
             
             return this.modelValue.toFixed(1) + "x"
+        }
+    },
+    watch: {
+        modelValue:{
+            handler() {
+                this.modelValueClone = this.modelValue
+            },
+            immediate: true
         }
     },
     methods: {
@@ -81,9 +99,19 @@ export default defineComponent({
             this.$emit("increase", this.modelValue + 1)
             // this.modelValue++
         },
+        updateValue() {
+            const value = parseInt(this.modelValueClone, 10)
+            console.log(value, typeof this.modelValue)
+            if (value <= 1) {
+                return this.$emit("update", 2)
+            } else if (value > 32) {
+                return this.$emit("update", 32)
+            }
+            this.$emit("update", value)
+            // console.log(value)
+        },
         decrease() {
             if (this.disabled) return
-            
             this.$emit("decrease", this.modelValue - 1)
             // this.modelValue++
         },
@@ -113,6 +141,19 @@ export default defineComponent({
     flex-flow: column;
     font-family: $defaultFont;
     font-size: 14px;
+    position: relative;
+}
+.aztech-input-number-input {
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 50px;
+    z-index: 1;
+    cursor: default;
+    opacity: 0;
+    &:focus {
+        outline: 0 none transparent;
+    }
 }
 .aztech-input-number-text-value-container {
     display: flex;

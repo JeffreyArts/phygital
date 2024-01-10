@@ -2,8 +2,8 @@
     <div class="surface-dimensions-section" ref="container">
 
         <div class="surface-dimensions">
-            <aztech-input-number v-model="width" label="width" @increase="modifyWidth" @decrease="modifyWidth"/>
-            <aztech-input-number v-model="height" label="height"  @increase="modifyHeight" @decrease="modifyHeight"/>
+            <aztech-input-number v-model="width" label="width" @update="modifyWidth" @increase="modifyWidth" @decrease="modifyWidth"/>
+            <aztech-input-number v-model="height" label="height" @update="modifyHeight" @increase="modifyHeight" @decrease="modifyHeight"/>
         </div>
 
         <aztech-alert :options="options" :open="alertOpen" @close="closeAlert" >
@@ -145,6 +145,7 @@ export default defineComponent({
             this.phygital.updateSurfaces()
         },
         modifyHeight(v:number, skipAlert=false) {
+            console.log(v, typeof v)
             const seedDom = document.querySelectorAll(".seed-value")[0] as HTMLElement
             const seed = seedDom.innerText.split("\n")[0].trim()
             if (seed === "custom" && !skipAlert) {
@@ -175,7 +176,7 @@ export default defineComponent({
                 this.phygital.surfaces.back.height = v
                 break
             }
-            
+
             this.phygital.updateSurfaces()
         }
     }
