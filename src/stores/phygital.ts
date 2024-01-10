@@ -217,7 +217,10 @@ export const PhygitalStore = defineStore({
         addLine(newLine: Array<{x: number, y:number}>, surface: "top" | "bottom" | "left" | "right" | "front" | "back") {
             this.surfaces[surface].polylines.push(newLine)
             this.seed = "custom"
-
+        },
+        removeLine(newLine: Array<{x: number, y:number}>, surface: "top" | "bottom" | "left" | "right" | "front" | "back") {
+            this.surfaces[surface].polylines.push(newLine)
+            this.seed = "custom"
         },
         getOppositeSurface(surface: "top" | "bottom" | "left" | "right" |  "front" | "back") {
             if (surface == "top") {
