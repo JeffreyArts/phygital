@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 
-export type ViewState = "cube-3d" | "cube-faces"
+export type ViewState = "view-3d" | "view-surfaces"
 export type OrientationType = "landscape" | "portrait"
 type Surfaces = "top" | "bottom" | "left" | "right" | "front" | "back"
 
@@ -15,7 +15,7 @@ interface AppState {
 export const AppState = defineStore({
     id: "appStates",
     state: () => ({
-        activeView: "cube-3d",
+        activeView: "view-3d",
         orentation: "landscape",
         activeSurface: "front",
         editMode: false

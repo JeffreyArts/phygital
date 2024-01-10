@@ -37,7 +37,7 @@ export default defineComponent ({
     },
     mounted() {
         document.title = "Phygital - Surface editor" 
-        this.app.activeView = "cube-faces"
+        this.app.activeView = "view-surfaces"
     },
     methods: {
         

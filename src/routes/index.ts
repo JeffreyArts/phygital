@@ -1,7 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router"
 import Home from "@/routes/home.vue"
 import view3D from "@/routes/view-3d.vue"
-import viewSections from "@/routes/view-sections.vue"
+import viewSections from "@/routes/view-surface.vue"
 
 const routes = [
     {

@@ -3,7 +3,7 @@
         <header class="cube-surfaces-header">
             <span class="cube-surfaces-cell">
                 <aztech-label class="cube-surfaces-label" :class="[
-                    (app.activeSurface == 'top') && app.activeView == 'cube-faces' ? '__isSelected' : '',
+                    (app.activeSurface == 'top') && app.activeView == 'view-surfaces' ? '__isSelected' : '',
                     phygital.generatingSeed ? '__isForbidden' : '',
                     surface == 'top'  ? '__isHover': ''
                     ]"
@@ -13,7 +13,7 @@
             </span>
             <span class="cube-surfaces-cell">
                 <aztech-label class="cube-surfaces-label" :class="[
-                    (app.activeSurface == 'front') && app.activeView == 'cube-faces' ? '__isSelected' : '',
+                    (app.activeSurface == 'front') && app.activeView == 'view-surfaces' ? '__isSelected' : '',
                     phygital.generatingSeed ? '__isForbidden' : '',
                     surface == 'front' ? '__isHover': ''
                     ]"
@@ -23,7 +23,7 @@
             </span>
             <span class="cube-surfaces-cell">
                 <aztech-label class="cube-surfaces-label" :class="[
-                    (app.activeSurface == 'left') && app.activeView == 'cube-faces' ? '__isSelected' : '',
+                    (app.activeSurface == 'left') && app.activeView == 'view-surfaces' ? '__isSelected' : '',
                     phygital.generatingSeed ? '__isForbidden' : '',
                     surface == 'left' ? '__isHover': ''
                     ]"
@@ -38,8 +38,8 @@
                 :key="k" 
                 class="cube-surfaces-cell"
                 :class="[
-                    (app.activeSurface == s) && app.activeView == 'cube-faces' ? '__isSelected' : '',
-                    (surface == s && app.activeSurface !== s || app.activeView == 'cube-3d' && surface == s) ? '__isHover' : '',
+                    (app.activeSurface == s) && app.activeView == 'view-surfaces' ? '__isSelected' : '',
+                    (surface == s && app.activeSurface !== s || app.activeView == 'view-3d' && surface == s) ? '__isHover' : '',
                     phygital.generatingSeed ? '__isForbidden' : '',
                 ]" 
                 @click="selectSurface(s)" 
@@ -51,7 +51,7 @@
         <footer class="cube-surfaces-footer">
             <span class="cube-surfaces-cell">
                 <aztech-label class="cube-surfaces-label" :class="[
-                    (app.activeSurface == 'bottom') && app.activeView == 'cube-faces' ? '__isSelected' : '',
+                    (app.activeSurface == 'bottom') && app.activeView == 'view-surfaces' ? '__isSelected' : '',
                     phygital.generatingSeed ? '__isForbidden' : '',
                     surface == 'bottom' ? '__isHover': ''
                     ]"
@@ -61,7 +61,7 @@
             </span>
             <span class="cube-surfaces-cell">
                 <aztech-label class="cube-surfaces-label" :class="[
-                    (app.activeSurface == 'back') && app.activeView == 'cube-faces' ? '__isSelected' : '',
+                    (app.activeSurface == 'back') && app.activeView == 'view-surfaces' ? '__isSelected' : '',
                     phygital.generatingSeed ? '__isForbidden' : '',
                     surface == 'back' ? '__isHover': ''
                     ]"
@@ -71,7 +71,7 @@
             </span>
             <span class="cube-surfaces-cell">
                 <aztech-label class="cube-surfaces-label" :class="[
-                    (app.activeSurface == 'right') && app.activeView == 'cube-faces' ? '__isSelected' : '',
+                    (app.activeSurface == 'right') && app.activeView == 'view-surfaces' ? '__isSelected' : '',
                     phygital.generatingSeed ? '__isForbidden' : '',
                     surface == 'right' ? '__isHover': ''
                     ]"
@@ -120,7 +120,7 @@ export default defineComponent({
             }
             this.app.activeSurface = surface
             this.$router.push("/sections-view")
-            // this.activeView = "cube-faces"
+            // this.activeView = "view-surfaces"
         },
         
         hoverSurface(surface: "top" | "front" | "left" | "bottom" | "back" | "right") {
