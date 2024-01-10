@@ -1,21 +1,8 @@
-# Jeff frontend
+# Phygital
 
-This is a boilerplate for a frontend application using Vue 3, Typescript, Vue Router, Pinia, Vite, Lodash, PouchDB, Sass, normalize.css & SocketIO. It can best be used with its backend counterpart Jeff-backend, which you can create with `yarn create jeff-backend`.
+This interface is developed by Jeffrey Arts for the creation of concrete scuptures. With this technology he creates geometric sculptures in a collaborative effort with [the algorithm](https://github.com/JeffreyArts/visual-pattern-generator). Sometimes the algorithm create something stunning in one go, but more often it needs a little bit of artistic editation. Using the work method the artist can iterively explore the beauty in 3-dimensional symmetry. Which he will materialise in concrete whenever he is satisfied with the created outcome. Making these digital 3D models operate as a 3-dimensional sketches that used during the fabrication proces.
 
-## Features
-
-- [Axios](https://github.com/axios/axios)
-- [GSAP](https://github.com/greensock/GSAP)
-- [Lodash](https://github.com/lodash/lodash)
-- [normalize.css](https://github.com/necolas/normalize.css)
-- [Pinia](https://github.com/vuejs/pinia)
-- [PouchDB](https://github.com/pouchdb/pouchdb)
-- [Sass](https://github.com/sass/sass)
-- [TypeScript](https://github.com/microsoft/TypeScript)
-- [Vite](https://github.com/vitejs/vite)
-- [Vue 3](https://github.com/vuejs/vue)
-- [Vue Router](https://github.com/vuejs/vue-router)
-- [SocketIO](https://github.com/socketio/socket.io-client)
+If you want to get this project up and running for yourself, you'll need to be familair with the nodeJS environment and comfortable with the terminal. Assuming that you already have nodeJS running on your machine (if not, use [NVM](https://github.com/nvm-sh/nvm) to install it with a few steps) use the steps below to get this project up and running.
 
 ## Getting started
 
@@ -70,12 +57,24 @@ $ yarn deploy
 ```
 
 
-## [License](https://github.com/JeffreyArts/create-jeff-backend/blob/master/LICENSE)
+## Fair Source License
 
-Copyright © 2023 <Jeffrey Arts>
+Copyright © 2024 Jeffrey Arts
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+Licensor: Jeffrey Arts 
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+Software: Phygital
 
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Use Limitation: 1 user
+
+License Grant. Licensor hereby grants to each recipient of the Software (“you”) a non-exclusive, non-transferable, royalty-free and fully-paid-up license, under all of the Licensor’s copyright and patent rights, to use, copy, distribute, prepare derivative works of, publicly perform and display the Software,, as well as any digital or physical objects produced with the Software, subject to the Use Limitation and the conditions set forth below.
+
+Use Limitation. The license granted above allows use by up to the number of users per entity set forth above (the “Use Limitation”). For determining the number of users, “you” includes all affiliates, meaning legal entities controlling, controlled by, or under common control with you. If you exceed the Use Limitation, your use is subject to payment of Licensor’s then-current list price for licenses.
+
+Conditions. Redistribution in source code or other forms must include a copy of this license document to be provided in a reasonable manner. Any redistribution of the Software or its produced digital or physical objects is only allowed subject to this license.
+
+Trademarks. This license does not grant you any right in the trademarks, service marks, brand names or logos of Licensor.
+
+DISCLAIMER. THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OR CONDITION, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. LICENSORS HEREBY DISCLAIM ALL LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE.
+
+Termination. If you violate the terms of this license, your rights will terminate automatically and will not be reinstated without the prior written consent of Licensor. Any such termination will not affect the right of others who may have received copies of the Software or its produced digital or physical objects from you.

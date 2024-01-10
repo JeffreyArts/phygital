@@ -103,7 +103,6 @@ export default defineComponent({
                         opacity: 0,
                         ease: "power4.inOut",
                         onComplete: () => {
-                            console.log("ASDF", this.$router)
                             this.$router.replace("/3D-view")
                         }
                     })
