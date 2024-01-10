@@ -107,19 +107,17 @@ export default defineComponent({
             verticalLines: 0,
             horizontalLines: 0,
             offset: {x:1, y:1} as {x:number, y:number},
+            strokeWidth: 30,
             polylinePoints: [] as Array<Array<{x: number, y: number}>>,
             polylineCords: [] as Array<Array<{x: number, y: number}>>,
-            manualUpdate: false,
             newLine: [] as Array<{x:number, y:number}>,
+            manualUpdate: false,
             disableNewLine: false,
-            removableLine: null as null | HTMLElement,
-            removingLine: false,
+
             mouseX: 0,
             mouseY: 0,
             mousePointX: 0,
             mousePointY: 0,
-            strokeWidth: 30,
-            ignoreAnimation: false,
         }
     },
     computed: {
@@ -137,6 +135,11 @@ export default defineComponent({
     watch: {
         "phygital.editMode": {
             handler(editMode) {
+                const el = this.$el
+                if (!el || el.querySelectorAll(".vpg-line").length <=0) {
+                    return
+                }
+                
                 // this.surfaceInTransition = true
                 gsap.killTweensOf(".grid-point")
                 gsap.killTweensOf(".vpg-line")
@@ -214,8 +217,12 @@ export default defineComponent({
 
         gsap.registerPlugin(DrawSVGPlugin)
         if (this.vpgPattern && this.isDev) {
+            window.removeEventListener("phygital:seed", this.phygitalSeedEvent)
+            window.removeEventListener("phygital:update", this.phygitalUpdateEvent)
+            window.removeEventListener("resize", this.resizeEvent)
+            window.removeEventListener("keydown", this.keydownEvent)
             this.updatePattern()
-        }
+        } 
 
         window.addEventListener("phygital:seed", this.phygitalSeedEvent)
         window.addEventListener("phygital:update", this.phygitalUpdateEvent)
@@ -250,6 +257,10 @@ export default defineComponent({
                 this.strokeWidth = 14
             } else {
                 this.strokeWidth = 30
+            }
+
+            if (this.newLine.length == 2 ){
+                this.cancelNewLine()
             }
             this.updatePattern()
         },
@@ -496,6 +507,12 @@ export default defineComponent({
             })
         },
         showPolylines() {
+
+            const el = this.$el
+            if (!el || el.querySelectorAll(".vpg-line").length <=0) {
+                return
+            }
+                
             if (this.app.editMode) {
                 gsap.to(".vpg-line", {
                     strokeWidth: this.strokeWidth,
@@ -524,14 +541,14 @@ export default defineComponent({
                 if (this.$el.querySelectorAll(".vpg-line").length == 0) {
                     return resolve(true)
                 }
-                console.log("hidePolylines")
                 
                 const totalDuration = 2
                 const lines = document.querySelectorAll(".vpg-line")
                 let duration = totalDuration/lines.length
-                if (duration < .24) {
-                    duration = .24
+                if (duration < .32) {
+                    duration = .32
                 }
+
                 const timelines = [] as Array<Promise<boolean>>
                 gsap.killTweensOf(lines)
                 lines.forEach((line, index) => {
@@ -541,13 +558,10 @@ export default defineComponent({
                             drawSVG: "0.01%",
                             ease: "power2.out",
                             opacity: 0,
+                            strokeWidth: this.strokeWidth / 2,
                             // strokeLinecap: "round",
                             duration: animate ? duration : 0,
                             delay: animate ? index * .08 : 0,
-                        }).to(line, {
-                            opacity: 0,
-                            strokeWidth:0,
-                            duration: animate ? duration/2 : 0,
                             onComplete: () => {
                                 setTimeout(() => {
                                     resolve2(true)
@@ -722,7 +736,6 @@ export default defineComponent({
             const gridPoints = this.$el.querySelectorAll(".__isOption")
             this.disableNewLine = true
             gridPoints.forEach((gridPoint: SVGAElement)=> {
-                // console.log("GP", gridPoint)
                 gridPoint.classList.remove("__isOption")
             })
             gsap.to(".new-line", {

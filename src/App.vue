@@ -137,7 +137,6 @@ export default defineComponent ({
 <style lang="scss">
 
 .dashboard-main {
-	background-color: rgba(0,0,0,.1);
     position: absolute;
 }
 
