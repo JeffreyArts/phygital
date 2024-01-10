@@ -9,7 +9,7 @@
                 <aztech-input-number v-model="depth" disabled label="depth" unit="cm" />
             </div>
             <div class="cube-size">
-                <aztech-input-number v-model="phygital.blockSize"  label="Block size" unit="cm"  @increase="modifyBlockSize" @decrease="modifyBlockSize"/>
+                <aztech-input-number v-model="phygital.blockSize"  label="Block size" unit="cm" @increase="modifyBlockSize" @decrease="modifyBlockSize"/>
             </div>
         </div>
     </div>

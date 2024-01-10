@@ -1,5 +1,5 @@
 <template >
-    <dashboard-overlay />
+    <dashboard-overlay v-if="isDev"/>
     <div ref="main" class="dashboard-main">
         <router-view />
     </div>

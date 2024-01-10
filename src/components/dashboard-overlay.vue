@@ -1,5 +1,5 @@
 <template>
-    <div class="dashboard-overlay" ref="container" @click="fadeOut(true)" v-if="!isDev">
+    <div class="dashboard-overlay" ref="container" @click="fadeOut(true)">
         <svg class="do-c" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 320 320" style="enable-background:new 0 0 320 320;" xml:space="preserve">
             <polyline points="288,32 288,288 160,288 32,288 32,32 160,32 "/>
             <line x1="160" y1="288" x2="160" y2="160"/>
@@ -43,21 +43,15 @@ export default defineComponent({
     name: "dashboard-component",
     data: () => {
         return {
-            fadedOut: false
-        }
-    },
-    computed: {
-        isDev() {
-            return import.meta.env.DEV
+            fadedOut: false,
+            disableClick: false
         }
     },
     watch: {
     
     },
     mounted() {
-        if (!this.isDev) {
-            this.startAnimation()
-        }
+        this.startAnimation()
     },
     methods: {
         startAnimation() {
@@ -84,20 +78,27 @@ export default defineComponent({
                 // delay: .64,
             })
 
-            const timeline = gsap.timeline({
-                onComplete: () => {
-                    setTimeout(() => {
-                        if (this.fadedOut) return
-                        this.fadeOut()
-                    }, 800)
-                }
-            })
-
-            timeline.to(".dashboard-overlay-container", {
+            // const timeline = gsap.timeline({
+            //     onComplete: () => {
+            //         setTimeout(() => {
+            //             if (this.fadedOut) return
+            //             // this.fadeOut()
+            //         }, 1600)
+            //     }
+            // })
+            
+            gsap.to(".dashboard-overlay-container", {
                 scale: 1,
                 opacity: 1,
                 duration: .32,
-                ease: "linear"
+                ease: "linear",
+                onComplete: () => {
+                    setTimeout(()=> {
+                        this.cornersFadeOut().then(() => {
+                            this.fadeOut()
+                        })
+                    }, 1000)
+                }
             })
         },
         killAll() {
@@ -108,22 +109,17 @@ export default defineComponent({
             gsap.killTweensOf(".dashboard-overlay-header")
             gsap.killTweensOf(".dashboard-overlay-footer")
         },
-        fadeOut(immediate=false) {
-            this.killAll()
-            this.fadedOut = true
-            // let delay = 
-            
-            const timeline = gsap.timeline({
-                onComplete: () => {
-                    // this.fadeOut()
-                }
-            })
-
-            if (!immediate) {
+        cornersFadeOut() {
+            return new Promise(resolve => {
+                const timeline = gsap.timeline({
+                    onComplete: () => {
+                        resolve(0)
+                    }
+                })
                 timeline.to(".do-c line", {
                     duration: 1.08,
                     strokeDashoffset: 128,
-                    delay: 1,
+                    delay: 0,
                     ease: "power2.out"
                 })
                 timeline.to(".do-c polyline", {
@@ -132,30 +128,44 @@ export default defineComponent({
                     strokeDashoffset: 390,
                     ease: "power4.out"
                 })
-            } else {
-                gsap.to(".do-c line", {
-                    duration: 1.08,
-                    strokeDashoffset: 128,
-                    strokeWidth: 32,
-                    ease: "power2.out"
-                })
-                gsap.to(".do-c polyline", {
-                    duration: 1.44,
-                    strokeDashoffset: 390,
-                    strokeWidth: 32,
-                    ease: "power4.out"
-                })
-            }
-
-
-            gsap.to(".dashboard-overlay-by", {
-                scale: 0.3,
-                opacity: 0,
-                duration: .96,
-                delay: 2.28,
-                ease: "power4.inOut"
             })
+        },
+        fadeOut(immediate=false) {
+            if (this.disableClick) {
+                return
+            }
+            this.disableClick = true
+            
+            this.killAll()
+            this.fadedOut = true
 
+            if (immediate) {
+                this.cornersFadeOut()
+            }
+            
+            
+            // Set corner lines to black, if that happens to be cancelled cause of the killAll method
+            gsap.to(".do-c",{
+                opacity: 1,
+                duration: .24,
+                ease: "linear",
+                onComplete: () => {
+                    gsap.set(".dashboard-overlay", {
+                        pointerEvents:"none"
+                    })
+                }
+            })
+            
+            // Hide background overlay
+            gsap.to(".dashboard-overlay", {
+                duration: 1.28,
+                delay: .64,
+                backgroundColor: "transparent",
+                ease: "power4.out"
+            })
+            
+
+            const timeline = gsap.timeline()
             timeline.to(".dashboard-overlay-container", {
                 height: "100vh",
                 delay: .16,
@@ -170,6 +180,13 @@ export default defineComponent({
                 duration: 1.28,
                 delay: -1.28,
                 ease: "power2.out"
+            })
+            timeline.to(".dashboard-overlay-by", {
+                duration: .64,
+                scale: 0.6,
+                delay: -1.28,
+                opacity: 0,
+                ease: "power4.out"
             })
             timeline.to(".do-c", {
                 duration: 1.44,
@@ -186,17 +203,6 @@ export default defineComponent({
                 delay: -1.28,
                 ease: "power4.out"
             })
-
-            if (this.$el.querySelector(".dashboard-overlay")) {
-                timeline.to(".dashboard-overlay", {
-                    duration: 0.8,
-                    pointerEvents:"none",
-                    backgroundColor: "transparent",
-                    delay: -1.08,
-                    strokeDashoffset: 390,
-                    ease: "power4.out"
-                })
-            }
         }
     }
 })
