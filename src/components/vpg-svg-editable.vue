@@ -608,6 +608,9 @@ export default defineComponent({
             })
         },
         hideLine(polylineIndex: number) {
+            if (!this.app.editMode) {
+                return
+            }
             const polylines = this.$refs.polyline as Array<HTMLElement>
             if (!polylines || !this.vpgPattern) {
                 return
@@ -863,12 +866,6 @@ export default defineComponent({
         stroke-width: .5;
         stroke-type: solid;
         stroke-linecap: square;
-    }
-
-    .vpg-line {
-        &:hover {
-            opacity: .5;
-        }
     }
 
     .outer-ring {
