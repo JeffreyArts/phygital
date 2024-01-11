@@ -387,6 +387,8 @@ export default {
                                 
                             const material = child.material.clone()
                             child.material = material
+                            // material.depthWrite = false
+                            // material.depthTest = false
                             surfaceLines.push(child)
                         })
                     })                
@@ -419,15 +421,28 @@ export default {
                 //         // return resolve(true)
                 //     }
                 // })
-                const promises = [] as Array<Promise<unknown>>
-                if (surfaces) {
-                    _.each(surfaces.children, (childObject) => {
-                        const surface = childObject as THREE.Group
-                        promises.push(this.explodeSurfaceAnimation(surface))
-                    })
+                this.setCameraToStartPosition()
+                // if (surfaces) {
+                //     _.each(surfaces.children, (childObject) => {
+                //         const surface = childObject as THREE.Group
+                //         promises.push(this.explodeSurfaceAnimation(surface))
+                //     })
+                // }
+                if (!surfaces) {
+                    return reject()
                 }
-
-                Promise.all(promises).then(resolve)
+                        
+                const promises = [] as Array<Promise<unknown>>
+                
+                let delay = 0
+                let childObjects = []
+                _.each(surfaces.children, surface => {
+                    _.each(surface.children, childObject => {
+                        childObjects.push(childObject)
+                    })
+                })
+                this.explodeSurfaceAnimation(_.shuffle(childObjects))
+                    .then(resolve)
                 
                 // // Animate parts    
                 // _.each(surfaceObjects, (object, i) => {
@@ -476,63 +491,202 @@ export default {
                 // })
             })
         },
-        explodeSurfaceAnimation(surface: THREE.Group) {
+        explodeSurfaceAnimation(lineObjects: Array<THREE.Object3D>) {
             return new Promise(resolve => {
-                const baseAnimation = {
-                    duration: .96,
-                    ease: "power1.out",
-                    delay: 0
-                }
-                let animation = {
-                    ...baseAnimation
-                } as {
-                duration: number,
-                ease: string,
-                delay: number
-                x?: string | number,
-                y?: string | number,
-                z?: string | number,
-            }
-            
-                if (surface.name.endsWith("top")) {
-                    animation.y = "+=.8"
-                } else if(surface.name.endsWith("bottom")) {
-                    animation.delay = 0.48
-                    animation.y = "-=.8"
-                } else if (surface.name.endsWith("front")) {
-                    animation.delay = .16
-                    animation.z = "+=.8"
-                } else if(surface.name.endsWith("back")) {
-                    animation.delay = .8
-                    animation.z = "-=.8"
-                } else if (surface.name.endsWith("left")) {
-                    animation.delay = 0.64
-                    animation.x = "-=.8"
-                } else if(surface.name.endsWith("right")) {
-                    animation.delay = 0.32
-                    animation.x = "+=.8"
-                }
+                const promises = [] as Array<Promise<unknown>>
+                let delay = 0
+                _.each(lineObjects, childObject => {
+                    promises.push( new Promise(resolve => {
+                        const size = this.pattern3D.width*this.pattern3D.height*this.pattern3D.depth
+                        if (size > 220) {
+                            delay += .0064
+                        } else if (size > 128) {
+                            delay += .008
+                        } else if (size > 64) {
+                            delay += .012
+                        } else {
+                            delay += .024
+                        }
+                        console.log()
+                        
+                        let childAnimation = {
+                            delay,
+                            duration: 1.28,
+                            ease: "power3.inOut"
+                        } as {
+                            delay: number,
+                            duration: number,
+                            ease: string,
+                            x?: string | number,
+                            y?: string | number,
+                            z?: string | number,
+                        }
+                        
+                        const surface = childObject.parent
+                        if (!surface) {
+                            return
+                        }
 
-                gsap.to(surface.position,animation)
+                        if(surface.name.endsWith("top") || surface.name.endsWith("front") ) {
+                            childAnimation.y = `+=${Math.random()*1 + .5}`
 
-                _.each(surface.children, childObject => {
-                    const material = childObject.material
-                    material.transparent = true
-                    const opacityAnimation = gsap.to(material, {
-                        duration: 0.4,
-                        delay: animation.delay + .08,
-                        opacity: 0,
-                        onUpdate: () => {
-                            material.needsUpdate = true
-                        },
-                        onComplete: () => {
-                            material.opacity = 0 // Ensure opacity is set to 0 when animation completes
-                            material.needsUpdate = true
-                            resolve(true)
-                        },
-                        ease: "none",
-                    })
-                })
+                        } else if(surface.name.endsWith("bottom") || surface.name.endsWith("back") || surface.name.endsWith("left") || surface.name.endsWith("right")) {
+                            childAnimation.y = `-=${Math.random()*1 + .5}`
+                        } 
+
+
+                        gsap.to(childObject.position, {
+                            ...childAnimation,
+                            // delay: delay + .16,
+                        })
+                        
+                        const opacityAnimation = gsap.to(childObject.material, {
+                            duration: 0.4,
+                            delay: delay + .16,
+                            opacity: 0,
+                            onUpdate: () => {
+                                childObject.material.depthWrite = false
+                                childObject.material.depthTest = false
+
+                                childObject.material.needsUpdate = true
+                                childObject.material.needsUpdate = true
+                            },
+                            onComplete: () => {
+                                childObject.material.opacity = 0 // Ensure opacity is set to 0 when animation completes
+                                childObject.material.needsUpdate = true
+                                resolve(true)
+                            },
+                            ease: "none",
+                        })
+                    }))
+                }) 
+                console.log("promises.length",promises.length)
+
+                Promise.all(promises).then(resolve)
+                // const baseAnimation = {
+                //     duration: .96,
+                //     ease: "power1.out",
+                //     delay: .32
+                // }
+                // let animation = {
+                //     ...baseAnimation
+                // } as {
+                //     duration: number,
+                //     ease: string,
+                //     delay: number
+                //     x?: string | number,
+                //     y?: string | number,
+                //     z?: string | number,
+                // }
+
+                // let width = 0
+                // let height = 0
+
+                // if (surface.name.endsWith("top")) {
+                //     animation.y = "+=.8"
+                //     width = this.pattern3D.width
+                //     height = this.pattern3D.depth
+                // } else if(surface.name.endsWith("bottom")) {
+                //     animation.delay = 0.6
+                //     animation.y = "-=.8"
+                //     width = this.pattern3D.width
+                //     height = this.pattern3D.depth
+                // } else if (surface.name.endsWith("front")) {
+                //     animation.delay = 0.2
+                //     animation.z = "+=.8"
+                //     width = this.pattern3D.width
+                //     height = this.pattern3D.height
+                // } else if(surface.name.endsWith("back")) {
+                //     animation.delay = 0.8
+                //     animation.z = "-=.8"
+                //     width = this.pattern3D.width
+                //     height = this.pattern3D.height
+                // } else if (surface.name.endsWith("left")) {
+                //     animation.delay = 1
+                //     animation.x = "-=.8"
+                //     width = this.pattern3D.depth
+                //     height = this.pattern3D.height
+                // } else if(surface.name.endsWith("right")) {
+                //     animation.delay = 0.4
+                //     animation.x = "+=.8"
+                //     width = this.pattern3D.depth
+                //     height = this.pattern3D.height
+                // }
+
+                // // gsap.to(surface.position,animation)
+                // // gsap.to(surface.scale,{
+                // //     ...baseAnimation,
+                // //     x: 2,
+                // //     y: 2,
+                // //     z: 2,
+                // // })
+
+                // _.each(surface.children, childObject => {
+                //     const material = childObject.material
+                //     material.transparent = true
+                //     console.log("childObject.position", childObject)
+                //     let childAnimation = {
+                //         duration: 1.28,
+                //         delay: animation.delay,
+                //         ease: "power1.inOut"
+                //     } as {
+                //         delay: number,
+                //         duration: number,
+                //         ease: string,
+                //         x?: string | number,
+                //         y?: string | number,
+                //         z?: string | number,
+                //     }
+                //     if(surface.name.endsWith("top") || surface.name.endsWith("front") ) {
+                //         childAnimation.y = `+=${Math.random()*1 + .5}`
+
+                //     } else if(surface.name.endsWith("bottom") || surface.name.endsWith("back") || surface.name.endsWith("left") || surface.name.endsWith("right")) {
+                //         childAnimation.y = `-=${Math.random()*1 + .5}`
+
+                //     } 
+
+                //     // if (childObject.orientation == "vert") {
+                //     //     if (width > childObject.position.x) {
+                //     //         childAnimation.x = "+=1"
+                //     //     } else {
+                //     //         childAnimation.x = "-=1"
+                //     //     }
+                //     // } else if (childObject.orientation == "hor") {
+                //     //     if (width > childObject.position.x) {
+                //     //         childAnimation.z = "+=1"
+                //     //     } else {
+                //     //         childAnimation.z = "-=1"
+                //     //     }
+                //     // }
+
+
+                //     gsap.to(childObject.position, {
+                //         ...childAnimation,
+                //         delay: animation.delay + .16,
+                //     })
+                //     // gsap.to(childObject.scale, {
+                //     //     ...childAnimation,
+                //     //     delay: animation.delay + .08,
+                //     //     x: .16,
+                //     //     y: .16,
+                //     //     z: .16,
+                //     // })
+                //     // const opacityAnimation = gsap.to(material, {
+                //     //     duration: .96,
+                //     //     delay: animation.delay + .08 + .32,
+                //     //     opacity: 0,
+                //     //     ease: "power4.out",
+                //     //     onUpdate: () => {
+                //     //         material.needsUpdate = true
+                //     //     },
+                //     //     onComplete: () => {
+                //     //         material.opacity = 0 // Ensure opacity is set to 0 when animation completes
+                //     //         material.needsUpdate = true
+                //     //         resolve(true)
+                //     //     },
+                //     //     ease: "none",
+                //     // })
+                // })
             })
                     
             // side: "top" | "bottom" | "back" | "front" | "left" | "right"
@@ -578,6 +732,44 @@ export default {
             // if (this.orbitControls) {
             //     this.orbitControls.target =  target
             // }
+        },
+        setCameraToStartPosition() {
+            if (!this.camera) {
+                return
+            }
+            const target = new THREE.Vector3(this.pattern3D.width / 2 - 0.75, this.pattern3D.height / 2 + 0.5, this.pattern3D.depth / 2 - 0.75)
+
+            gsap.to(this.camera.position, {
+                duration: 1.28, // Duration in seconds
+                x: this.pattern3D.width * 2.8,
+                y: this.pattern3D.height * 1.6,
+                z: this.pattern3D.height * 2.8,
+                ease: "power1.inOut",
+                onComplete: () => {
+                    // window.dispatchEvent(new CustomEvent(`appState:${this.name}`, { detail: "activated" }))
+                    // this.updatePattern ++
+                    // this.appState = "Active"
+                },
+            })
+
+            if (this.orbitControls) {
+                this.orbitControls.target =  target
+            }
+            // this.camera.lookAt(target.x, target.y, target.z)
+
+            // Animate orientation point of camera
+            gsap.to(this.camera.lookAt, {
+                duration: 1.28,
+                x: target.x,
+                y: target.y,
+                z: target.z,
+                onUpdate: () => {
+                    if (!this.camera) return
+
+                    this.camera.lookAt(target)
+                },
+                ease: "power1.inOut",
+            })
         },
         fadeOut() {
             this.hideSculpture()
@@ -629,41 +821,9 @@ export default {
             //     }
             // }
 
-            
-            const target = new THREE.Vector3(this.pattern3D.width / 2 - 0.75, this.pattern3D.height / 2 + 0.5, this.pattern3D.depth / 2 - 0.75)
-
             // Animate camera position and lookAt using GSAP
-            gsap.to(this.camera.position, {
-                duration: 1.28, // Duration in seconds
-                x: this.pattern3D.width * 2.8,
-                y: this.pattern3D.height * 1.6,
-                z: this.pattern3D.height * 2.8,
-                ease: "power1.inOut",
-                onComplete: () => {
-                    // window.dispatchEvent(new CustomEvent(`appState:${this.name}`, { detail: "activated" }))
-                    // this.updatePattern ++
-                    // this.appState = "Active"
-                },
-            })
+            this.setCameraToStartPosition()
 
-            if (this.orbitControls) {
-                this.orbitControls.target =  target
-            }
-            this.camera.lookAt(target.x, target.y, target.z)
-
-            // Animate orientation point of camera
-            gsap.to(this.camera.lookAt, {
-                duration: 1.28,
-                x: target.x,
-                y: target.y,
-                z: target.z,
-                onUpdate: () => {
-                    if (!this.camera) return
-
-                    this.camera.lookAt(target)
-                },
-                ease: "power1.inOut",
-            })
             
             
             this.updateTimeout = setTimeout(() => {
