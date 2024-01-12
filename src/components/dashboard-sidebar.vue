@@ -1,9 +1,6 @@
 <template>
     <div>
         <aside class="dashboard-sidebar">
-            <!-- <section @click="select('view-3d')">
-                <main-view-surface/>
-            </section> -->
             <section id="s-seed">
                 <section-seed/>
             </section>
@@ -14,7 +11,7 @@
                 <section-meta-dimensions />
             </section>
             <section id="s-cube3d" @click="select('view-3d')" @mousedown="setSelection" @mousemove="cancelSelection">
-                <!-- <section-cube3d name="sidebar" /> -->
+                <section-vpg-3d name="sidebar" />
                 <svg :class="app.activeView === 'view-3d' ? '__isHidden' : ''" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 37 64" xml:space="preserve">
                     <path d="M30.9,11v18.8h-1.7V4.4h-6.1v25.4h-1.7V0h-6.1v29.8h-1.7V3.3H7.7v35.9H6.1V19.9H0v25.7C0,55.7,8.3,64,18.5,64 C28.7,64,37,55.7,37,45.5V11H30.9z M13.2,41.4H17v-3.9h3.9v3.9h3.9v3.9h-3.9v3.9H17v-3.9h-3.9V41.4z M19,58.4 c-6.4,0-11.7-4.8-12.4-11h3.9c0.7,4.1,4.2,7.2,8.5,7.2c4.3,0,7.8-3.1,8.5-7.2h3.9C30.7,53.6,25.4,58.4,19,58.4z"/>
                 </svg>
@@ -48,6 +45,7 @@ import sectionDownload from "@/components/sections/download-model.vue"
 import sectionSurfaces from "@/components/sections/surfaces-grid.vue"
 import sectionViewEditButton from "@/components/sections/view-edit-button.vue"
 import sectionSurfaceDimensions from "@/components/sections/surface-dimensions.vue"
+import sectionVpg3d from "@/components/sections/vpg-3d.vue"
 
 export default defineComponent({
     name: "dashboard-sidebar",
@@ -57,7 +55,8 @@ export default defineComponent({
         sectionSeed,
         sectionSurfaces,
         sectionViewEditButton,
-        sectionSurfaceDimensions
+        sectionSurfaceDimensions,
+        sectionVpg3d
     },
     setup() {
         const app = App()

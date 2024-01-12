@@ -140,9 +140,14 @@ export default defineComponent({
                     return
                 }
                 
-                // this.surfaceInTransition = true
-                gsap.killTweensOf(".grid-point")
-                gsap.killTweensOf(".vpg-line")
+                // gsap.killTweensOf(".grid-point")
+                // gsap.killTweensOf(".vpg-line")
+
+                // Line removal
+                const removedLined = el.querySelector(".vpg-line.__isRemoved")
+                if (removedLined) {
+                    removedLined.remove()
+                }
 
                 if (editMode) {
                     gsap.to(".grid-point", {
@@ -160,9 +165,6 @@ export default defineComponent({
                         strokeLinecap: "round",
                         duration: 0.8,
                         ease: "back.out(3.2)",
-                        onComplete: () => {
-                            // this.surfaceInTransition = false
-                        }
                     })
                 } else {
                     gsap.to(".grid-point", {
@@ -187,6 +189,9 @@ export default defineComponent({
         
         "app.activeSurface": {
             handler() {
+                if (this.newLine.length == 2 ){
+                    this.cancelNewLine()
+                }
                 Promise.all([
                     this.hideGrid(),
                     this.hidePolylines()
@@ -240,7 +245,10 @@ export default defineComponent({
         phygitalSeedEvent(e : Event) {
             const event = e as phygitalSeedEvent   
             
-            if (event.detail == "prepareChange") {   
+            if (event.detail == "prepareChange") {  
+                if (this.newLine.length == 2 ){
+                    this.cancelNewLine()
+                } 
                 Promise.all([
                     this.hideGrid(),
                     this.hidePolylines()
@@ -260,9 +268,6 @@ export default defineComponent({
                 this.strokeWidth = 30
             }
 
-            if (this.newLine.length == 2 ){
-                this.cancelNewLine()
-            }
             this.updatePattern()
         },
         keydownEvent(e: KeyboardEvent) {
@@ -382,6 +387,11 @@ export default defineComponent({
         
         // Helper methods
         updatePattern() {
+
+            if (this.newLine.length == 2 ){
+                this.cancelNewLine()
+            }
+
             this.defineGrid()
             this.definePolylines()       
             
@@ -522,9 +532,6 @@ export default defineComponent({
                     opacity: 1,
                     drawSVG: "100%",
                     ease: "back.out(3.2)",
-                    // onComplete: () => {
-                    //     this.surfaceInTransition = false
-                    // }
                 })
             } else {
                 gsap.to(".vpg-line", {
@@ -645,6 +652,7 @@ export default defineComponent({
             gsap.set(polylineElement, {opacity: 1})
 
             const animationElement = polylineElement.cloneNode(true) as SVGPolylineElement
+            animationElement.classList.add("__isRemoved")
             const patternGroup = el.querySelector("svg .vpg-pattern")
             patternGroup?.appendChild(animationElement)
 
