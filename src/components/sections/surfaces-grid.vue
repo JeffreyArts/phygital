@@ -119,8 +119,10 @@ export default defineComponent({
                 return
             }
             this.app.activeSurface = surface
-            this.$router.push("/sections-view")
-            // this.activeView = "view-surfaces"
+
+            if (this.app.activeView != "view-surfaces") {
+                this.$router.replace("/sections-view")
+            }
         },
         
         hoverSurface(surface: "top" | "front" | "left" | "bottom" | "back" | "right") {

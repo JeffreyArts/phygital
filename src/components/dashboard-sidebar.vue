@@ -103,7 +103,9 @@ export default defineComponent({
                         opacity: 0,
                         ease: "power4.inOut",
                         onComplete: () => {
-                            this.$router.replace("/3D-view")
+                            if (this.app.activeView != "view-3d") {
+                                this.$router.replace("/3D-view")
+                            }
                         }
                     })
                 } else if (this.app.activeView !== "view-surfaces" && section === "view-surface") {
