@@ -4,6 +4,10 @@ import shuffleSeed from "@/services/shuffle-seed"
 import _ from "lodash"
 import { saveAs } from "file-saver"
 import * as exportSTL  from "threejs-export-stl"
+import * as THREE from "three"
+import polylinesToThreejs from "@/services/polylines-to-threejs"
+import removeObject from "@/services/threejs-remove-object"
+import { CSG } from "three-csg-ts"
 
 export type Surface = {
   mirrorX: 0 | 1 | 2;
@@ -12,6 +16,12 @@ export type Surface = {
   height: number;
   polylines: Array<Array<{x:number, y:number}>>;
 }
+export interface SculptureGroup extends THREE.Group {
+    height: number;
+    width: number;
+    depth: number;
+  }
+  
 
 export interface phygitalSeedEvent extends Event {
     detail: "prepareChange" | "changed" 
@@ -103,7 +113,6 @@ export const PhygitalStore = defineStore({
                 if (!this.seed) {
                     return reject(new Error("No seed"))
                 }
-
                 
                 const surfaces = ["top","left","front"] as Array<"top" | "left" | "front">
                 
@@ -243,26 +252,27 @@ export const PhygitalStore = defineStore({
                 console.error("getOppositeSurface: Invalid input")
             }
         },
-        downloadSTL(filename: string) { 
+        downloadSTL(model: SculptureGroup, filename: string) { 
             return new Promise((resolve, reject)=> {       
-                let mergedObject = null as null | THREE.Mesh | THREE.Mesh<THREE.BufferGeometry<THREE.NormalBufferAttributes>>
-                
-                _.each(this.surfaces, (surface) => {
-                    if (!_.isNull(surface.model3D)) {
-                        surface.model3D.updateMatrix()
-                        _.each(surface.model3D.children, (child) => {
-                            const newMesh = child.clone() as THREE.Mesh<THREE.BufferGeometry<THREE.NormalBufferAttributes>>
-                            if (!surface.model3D) {
-                                return
-                            }
-                            
-                            newMesh.position.x += surface.model3D.position.x
-                            newMesh.position.y += surface.model3D.position.y
-                            newMesh.position.z += surface.model3D.position.z
+                if (!model) {
+                    return new Error("no model provided")
+                }
 
-                            newMesh.rotateX(surface.model3D.rotation.x)
-                            newMesh.rotateY(surface.model3D.rotation.y)
-                            newMesh.rotateZ(surface.model3D.rotation.z)
+                let mergedObject = null as null | THREE.Mesh | THREE.Mesh<THREE.BufferGeometry<THREE.NormalBufferAttributes>>
+                console.log("model", model)
+                model.children.forEach(surface => {
+                    console.log("surface.name", surface.name)
+                    if (surface.name.startsWith("surface-")) {
+                        surface.children.forEach(lineMesh => {
+                            const newMesh = lineMesh.clone() as THREE.Mesh<THREE.BufferGeometry<THREE.NormalBufferAttributes>>
+                            
+                            newMesh.position.x += surface.position.x
+                            newMesh.position.y += surface.position.y
+                            newMesh.position.z += surface.position.z
+
+                            newMesh.rotateX(surface.rotation.x)
+                            newMesh.rotateY(surface.rotation.y)
+                            newMesh.rotateZ(surface.rotation.z)
 
                             newMesh.updateMatrix()
 
@@ -285,11 +295,117 @@ export const PhygitalStore = defineStore({
             
                 const buffer = exportSTL.fromMesh(mergedObject)
                 const blob = new Blob([buffer], { type: exportSTL.mimeType })
-
-                saveAs(blob, `${filename}.stl`)
+                saveAs(blob, `${filename.replace(".stl", "")}.stl`)
                 return resolve(blob)
             })
         },
+        update3DModel(model: SculptureGroup, surfaceSide: "top" | "bottom" | "left" | "right" |  "front" | "back") {
+            if (!model) {
+                return new Error("updateModelSurface: Missing model")
+            }
+            model.width = this.surfaces.top.width
+            model.depth = this.surfaces.top.height
+            model.height = this.surfaces.left.height
+
+            
+            const diameter = .5
+            const surfaces = this.surfaces
+            const surface = this.surfaces[surfaceSide]
+            const pattern3D = polylinesToThreejs(surface.polylines, {
+                width: surface.width,
+                height: surface.height,
+                type: "box",
+                diameter: diameter,
+                beamWidth: diameter,
+                beamHeight: diameter,
+                tube: false,
+                color: "#777",
+                tubeThickness: .0125,
+            })
+            const mergedObject = new THREE.Group()
+            
+            
+            _.each(pattern3D, (mesh: any, i:number) => {
+                mesh.name = `${surfaceSide}-${i}`
+                mergedObject.add(mesh)
+            })
+            
+            if (surfaceSide === "top") {
+                // mergedObject.material = pattern3D[0].material
+                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#f00" })
+                mergedObject.name = "surface-top"
+                mergedObject.position.z = - diameter/2
+                mergedObject.position.x = - diameter/2
+                mergedObject.position.y = surfaces.left.height - diameter/2
+            }
+            if (surfaceSide === "bottom") {
+                // mergedObject.material = pattern3D[0].material
+                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#ff0" })
+                mergedObject.name = "surface-bottom"
+                mergedObject.position.z = - diameter/2 
+                mergedObject.position.x = - diameter/2 
+                mergedObject.position.y = 1 - diameter/2 
+            }
+            
+            if (surfaceSide === "front") {
+                // mergedObject.material = pattern3D[0].material
+                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#0f0" })
+                mergedObject.name = "surface-front"
+                mergedObject.rotateX(Math.PI/180* 90)
+                mergedObject.position.z = -diameter + surfaces.left.width-1
+
+                mergedObject.position.x = - diameter/2  
+                mergedObject.position.y = surface.height
+            }
+            
+            if (surfaceSide === "back") {
+                // mergedObject.material = pattern3D[0].material
+                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#0ff" })
+                mergedObject.name = "surface-back"
+                mergedObject.rotateX(Math.PI/180* 90)
+                mergedObject.position.z = -diameter
+                mergedObject.position.x = -diameter/2
+                mergedObject.position.y = surface.height
+            }
+
+            if (surfaceSide === "left") {
+                // mergedObject.material = pattern3D[0].material
+                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#00f" })
+                mergedObject.name = "surface-left"
+                mergedObject.rotateX(Math.PI/180* 90)
+                mergedObject.rotateZ(Math.PI/180* 90)
+                mergedObject.position.z = -diameter / 2
+                mergedObject.position.y = surface.height
+            }
+            
+            if (surfaceSide === "right") {
+                // mergedObject.material = pattern3D[0].material
+                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#f0f" })
+                mergedObject.name = "surface-right"
+                mergedObject.rotateY(Math.PI/180* 180)
+                mergedObject.rotateX(Math.PI/180* 90)
+                mergedObject.rotateZ(Math.PI/180* 90)
+                mergedObject.position.z = surface.width - diameter / 2 - 1
+                mergedObject.position.x = surfaces.front.width - 1 - diameter
+                mergedObject.position.y = surface.height
+            }
+            
+            // Remove old pieces
+            model.children.forEach( g => {
+                const group = g as THREE.Group
+                if (group?.name == mergedObject.name) {
+                    removeObject(group)
+                    model?.remove(g)
+                    return true
+                }
+                return false
+            })
+            
+            // Add new
+            mergedObject.updateMatrix()
+            model.add(mergedObject)
+            return model
+        }
     },
     getters: {
     }

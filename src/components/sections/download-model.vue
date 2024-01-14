@@ -12,6 +12,9 @@
 import { defineComponent } from "vue"
 import icon from "@/components/icon.vue"
 import Phygital from "@/stores/phygital"
+import { SculptureGroup } from "@/stores/phygital"
+import * as THREE from "three"
+
 import gsap from "gsap"
 
 export default defineComponent({
@@ -76,8 +79,19 @@ export default defineComponent({
                 filename = seedDom.innerText
             }
             this.clickAnimation()
-
-            // this.phygital.downloadSTL(filename)
+            const model = new THREE.Group() as SculptureGroup
+            model.name = "sculpture"
+            model.width = this.phygital.surfaces.top.width
+            model.depth = this.phygital.surfaces.top.height
+            model.height = this.phygital.surfaces.left.height
+            
+            this.phygital.update3DModel(model, "top")
+            this.phygital.update3DModel(model, "bottom")
+            this.phygital.update3DModel(model, "left")
+            this.phygital.update3DModel(model, "right")
+            this.phygital.update3DModel(model, "back")
+            this.phygital.update3DModel(model, "front")
+            this.phygital.downloadSTL(model, filename)
         },
     }
 })

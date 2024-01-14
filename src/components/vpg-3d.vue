@@ -1,5 +1,5 @@
 <template>
-    <div class="sandbox-view" @mousedown="cancelAnimations"></div>
+    <div class="sandbox-view" @mousedown="cancelCameraAnimation"></div>
 </template>
 
 <script lang="ts">
@@ -9,18 +9,11 @@ import gsap from "gsap"
 import Phygital from "@/stores/phygital"
 import AppStore from "@/stores/app"
 
-import { phygitalSeedEvent, Surface } from "@/stores/phygital"
+import { phygitalSeedEvent, SculptureGroup } from "@/stores/phygital"
 import { vpg3dRenderer } from "@/services/3d-view.js"
 
 import threeDView from "@/services/3d-view.js"
-import polylinesToThreejs from "@/services/polylines-to-threejs"
 import removeObject from "@/services/threejs-remove-object"
-
-interface SculptureGroup extends THREE.Group {
-  height: number;
-  width: number;
-  depth: number;
-}
 
 
 
@@ -83,7 +76,7 @@ export default {
                 this.updateModelSurface("back")
             },
             immediate: true
-        }
+        },
     },
     mounted() {
         this.container.width = this.$el.parentElement.clientWidth
@@ -179,164 +172,10 @@ export default {
             }
         },
         updateModelSurface(surfaceSide: "top" | "bottom" | "left" | "right" |  "front" | "back") {
-
             if (!this.model) {
                 return new Error("updateModelSurface: Missing model")
             }
-
-            const diameter = .5
-            const surfaces = this.phygital.surfaces
-            const surface = this.phygital.surfaces[surfaceSide]
-            const pattern3D = polylinesToThreejs(surface.polylines, {
-                width: surface.width,
-                height: surface.height,
-                type: "box",
-                diameter: diameter,
-                beamWidth: diameter,
-                beamHeight: diameter,
-                tube: false,
-                color: "#777",
-                tubeThickness: .0125,
-            })
-            const mergedObject = new THREE.Group()
-
-
-            _.each(pattern3D, (mesh: any, i:number) => {
-                mesh.name = `${surfaceSide}-${i}`
-                mergedObject.add(mesh)
-            })
-            
-            if (surfaceSide === "top") {
-                // mergedObject.material = pattern3D[0].material
-                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#f00" })
-                mergedObject.name = "surface-top"
-                mergedObject.position.z = - diameter/2
-                mergedObject.position.x = - diameter/2
-                mergedObject.position.y = surfaces.left.height - diameter/2
-                
-                _.each(this.model.children, g => {
-                    const group = g as THREE.Group
-                    if (group?.name == "surface-top") {
-                        removeObject(group)
-                        this.model?.remove(g)
-                        return true
-                    }
-                    return false
-                })
-                this.model.add(mergedObject)
-            }
-            if (surfaceSide === "bottom") {
-                // mergedObject.material = pattern3D[0].material
-                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#ff0" })
-                mergedObject.name = "surface-bottom"
-                mergedObject.position.z = - diameter/2 
-                mergedObject.position.x = - diameter/2 
-                mergedObject.position.y = 1 - diameter/2 
-                mergedObject.updateMatrix()
-                
-                _.each(this.model.children, g => {
-                    const group = g as THREE.Group
-                    if (group?.name == mergedObject.name) {
-                        removeObject(group)
-                        this.model?.remove(g)
-                        return true
-                    }
-                    return false
-                })
-                this.model.add(mergedObject)
-            }
-            
-            if (surfaceSide === "front") {
-                // mergedObject.material = pattern3D[0].material
-                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#0f0" })
-                mergedObject.name = "surface-front"
-                mergedObject.rotateX(Math.PI/180* 90)
-                mergedObject.position.z = -diameter + surfaces.left.width-1
-                mergedObject.position.x = - diameter/2  
-                mergedObject.position.y = surface.height
-                mergedObject.updateMatrix()
-                
-                _.each(this.model.children, g => {
-                    const group = g as THREE.Group
-                    if (group?.name == mergedObject.name) {
-                        removeObject(group)
-                        this.model?.remove(g)
-                        return true
-                    }
-                    return false
-                })
-                this.model.add(mergedObject)
-            }
-            
-            if (surfaceSide === "back") {
-                // mergedObject.material = pattern3D[0].material
-                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#0ff" })
-                mergedObject.name = "surface-back"
-                mergedObject.rotateX(Math.PI/180* 90)
-                mergedObject.position.z = -diameter
-                mergedObject.position.x = -diameter/2
-                mergedObject.position.y = surface.height
-                mergedObject.updateMatrix()
-                
-                _.each(this.model.children, g => {
-                    const group = g as THREE.Group
-                    if (group?.name == mergedObject.name) {
-                        removeObject(group)
-                        this.model?.remove(g)
-                        return true
-                    }
-                    return false
-                })
-                this.model.add(mergedObject)
-            }
-
-            if (surfaceSide === "left") {
-                // mergedObject.material = pattern3D[0].material
-                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#00f" })
-                mergedObject.name = "surface-left"
-                mergedObject.rotateY(Math.PI/180* 180)
-                mergedObject.rotateX(Math.PI/180* 90)
-                mergedObject.rotateZ(Math.PI/180* 90)
-                // mergedObject.rotateZ(Math.PI/180* 90)
-                mergedObject.position.z = -diameter/2 +  surface.width - 1
-                mergedObject.position.x = - diameter
-                mergedObject.position.y = surface.height
-                mergedObject.updateMatrix()
-                
-                _.each(this.model.children, g => {
-                    const group = g as THREE.Group
-                    if (group?.name == mergedObject.name) {
-                        removeObject(group)
-                        this.model?.remove(g)
-                        return true
-                    }
-                    return false
-                })
-                this.model.add(mergedObject)
-            }
-            
-            if (surfaceSide === "right") {
-                // mergedObject.material = pattern3D[0].material
-                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#f0f" })
-                mergedObject.name = "surface-right"
-                mergedObject.rotateX(Math.PI/180* 90)
-                mergedObject.rotateZ(Math.PI/180* 90)
-                mergedObject.position.z = - diameter/2 
-                mergedObject.position.x = surfaces.front.width - 1
-                mergedObject.position.y = surface.height
-                mergedObject.updateMatrix()
-                
-                _.each(this.model.children, g => {
-                    const group = g as THREE.Group
-                    if (group?.name == mergedObject.name) {
-                        removeObject(group)
-                        this.model?.remove(g)
-                        return true
-                    }
-                    return false
-                })
-                this.model.add(mergedObject)
-            }
+            this.phygital.update3DModel(this.model, surfaceSide)
         },
         explodeSurfaceAnimation(lineObjects: Array<THREE.Mesh>) {
             return new Promise(resolve => {
@@ -521,7 +360,7 @@ export default {
             // Animate camera position and lookAt using GSAP
             this.setCameraToStartPosition()
         },
-        cancelAnimations() {
+        cancelCameraAnimation() {
             if (!this.camera) return
             gsap.killTweensOf(this.camera.position)
             gsap.killTweensOf(this.camera.lookAt)

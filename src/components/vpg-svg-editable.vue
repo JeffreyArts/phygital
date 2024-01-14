@@ -144,9 +144,11 @@ export default defineComponent({
                 // gsap.killTweensOf(".vpg-line")
 
                 // Line removal
-                const removedLined = el.querySelector(".vpg-line.__isRemoved")
-                if (removedLined) {
-                    removedLined.remove()
+                const removedLines = el.querySelectorAll(".vpg-line.__isRemoved") as Array<HTMLElement>
+                if (removedLines) {
+                    removedLines.forEach(line => {
+                        line.remove()
+                    })
                 }
 
                 if (editMode) {
@@ -363,7 +365,7 @@ export default defineComponent({
                     })
                     
                     if (gsap.getProperty(".new-line", "opacity") != 1) {
-                        gsap.killTweensOf(".new-line")
+                        gsap.killTweensOf(".new-line:not(.__isRemoved)")
                         gsap.to(".new-line", {
                             opacity: 1,
                             duration: .8,
@@ -372,7 +374,7 @@ export default defineComponent({
                     }
                 } else {
                     if (gsap.getProperty(".new-line", "opacity") != 0.5) {
-                        gsap.killTweensOf(".new-line")
+                        gsap.killTweensOf(".new-line:not(.__isRemoved)")
                         gsap.to(".new-line", {
                             opacity: 0.5,
                             duration: .8,
@@ -551,11 +553,20 @@ export default defineComponent({
                 }
                 
                 const totalDuration = 2
+                let simultaneousLines = 1 
                 const lines = document.querySelectorAll(".vpg-line")
                 let duration = totalDuration/lines.length
-                if (duration < .32) {
-                    duration = .32
-                }
+                
+                if (duration < .05) {
+                    simultaneousLines = 8
+                    duration = duration*8
+                } else if (duration < .1) {
+                    simultaneousLines = 4
+                    duration = duration*4
+                } else if (duration < .2) {
+                    simultaneousLines = 2
+                    duration = duration*2
+                } 
 
                 const timelines = [] as Array<Promise<boolean>>
                 gsap.killTweensOf(lines)
@@ -569,7 +580,7 @@ export default defineComponent({
                             strokeWidth: this.strokeWidth / 2,
                             // strokeLinecap: "round",
                             duration: animate ? duration : 0,
-                            delay: animate ? index * .08 : 0,
+                            delay: animate ? Math.ceil(index/simultaneousLines) * .08 : 0,
                             onComplete: () => {
                                 setTimeout(() => {
                                     resolve2(true)
@@ -744,7 +755,7 @@ export default defineComponent({
         },
         cancelNewLine() {    
             // remove old line
-            gsap.killTweensOf(".new-line")
+            gsap.killTweensOf(".new-line:not(.__isRemoved)")
             const gridPoints = this.$el.querySelectorAll(".__isOption")
             this.disableNewLine = true
             gridPoints.forEach((gridPoint: SVGAElement)=> {
@@ -757,6 +768,13 @@ export default defineComponent({
                 onComplete: () => {
                     this.newLine.length = 0
                     this.disableNewLine = false
+
+                    const removedLines = this.$el.querySelectorAll(".vpg-line.__isRemoved") as Array<HTMLElement>
+                    if (removedLines) {
+                        removedLines.forEach(line => {
+                            line.remove()
+                        })
+                    }
                 }
             })
         }
