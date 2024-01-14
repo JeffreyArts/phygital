@@ -29,8 +29,12 @@ const view3D  = {
         // renderer.shadowMapEnabled = true;
         // renderer.shadowMapType = THREE.PCFSoftShadowMap;
 
-        const scene             = new THREE.Scene()
-        const camera            = new THREE.PerspectiveCamera( 35, 1, 0.1, 1000 )
+        let scene             = new THREE.Scene() as THREE.Scene | null
+        let camera            = new THREE.PerspectiveCamera( 35, 1, 0.1, 1000 ) as THREE.PerspectiveCamera | null
+
+        if (!scene || !camera) {
+            return
+        }
         camera.position.set( 0, 8, 0)
         camera.lookAt( 0, 0, 0)
 
@@ -58,8 +62,13 @@ const view3D  = {
 
 
         function animate() {
-            // if mouse down
             if (renderer.destroyed) {
+                scene = null
+                camera = null
+                return
+            }
+            
+            if (!scene || !camera) {
                 return
             }
             

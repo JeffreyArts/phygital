@@ -86,11 +86,9 @@ export default defineComponent({
         setSelection(event:MouseEvent) {
             this.selection.x = event.clientX
             this.selection.y = event.clientY
-            console.log("setSelection", this.selection.x)
         },
         select(section: "view-3d" | "view-surface") {
             if (this.selection.x !== 0 && this.selection.y !== 0) {
-                console.log("select", this.app.activeView, section)
                 if (this.app.activeView !== "view-3d" && section === "view-3d") {
                     gsap.to(".vpg-svg-editable polyline", {
                         duration: .8,
@@ -134,9 +132,15 @@ export default defineComponent({
 <style lang="scss">
 @import "./../assets/scss/variables.scss";
 .dashboard-sidebar {
+    display: grid;
     section {
         position: relative;
     }
+}
+
+.dashboard-sidebar-container {
+    position: absolute;
+    overflow:auto;
 }
 
 .dashboard-sidebar-container[data-grid="3x8"] {
@@ -146,72 +150,10 @@ export default defineComponent({
         grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
         grid-template-columns: 1fr 1fr 1fr;
     }
-}
-.dashboard-sidebar-container[data-grid="8x2"] {
-    .dashboard-sidebar {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-    }
-}
 
-
-#s-seed {
-    background-color: rgba(255,255,0,.32);
-}
-#s-surfaces {
-    background-color: rgba(255,0,255,.32);
-}
-#s-dimensions {
-    background-color: rgba(0,255,255,.32);
-}
-#s-cube3d {
-    background-color: rgba(0,255,0,.32);
-}
-#s-download{
-    background-color: rgba(0,0, 255,.32);
-}
-#s-links {
-    background-color: rgba(255,0,0,.32);
-}
-.dashboard-sidebar {
-    display: grid;
-    
-
-    // &.__2Columns {
-    //     grid-template-columns: 1fr 1fr;
-    //     gap: 8px;
-    // }
-}
-// .dashboard-sidebar[data-grid="3x6"] {
-//     #s-seed {
-//         grid-column: 2;
-//         grid-row: 1/2;
-//     }
-//     #s-surfaces {
-//         grid-column: 2;
-//         grid-row: 2/4;
-//     }
-//     #s-dimensions {
-//         grid-column: 2;
-//         grid-row: 4/5;
-//     }
-    
-//     #s-cube3d {
-//         grid-column: 2;
-//         grid-row: 5/7;
-//     }
-    
-//     #s-download {
-//         grid-column: 2;
-//         grid-row: 5/6;
-//         display: none;
-//     }
-//     #s-view-edit {
-//         grid-column: 1;
-//         grid-row:6/7;
-//     }
-// }
-.dashboard-sidebar-container[data-grid="3x8"] {
+    //
+    // Sections
+    //
 
     #s-surfaces {
         grid-column: 2/4;
@@ -253,6 +195,15 @@ export default defineComponent({
 }
 
 .dashboard-sidebar-container[data-grid="8x2"] {
+    .dashboard-sidebar {
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+
+    //
+    // Sections
+    //
+
     #s-surfaces {
         grid-column: 1/2;
         grid-row: 1/3;

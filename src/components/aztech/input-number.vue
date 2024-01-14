@@ -76,7 +76,7 @@ export default defineComponent({
     watch: {
         modelValue:{
             handler() {
-                this.modelValueClone = this.modelValue
+                this.modelValueClone = this.modelValue.toString()
             },
             immediate: true
         }
@@ -101,19 +101,16 @@ export default defineComponent({
         },
         updateValue() {
             const value = parseInt(this.modelValueClone, 10)
-            console.log(value, typeof this.modelValue)
             if (value <= 1) {
                 return this.$emit("update", 2)
             } else if (value > 32) {
                 return this.$emit("update", 32)
             }
             this.$emit("update", value)
-            // console.log(value)
         },
         decrease() {
             if (this.disabled) return
             this.$emit("decrease", this.modelValue - 1)
-            // this.modelValue++
         },
     }
 })

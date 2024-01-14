@@ -18,6 +18,7 @@ import removeObject from "@/services/threejs-remove-object"
 
 
 
+
 export default {
     props: ["datamodel", "modelChanged", "name"],
     setup() {
@@ -91,12 +92,6 @@ export default {
             deep:true,
             immediate: true
         },
-        "app.activeSurface": {
-            handler() {
-                // console.log("moveCameraToSurfaceasfg")
-                // this.moveCameraToSurface()
-            }
-        }
     },
     mounted() {
         this.container.width = this.$el.parentElement.clientWidth
@@ -111,7 +106,7 @@ export default {
     },
     beforeUnmount() {
         window.removeEventListener("phygital:seed", this.phygitalSeedEvent)
-        const render = this.renderer as vpg3dRenderer
+
         if (this.scene) {
             for (let index = this.scene.children.length - 1; index >= 0; index--) {
                 const object = this.scene.children[index]
@@ -135,16 +130,16 @@ export default {
         window.removeEventListener("resize", this.updateCanvasSize)
     },
     methods: {
-
         phygitalSeedEvent(e : Event) {
             const event = e as phygitalSeedEvent   
             
             if (event.detail == "prepareChange") {   
-                
+                this.setCameraToStartPosition()
             }
         },
         define3dEnvironment() {
             const o = threeDView.init({orbitControls: true})
+
             // Update the controls target to the origin point
             this.scene      = o.scene
             this.renderer   = o.renderer
@@ -279,7 +274,6 @@ export default {
             // side: "top" | "bottom" | "back" | "front" | "left" | "right"
         },
         updateModel() {
-            console.log("Update model")
             // Changing this order might cause unexpected behaviour
             this.updateModelSurface("top")
             this.updateModelSurface("bottom")
@@ -316,21 +310,22 @@ export default {
                 y: this.model.height * 1.6,
                 z: this.model.height * 2.8,
                 ease: "power1.inOut",
-            })
-
-            // Animate orientation point of camera
-            gsap.to(this.camera.lookAt, {
-                duration: 1.28,
-                x: target.x,
-                y: target.y,
-                z: target.z,
                 onUpdate: () => {
                     if (!this.camera) return
 
                     this.camera.lookAt(target)
                 },
-                ease: "power1.inOut",
             })
+
+            // console.log(this.camera.lookAt)
+            // // Animate orientation point of camera
+            // gsap.to(this.camera.lookAt, {
+            //     duration: 1.28,
+            //     x: target.x,
+            //     y: target.y,
+            //     z: target.z,
+            //     ease: "power1.inOut",
+            // })
 
             this.redefineOrbitControls()
         },
@@ -391,9 +386,6 @@ export default {
             if (!this.camera || !this.model) {
                 return  
             }
-            
-            const a = this.model.width*this.model.height*this.model.depth/100
-            console.log("A", a)
 
             const target = new THREE.Vector3(this.model.width / 2 - 0.75, this.model.height / 2 + 0.5, this.model.depth / 2 - 0.75)
             const cameraTarget = new THREE.Vector3(this.model.width * 2.8, this.model.height * 1.6, this.model.height * 2.8)

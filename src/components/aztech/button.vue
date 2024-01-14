@@ -36,14 +36,6 @@ export default defineComponent({
             width: 0
         }
     },
-    computed: {
-        // width() {
-        //     const contentElement = this.$refs.content as HTMLElement
-        //     if (!contentElement) return 0
-        //     console.log(this.widthStartSection + this.widthEndSection + contentElement.clientWidth)
-        //     return this.widthStartSection + this.widthEndSection + contentElement.clientWidth
-        // }
-    },
     mounted() {
         this.updateSize()
         window.addEventListener("resize", this.updateSize)    

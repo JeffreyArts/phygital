@@ -259,9 +259,7 @@ export const PhygitalStore = defineStore({
                 }
 
                 let mergedObject = null as null | THREE.Mesh | THREE.Mesh<THREE.BufferGeometry<THREE.NormalBufferAttributes>>
-                console.log("model", model)
                 model.children.forEach(surface => {
-                    console.log("surface.name", surface.name)
                     if (surface.name.startsWith("surface-")) {
                         surface.children.forEach(lineMesh => {
                             const newMesh = lineMesh.clone() as THREE.Mesh<THREE.BufferGeometry<THREE.NormalBufferAttributes>>

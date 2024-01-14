@@ -20,10 +20,8 @@ import icon from "@/components/icon.vue"
 import AztechUnderline from "@/components/aztech/underline-1.vue"
 import gsap from "gsap"
 import _ from "lodash"
-import App from "@/stores/app"
 import { phygitalSeedEvent } from "@/stores/phygital"
 import Phygital from "@/stores/phygital"
-import { runInThisContext } from "vm"
 
 export default defineComponent({
     name: "cube-seed",
@@ -75,29 +73,14 @@ export default defineComponent({
         }
     },
     mounted() {
-
-        if (window.innerWidth> 512) {
-            this.slots = 4
-        } else {
-            this.slots = 1
-        }
+        this.resizeEvent()
         this.phygital.setSeed(this.seed)
-        window.addEventListener("phygital:seed", this.seedChange)
-        
-        // this.phygital.generateDimensions()
-        // this.updateSurfaces()
-        // this.seed = this.phygital.seed + ""
-
-        // this.mountedAnimations()
-        
+        window.addEventListener("phygital:seed", this.phygitalSeedEvent)
         window.addEventListener("resize", this.resizeEvent)
-        // window.addEventListener("appState:sidebar", this.handleAppState)
-        // window.addEventListener("appState", this.handleAppState)
     },
     methods: {
-        seedChange(e : Event) {
+        phygitalSeedEvent(e : Event) {
             const event = e as phygitalSeedEvent
-            console.log(event.detail)
             if (event.detail == "changed") {
                 // Update the data and finish animations
                 clearInterval(this.seedGenerationInterval)
@@ -114,6 +97,7 @@ export default defineComponent({
                 }
 
                 const target = currentTarget.querySelector("g")
+                
                 // kill slots animation
                 gsap.killTweensOf(target)
                 gsap.to(target, {
@@ -131,47 +115,15 @@ export default defineComponent({
                     this.regenerating = false
                     currentTarget.classList.remove("__isGenerating")
                     gsap.set(target, {rotate: 0})
-                    // console.log("A")
-                    // App.activated()
                 }, 0)
             }
         },
-        resizeEvent(e) {
-
+        resizeEvent() {
             if (window.innerWidth> 512) {
                 this.slots = 4
             } else {
                 this.slots = 1
             }
-        },
-        handleAppState(event: CustomEvent) {
-            // console.log(event)
-            if (event.detail == "activated") {
-                
-            }
-        },
-        mountedAnimations() {
-            gsap.set(".aztech-underline-1-slot", {
-                opacity: 0,
-                x: 2
-            })
-
-            setTimeout(() => {
-                gsap.to(this.$el.querySelector(".seed-button g"), {
-                    duration: 1.64,
-                    rotate: 1280,
-                    ease: "elastic.inOut(1, 0.4)",
-                })
-
-                gsap.to(".aztech-underline-1-slot", {
-                    duration: .8,
-                    stagger: .02,
-                    opacity: 1,
-                    delay: .32,
-                    x:0,
-                    ease: "power2.out",
-                })
-            })
         },
         regenerateSeed(event:MouseEvent) {
             const currentTarget = event.currentTarget as HTMLElement
@@ -219,26 +171,6 @@ export default defineComponent({
             
             
         },
-        
-        updateSurfaces() {
-            this.phygital.processSeed().then(() => {
-                this.phygital.update3DSurface("top")
-                this.phygital.update3DSurface("bottom")
-
-                this.phygital.update3DSurface("left")
-                this.phygital.update3DSurface("right")
-
-                this.phygital.update3DSurface("front")
-                this.phygital.update3DSurface("back")
-                setTimeout(() => {
-                    App.activate()
-                    
-                }, 1000)
-            }) 
-        },
-        modifyBlockSize(size: number) {
-            this.phygital.blockSize = size/this.phygital.surfaces.top.width 
-        }
     }
 })
 </script>

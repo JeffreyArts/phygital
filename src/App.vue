@@ -140,10 +140,4 @@ export default defineComponent ({
     position: absolute;
 }
 
-.dashboard-sidebar-container {
-	background-color: rgba(255,0,0,.1);
-    position: absolute;
-    overflow:auto;
-}
-
 </style>

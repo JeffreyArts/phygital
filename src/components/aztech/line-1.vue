@@ -34,7 +34,6 @@ export default defineComponent({
     methods: {
         updateLine() {
             const el = this.$el as HTMLElement
-            console.log(el)
             if (!el) return
             this.svgWidth = el.clientWidth
             const startSectionWidth = 4

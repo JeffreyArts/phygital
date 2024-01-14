@@ -287,20 +287,11 @@ export default {
                 y: this.model.height * 1.6,
                 z: this.model.height * 2.8,
                 ease: "power1.inOut",
-            })
-
-            // Animate orientation point of camera
-            gsap.to(this.camera.lookAt, {
-                duration: 1.28,
-                x: target.x,
-                y: target.y,
-                z: target.z,
                 onUpdate: () => {
                     if (!this.camera) return
 
                     this.camera.lookAt(target)
                 },
-                ease: "power1.inOut",
             })
 
             // Define orientation point for orbitControls

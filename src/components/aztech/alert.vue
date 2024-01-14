@@ -62,7 +62,7 @@ export default defineComponent({
                     label: "DEFAULT",
                     type: "primary", // Set the correct type value
                     onClick: () => {
-                        console.log("SPECIFY OPTIONS ATTRIBUTE")
+                        console.warn("SPECIFY OPTIONS ATTRIBUTE")
                     },
                 },
             ],
@@ -80,14 +80,6 @@ export default defineComponent({
                 height: number
             }
         }
-    },
-    computed: {
-        // width() {
-        //     const contentElement = this.$refs.content as HTMLElement
-        //     if (!contentElement) return 0
-        //     console.log(this.widthStartSection + this.widthEndSection + contentElement.clientWidth)
-        //     return this.widthStartSection + this.widthEndSection + contentElement.clientWidth
-        // }
     },
     watch: {
         "open": {

@@ -260,7 +260,6 @@ export default defineComponent({
             }
         },
         phygitalUpdateEvent(e : Event) {
-            console.log("phygitalUpdateEvent event")        
             this.updatePattern()
         },
         resizeEvent() {

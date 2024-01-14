@@ -39,14 +39,6 @@ export default defineComponent({
             }
         }
     },
-    computed: {
-        // width() {
-        //     const contentElement = this.$refs.content as HTMLElement
-        //     if (!contentElement) return 0
-        //     console.log(this.widthStartSection + this.widthEndSection + contentElement.clientWidth)
-        //     return this.widthStartSection + this.widthEndSection + contentElement.clientWidth
-        // }
-    },
     watch: {
         "open": {
             handler() {
@@ -95,13 +87,6 @@ export default defineComponent({
             
             this.$emit("close", true)
             this.isOpen = false
-
-            // gsap.to(".aztech-monitor", {
-            //     opacity: 0,
-            //     duration: .32,
-            //     delay: .24,
-            //     ease: "power4.out",
-            // })
             
             gsap.to($el, { opacity: 0, duration: 0.8, onComplete: () => {
                 gsap.set($el, { pointerEvents: "none" })

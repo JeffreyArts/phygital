@@ -145,7 +145,6 @@ export default defineComponent({
             this.phygital.updateSurfaces()
         },
         modifyHeight(v:number, skipAlert=false) {
-            console.log(v, typeof v)
             const seedDom = document.querySelectorAll(".seed-value")[0] as HTMLElement
             const seed = seedDom.innerText.split("\n")[0].trim()
             if (seed === "custom" && !skipAlert) {

@@ -305,7 +305,6 @@ const validateGeometryMesh = (mesh, meshes) => {
             return otherMesh
         }
     })
-    // console.log(existingMesh)
     if (existingMesh) return existingMesh
 
     const newMesh = {

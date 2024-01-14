@@ -102,7 +102,6 @@ export default defineComponent({
         },
     },
     mounted() {
-        console.log("MOUNTED")
         const container = this.$refs.container as HTMLElement
         this.height = container.clientHeight
         this.finalHeight = container.clientHeight
