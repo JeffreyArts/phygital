@@ -1,13 +1,11 @@
 import { createWebHistory, createRouter } from "vue-router"
-import Home from "@/routes/home.vue"
+// import Home from "@/routes/home.vue"
 import view3D from "@/routes/view-3d.vue"
 import viewSections from "@/routes/view-surface.vue"
 
 const routes = [
     {
         path: "/",
-        name: "Home",
-        component: Home,
         redirect: "/3D-view",
     },
     {
@@ -29,4 +27,3 @@ const router = createRouter({
 })
 
 export default router
-

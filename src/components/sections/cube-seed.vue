@@ -15,7 +15,7 @@
 
 
 <script lang="ts">
-import { defineComponent } from "vue"
+import { Ref, VueElement, defineComponent } from "vue"
 import icon from "@/components/icon.vue"
 import AztechUnderline from "@/components/aztech/underline-1.vue"
 import gsap from "gsap"
@@ -46,7 +46,7 @@ export default defineComponent({
             regenerating: false,
             seed: "a-" +_.random(100000, 999999).toString(),
             slots: 2,
-            seedGenerationInterval: 0 as number | timeout
+            seedGenerationInterval: 0 as number | ReturnType<typeof setInterval>
         }
     },
     computed: {
@@ -89,9 +89,10 @@ export default defineComponent({
                 if (!this.$refs["generateButton"]) {
                     return
                 }
-
-                const currentTarget = this.$refs["generateButton"].$el
-
+                
+                const tsTarget = this.$refs["generateButton"] as any
+                let currentTarget = tsTarget.$el
+                    
                 if (!currentTarget) {
                     return
                 }

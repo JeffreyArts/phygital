@@ -132,6 +132,9 @@ export default {
         },
         define3dEnvironment() {
             const o = threeDView.init({orbitControls: true})
+            if (!o) {
+                return
+            }
             // Update the controls target to the origin point
             this.scene      = o.scene
             this.renderer   = o.renderer
@@ -199,6 +202,7 @@ export default {
                             delay += .024
                         }
                         
+                        childObject.material = childObject.material as THREE.MeshLambertMaterial
                         const material = childObject.material.clone()
                         material.transparent = true
                         childObject.material = material as THREE.MeshLambertMaterial
