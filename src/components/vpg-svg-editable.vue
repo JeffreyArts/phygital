@@ -641,7 +641,8 @@ export default defineComponent({
         },
         removeLine(polylineElement: HTMLElement) {
             const el = this.$el as HTMLElement
-            if (!this.vpgPattern || !el) {
+            
+            if (!this.vpgPattern || !el || !polylineElement || polylineElement.classList.contains("__isRemoved")) {
                 return
             }
             // The division of removing and animating the removal is necessary

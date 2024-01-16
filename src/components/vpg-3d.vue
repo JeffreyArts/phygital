@@ -178,6 +178,7 @@ export default {
             if (!this.model) {
                 return new Error("updateModelSurface: Missing model")
             }
+
             this.phygital.update3DModel(this.model, surfaceSide)
         },
         explodeSurfaceAnimation(lineObjects: Array<THREE.Mesh>) {

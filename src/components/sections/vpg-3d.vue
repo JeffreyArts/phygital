@@ -9,13 +9,11 @@ import gsap from "gsap"
 import Phygital from "@/stores/phygital"
 import AppStore from "@/stores/app"
 
-import { phygitalSeedEvent, Surface, SculptureGroup } from "@/stores/phygital"
+import { phygitalSeedEvent, SculptureGroup } from "@/stores/phygital"
 import { vpg3dRenderer } from "@/services/3d-view.js"
 
 import threeDView from "@/services/3d-view.js"
 import removeObject from "@/services/threejs-remove-object"
-
-
 
 
 
@@ -46,6 +44,11 @@ export default {
         "phygital.surfaces.top.polylines": {
             handler() {
                 this.updateModelSurface("top")
+                this.updateModelSurface("bottom")
+                this.updateModelSurface("left")
+                this.updateModelSurface("right")
+                this.updateModelSurface("front")
+                this.updateModelSurface("back")
                 this.setCameraToStartPosition()
                 
             },
@@ -307,13 +310,15 @@ export default {
             }
 
             const target = new THREE.Vector3(this.model.width / 2 - 0.75, this.model.height / 2 + 0.5, this.model.depth / 2 - 0.75)
+            let distance = 2.8 
+            distance += this.model.depth / 8
 
             // Animate camera position 
             gsap.to(this.camera.position, {
                 duration: 1.28, // Duration in seconds
-                x: this.model.width * 2.8,
+                x: this.model.width * distance,
                 y: this.model.height * 1.6,
-                z: this.model.height * 2.8,
+                z: this.model.height * distance,
                 ease: "power1.inOut",
                 onUpdate: () => {
                     if (!this.camera) return

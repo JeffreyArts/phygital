@@ -11,7 +11,6 @@
 import {defineComponent} from "vue"
 import App from "@/stores/app"
 import _ from "lodash"
-import gsap from "gsap"
 
 import DashboardOverlay from "@/components/dashboard-overlay.vue"
 import DashboardSidebar from "@/components/dashboard-sidebar.vue"
