@@ -17,11 +17,12 @@ else
   echo "Unknown environment: $ENVIRONMENT_VAR"
   exit 1
 fi
-
 # Load the environment variables from .env.production
 set -o allexport
-source .env.production
+source "$ENV_FILE"
 set +o allexport
+
+
 
 # Build the application
 yarn run build
@@ -52,6 +53,7 @@ ssh $DEPLOYMENT_USER@$DEPLOYMENT_HOST "\
     rm $DEPLOYMENT_PATH/tmp -rf; \
     rm $DEPLOYMENT_PATH/deploy.zip; \
     $DEPLOYMENT_PATH/deploy.zip; \
+    chmod -R 755 $DEPLOYMENT_PATH/current/images
     exit"
     
 # Clean up old backups if there are more than 5
