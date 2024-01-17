@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 
-export type ViewState = "view-3d" | "view-surfaces"
+export type ViewState = "view-3d" | "view-surfaces" | ""
 export type OrientationType = "landscape" | "portrait"
 type Surfaces = "top" | "bottom" | "left" | "right" | "front" | "back"
 

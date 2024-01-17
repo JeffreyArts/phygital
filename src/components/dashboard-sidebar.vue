@@ -21,7 +21,7 @@
                 <section-download/>
             </section>
             <section id="s-links">
-                <!-- <section-links/> -->
+                <section-links/>
             </section>
             <section id="s-view-edit" v-if="app.activeView === 'view-surfaces'">
                 <section-view-edit-button />
@@ -45,6 +45,7 @@ import sectionDownload from "@/components/sections/download-model.vue"
 import sectionSurfaces from "@/components/sections/surfaces-grid.vue"
 import sectionViewEditButton from "@/components/sections/view-edit-button.vue"
 import sectionSurfaceDimensions from "@/components/sections/surface-dimensions.vue"
+import sectionLinks from "@/components/sections/links.vue"
 import sectionVpg3d from "@/components/sections/vpg-3d.vue"
 
 export default defineComponent({
@@ -56,6 +57,7 @@ export default defineComponent({
         sectionSurfaces,
         sectionViewEditButton,
         sectionSurfaceDimensions,
+        sectionLinks,
         sectionVpg3d
     },
     setup() {
@@ -90,6 +92,31 @@ export default defineComponent({
         select(section: "view-3d" | "view-surface") {
             if (this.selection.x !== 0 && this.selection.y !== 0) {
                 if (this.app.activeView !== "view-3d" && section === "view-3d") {
+
+
+                    gsap.to(".surface-dimensions .aztech-input-number", {
+                        opacity: 0,
+                        duration: .64,
+                        stagger: {
+                            from: "end",
+                            each: .08,
+                        },
+                        ease: "power4.out"
+                    })
+
+                    gsap.to(".view-edit-container svg", {
+                        opacity: 0,
+                        duration: .48,
+                        delay: .16,
+                        ease: "power4.out"
+                    })
+
+                    gsap.to(".view-edit-text-container", {
+                        opacity: 0,
+                        duration: .64,
+                        ease: "power4.out"
+                    })
+
                     gsap.to(".vpg-svg-editable polyline", {
                         duration: .8,
                         strokeWidth: 24,
@@ -191,6 +218,12 @@ export default defineComponent({
     #s-surface-dimensions {
         grid-column: 1/2;
         grid-row: 2/4;
+    }
+
+    .view-edit-container {
+        @media screen and (min-height: 760px) {
+            width: calc(100% - 16px);
+        }
     }
 }
 

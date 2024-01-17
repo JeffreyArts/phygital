@@ -85,6 +85,7 @@ export default defineComponent({
     mounted() {
         gsap.registerPlugin(MorphSVGPlugin)
         this.editMode = this.app.editMode        
+        this.fadeInElement()
 
         const viewEl = this.$refs["view-text"] as HTMLElement
         const editEl = this.$refs["edit-text"] as HTMLElement
@@ -97,14 +98,33 @@ export default defineComponent({
             gsap.set(".view-edit-deco-bottom-right #fill > *", {fill: "#1c1c1e"})
             gsap.set(".view-edit-deco-top-left #fill > *", {fill: "#1c1c1e"})
         } else {
-            gsap.set(viewEl, {opacity: 1, x: 0})
+            // gsap.set(viewEl, {opacity: 1, x: 0})
             gsap.set(editEl, {opacity: 0, x: -16})
             gsap.set("#hand", {morphSVG: "#eye-open"})
             gsap.set(".view-edit-deco-bottom-right #fill > *", {fill: "transparent"})
             gsap.set(".view-edit-deco-top-left #fill > *", {fill: "transparent"})
+            setTimeout(this.wink, 1000)
         }
     }, 
     methods: {
+        fadeInElement() {
+            gsap.fromTo(".view-edit-container svg", {
+                opacity: 0,
+                duration: .48,
+                ease: "power4.out"
+            },{
+                opacity: 1
+            })
+            
+            gsap.killTweensOf(".view-edit-text-container")
+            gsap.fromTo(".view-edit-text-container", {
+                opacity: 0,
+                delay: 1.8,
+                duration: 10,
+            },{
+                opacity: 1
+            })
+        },
         switchMode() {
             this.app.editMode = !this.app.editMode
             this.editMode = this.app.editMode
@@ -199,6 +219,10 @@ export default defineComponent({
     height: 100%;
     container-type: size;
     container-name: view-edit-container;
+}
+
+.view-edit-text-container {
+    opacity: 0;
 }
 
 .view-edit-text {

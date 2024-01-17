@@ -20,6 +20,7 @@ import AppStore from "@/stores/app"
 import AztechAlert from "@/components/aztech/alert.vue"
 import AztechInputNumber from "@/components/aztech/input-number.vue"
 import type { AztechAlertOption } from "@/types/aztech-alert"
+import gsap from "gsap"
 
 export default defineComponent({
     name: "surface-dimensions",
@@ -88,6 +89,21 @@ export default defineComponent({
             onClick: () => {
                 this.closeAlert()
             }
+        })
+        
+        this.$nextTick(() => {
+
+            gsap.fromTo(".surface-dimensions .aztech-input-number", {
+                opacity:0,
+                duration: .64,
+                stagger: {
+                    from: "end",
+                    each: .08,
+                },
+                ease: "power4.out"
+            },{
+                opacity: 1,
+            })
         })
     },
     methods: {
