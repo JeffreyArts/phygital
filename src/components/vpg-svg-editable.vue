@@ -228,8 +228,8 @@ export default defineComponent({
             window.removeEventListener("phygital:update", this.phygitalUpdateEvent)
             window.removeEventListener("resize", this.resizeEvent)
             window.removeEventListener("keydown", this.keydownEvent)
-            this.updatePattern()
         } 
+        this.updatePattern()
 
         window.addEventListener("phygital:seed", this.phygitalSeedEvent)
         window.addEventListener("phygital:update", this.phygitalUpdateEvent)
@@ -472,7 +472,8 @@ export default defineComponent({
             return new Promise((resolve, reject) => {
                 // Check if there are .grid-point's available
                 if (this.$el.querySelectorAll(".grid-point").length == 0) {
-                    return reject(new Error("no .grid-point's found"))
+                    console.warn("no .grid-point's found")
+                    return resolve(true)
                 }
                 
                 // Stop existing animations
