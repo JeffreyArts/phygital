@@ -10,7 +10,7 @@
                 <span class="aztech-input-number-text-value">
                     {{ value }}
                 </span>
-                <input class="aztech-input-number-input" :disabled="disabled" type="number" @change="updateValue" v-model="modelValueClone" />
+                <input class="aztech-input-number-input" :disabled="disabled" pattern="[0-9]*" type="number" @change="updateValue" v-model="modelValueClone" />
                 <span class="aztech-input-number-text-unit" v-if="unit">
                     {{ unit }}
                 </span>

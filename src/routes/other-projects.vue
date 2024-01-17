@@ -56,8 +56,9 @@ export default defineComponent ({
     width: 100%;
     overflow-y: auto;
     height: 100%;
-    padding-right: 64px;
-    max-width: calc(100% - 16px);
+    // padding-right: 64px;
+
+    // max-width: calc(100% - 16px);
 }
 .other-projects-container {
     height:calc(100% - 80px);

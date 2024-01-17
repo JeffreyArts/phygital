@@ -46,8 +46,8 @@
 
 
         <div class="view-edit-text-container">
-            <span class="view-edit-text" ref="edit-text">Edit</span>
-            <span class="view-edit-text" ref="view-text">View</span>
+            <span class="view-edit-text" ref="edit-text">View</span>
+            <span class="view-edit-text" ref="view-text">Edit</span>
         </div>
 
     </div>
