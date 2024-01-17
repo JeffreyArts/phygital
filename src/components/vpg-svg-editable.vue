@@ -471,6 +471,11 @@ export default defineComponent({
         hideGrid(animate = false as boolean) {
             return new Promise((resolve, reject) => {
                 // Check if there are .grid-point's available
+
+                if (this.$el.querySelectorAll(".vpg-line").length == 0) {
+                    return resolve(true)
+                }
+                
                 if (this.$el.querySelectorAll(".grid-point").length == 0) {
                     console.warn("no .grid-point's found")
                     return resolve(true)
