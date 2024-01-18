@@ -7,10 +7,10 @@
 
 <script lang="ts">
 import {defineComponent} from "vue"
+import {RouteLocationNormalized} from "vue-router"
 import AppStore from "@/stores/app"
 import vpgSvgEditable from "@/components/vpg-svg-editable.vue"
-
-import _ from "lodash"
+import gsap from "gsap"
 
 export default defineComponent ({ 
     name: "routeViewSection",
@@ -25,6 +25,7 @@ export default defineComponent ({
     },
     data() {
         return {
+            fadedOut: false
         }
     },
     computed: {
@@ -38,9 +39,117 @@ export default defineComponent ({
     mounted() {
         document.title = "Phygital - Surface editor" 
         this.app.activeView = "view-surfaces"
+
+        this.$nextTick(()=> {
+            this.fadeIn()
+        })
+
+        this.$router.beforeResolve(guard => {
+            if (this.$router.currentRoute.value.name != "Sections View" || this.fadedOut) {
+                return
+            }
+            this.fadeOut(guard)
+            return false
+        })
     },
     methods: {
-        
+        fadeOut(newRoute: RouteLocationNormalized) {
+            // section: Surface dimensions
+            gsap.to(".surface-dimensions .aztech-input-number", {
+                opacity: 0,
+                duration: .64,
+                stagger: {
+                    from: "end",
+                    each: .08,
+                },
+                ease: "power3.out"
+            })
+
+            // section: View edit button
+            gsap.to(".view-edit-container svg", {
+                opacity: 0,
+                duration: .48,
+                delay: .16,
+                ease: "power3.out"
+            })
+
+            gsap.to(".view-edit-text-container", {
+                opacity: 0,
+                duration: .64,
+                ease: "power3.out"
+            })
+
+            gsap.to(".vpg-svg-editable polyline", {
+                duration: .8,
+                strokeWidth: 24,
+                ease: "power2.out",
+            })
+
+            // Main
+            gsap.to(".vpg-svg-editable", {
+                duration: .96,
+                opacity: 0,
+                ease: "power3.out",
+                onComplete: () => {
+                    this.fadedOut = true
+                    this.$router.replace(newRoute.fullPath)
+                }
+            })
+
+        },
+        fadeIn() {
+
+            // section: Surface dimensions
+            gsap.set(".surface-dimensions .aztech-input-number", {
+                opacity: 0
+            })
+            gsap.to(".surface-dimensions .aztech-input-number", {
+                opacity: 1,
+                duration: .8,
+                stagger: {
+                    from: "start",
+                    each: .16,
+                },
+                ease: "power3.in"
+            })
+            
+            // section: View edit button
+            gsap.fromTo(".view-edit-container svg", {
+                opacity: 0,
+                duration: .48,
+                ease: "power3.in"
+            },{
+                opacity: 1,
+            })
+                
+            gsap.fromTo(".view-edit-text-container", {
+                opacity: 0,
+                duration: .64,
+                delay: .16,
+                ease: "power3.in"
+            },{
+                opacity: 1,
+            })
+            
+            // MAIN
+            gsap.set(".vpg-svg-editable svg", {
+                opacity: 0,
+                y: -8,
+                scale: .8,
+            })
+
+            gsap.to(".vpg-svg-editable svg", {
+                scale: 1,
+                y: 0,
+                ease: "power4.inOut",
+                duration: .8,
+                opacity: 1,
+            })
+
+
+
+
+        }   
     }
 })
 

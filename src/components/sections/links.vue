@@ -156,7 +156,7 @@ export default defineComponent({
         margin: 0;
         font-family: $defaultFont;
         list-style-type: none;
-        line-height: 1.2;
+        line-height: 1;
     }
 
     .link {
@@ -193,7 +193,7 @@ export default defineComponent({
 
 @container links-section (min-height: 64px) {
     .links-section li {
-        line-height: 1.4;
+        margin-top: 1px;
     }
 }
 @container links-section (min-height: 69px) {
@@ -205,7 +205,7 @@ export default defineComponent({
     .links-section {
         font-size: 12px;
         li {
-            line-height: 1.5;
+            margin-top: 2px;
         }
         .link {
             font-family: $accentFont;
@@ -223,14 +223,14 @@ export default defineComponent({
 @container links-section (min-height: 78px) {
     .links-section {
         li {
-            line-height: 1.6;
+            margin-top: 3px;
         }
     }
 }
 @container links-section (min-height: 85px) {
     .links-section {
         li {
-            line-height: 1.8;
+            margin-top: 4px;
         }
     }
 }

@@ -85,7 +85,6 @@ export default defineComponent({
     mounted() {
         gsap.registerPlugin(MorphSVGPlugin)
         this.editMode = this.app.editMode        
-        this.fadeInElement()
 
         const viewEl = this.$refs["view-text"] as HTMLElement
         const editEl = this.$refs["edit-text"] as HTMLElement
@@ -107,24 +106,6 @@ export default defineComponent({
         }
     }, 
     methods: {
-        fadeInElement() {
-            gsap.fromTo(".view-edit-container svg", {
-                opacity: 0,
-                duration: .48,
-                ease: "power4.out"
-            },{
-                opacity: 1
-            })
-            
-            gsap.killTweensOf(".view-edit-text-container")
-            gsap.fromTo(".view-edit-text-container", {
-                opacity: 0,
-                delay: 1.8,
-                duration: 10,
-            },{
-                opacity: 1
-            })
-        },
         switchMode() {
             this.app.editMode = !this.app.editMode
             this.editMode = this.app.editMode

@@ -10,7 +10,7 @@
             <section id="s-dimensions">
                 <section-meta-dimensions />
             </section>
-            <section id="s-cube3d" @click="select('view-3d')" @mousedown="setSelection" @mousemove="cancelSelection">
+            <section id="s-cube3d" @click="select3dView" @mousedown="setSelection" @mousemove="cancelSelection">
                 <section-vpg-3d name="sidebar" />
                 <svg :class="app.activeView === 'view-3d' ? '__isHidden' : ''" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 37 64" xml:space="preserve">
                     <path d="M30.9,11v18.8h-1.7V4.4h-6.1v25.4h-1.7V0h-6.1v29.8h-1.7V3.3H7.7v35.9H6.1V19.9H0v25.7C0,55.7,8.3,64,18.5,64 C28.7,64,37,55.7,37,45.5V11H30.9z M13.2,41.4H17v-3.9h3.9v3.9h3.9v3.9h-3.9v3.9H17v-3.9h-3.9V41.4z M19,58.4 c-6.4,0-11.7-4.8-12.4-11h3.9c0.7,4.1,4.2,7.2,8.5,7.2c4.3,0,7.8-3.1,8.5-7.2h3.9C30.7,53.6,25.4,58.4,19,58.4z"/>
@@ -89,60 +89,9 @@ export default defineComponent({
             this.selection.x = event.clientX
             this.selection.y = event.clientY
         },
-        select(section: "view-3d" | "view-surface") {
+        select3dView() {
             if (this.selection.x !== 0 && this.selection.y !== 0) {
-                if (this.app.activeView !== "view-3d" && section === "view-3d") {
-
-
-                    gsap.to(".surface-dimensions .aztech-input-number", {
-                        opacity: 0,
-                        duration: .64,
-                        stagger: {
-                            from: "end",
-                            each: .08,
-                        },
-                        ease: "power4.out"
-                    })
-
-                    gsap.to(".view-edit-container svg", {
-                        opacity: 0,
-                        duration: .48,
-                        delay: .16,
-                        ease: "power4.out"
-                    })
-
-                    gsap.to(".view-edit-text-container", {
-                        opacity: 0,
-                        duration: .64,
-                        ease: "power4.out"
-                    })
-
-                    gsap.to(".vpg-svg-editable polyline", {
-                        duration: .8,
-                        strokeWidth: 24,
-                        ease: "power2.inOut",
-                    })
-                    gsap.to(".vpg-svg-editable", {
-                        duration: .96,
-                        opacity: 0,
-                        ease: "power4.inOut",
-                        onComplete: () => {
-                            if (this.app.activeView != "view-3d") {
-                                this.$router.replace("/3D-view")
-                            }
-                        }
-                    })
-                } else if (this.app.activeView !== "view-surfaces" && section === "view-surface") {
-                    gsap.to(".main canvas", {
-                        duration: .48,
-                        scale: .48,
-                        y: "+64",
-                        opacity: 0,
-                    })
-                    setTimeout(() => {
-                        this.app.activeView = section
-                    }, 480)
-                }
+                this.$router.replace("/3D-view")
             }
         },
         cancelSelection(event:MouseEvent) {
@@ -188,12 +137,12 @@ export default defineComponent({
     }
     #s-dimensions {
         grid-column: 2/4;
-        grid-row: 4/5;
+        grid-row: 7/8;
     }
     
     #s-cube3d {
         grid-column: 2/4;
-        grid-row: 5/7;
+        grid-row: 4/6;
     }
 
     #s-seed {
@@ -203,7 +152,7 @@ export default defineComponent({
     
     #s-download {
         grid-column: 2/4;
-        grid-row: 7/8;
+        grid-row: 6/7;
     }
 
     #s-links {

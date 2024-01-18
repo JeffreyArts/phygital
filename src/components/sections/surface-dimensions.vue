@@ -90,21 +90,6 @@ export default defineComponent({
                 this.closeAlert()
             }
         })
-        
-        this.$nextTick(() => {
-
-            gsap.fromTo(".surface-dimensions .aztech-input-number", {
-                opacity:0,
-                duration: .64,
-                stagger: {
-                    from: "end",
-                    each: .08,
-                },
-                ease: "power4.out"
-            },{
-                opacity: 1,
-            })
-        })
     },
     methods: {
         closeAlert() {
