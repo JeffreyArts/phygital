@@ -1,7 +1,7 @@
 import { createWebHistory, createRouter } from "vue-router"
 import About from "@/routes/about.vue"
 import OtherProjects from "@/routes/other-projects.vue"
-
+import Sculptures from "@/routes/sculptures.vue"
 import view3D from "@/routes/view-3d.vue"
 import viewSections from "@/routes/view-surface.vue"
 
@@ -20,6 +20,12 @@ const routes = [
         path: "/other-projects",
         name: "Other projects",
         component: OtherProjects
+        
+    },
+    {
+        path: "/sculptures",
+        name: "Sculptures",
+        component: Sculptures
         
     },
     {

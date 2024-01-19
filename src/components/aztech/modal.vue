@@ -148,6 +148,10 @@ export default defineComponent({
     .aztech-monitor-bg {
         fill: #fafafa;
     }
+    .aztech-monitor-content {
+        padding-right: 32px;
+        width: calc(100% - 8px);
+    }
 }
 
 .aztech-modal-bg {

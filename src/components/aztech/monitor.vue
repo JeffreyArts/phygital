@@ -66,7 +66,7 @@
             </g>
         </svg>
         
-        <span class="aztech-monitor-content" ref="content" :style="height >= 32 ? `height:${height}px` : ``">
+        <span class="aztech-monitor-content" ref="content" :style="height >= 32 ? `height:${height - 32}px` : ``">
             <slot />
         </span>
     </div>
@@ -104,9 +104,15 @@ export default defineComponent({
     mounted() {
         const container = this.$refs.container as HTMLElement
         this.height = container.clientHeight
-        this.finalHeight = container.clientHeight
+        if (this.height > window.innerHeight - 320) {
+            this.height = window.innerHeight - 320
+        }
+        this.finalHeight = this.height
         gsap.set(".aztech-monitor-content", {
             opacity: 0
+        })
+        this.$nextTick(() => {
+            this.updateMonitor()
         })
         
         window.addEventListener("resize", this.updateMonitor)    
@@ -178,17 +184,19 @@ export default defineComponent({
 }
 
 .aztech-monitor-content {
-    padding: 16px 24px;
+    padding: 0 24px;
+    margin: 16px 0;
     display: block;
     position: relative;
     opacity: 0;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .aztech-monitor-svg{
     pointer-events: none;
     position: absolute;
     inset: 0;
+    
     rect {
         stroke: currentColor;
         stroke-width: 1px;

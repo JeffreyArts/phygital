@@ -14,14 +14,14 @@
                 </router-link>
             </li>
             <li>
-                <router-link to="/other-projects" class="link" @mouseenter="mouseEnterEvent" @mouseleave="mouseLeaveEvent">
+                <router-link to="/sculptures" class="link" @mouseenter="mouseEnterEvent" @mouseleave="mouseLeaveEvent">
                     <svg class="list-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 118.7 180" style="enable-background:new 0 0 118.7 180;" xml:space="preserve">
                         <polygon class="icon"/>
                         <polygon class="icon-line" points="0,161.6 9.2,152.4 109.5,152.4 118.7,161.6 118.7,180 107.1,180 8.2,180 0,180"/>
                         <polygon class="icon-ball" points="24,70.7 33.2,61.5 85.5,61.5 94.7,70.7 94.7,123 85.5,132.2 33.2,132.2 24,123 "/>
                     </svg>
                     <span class="text">
-                        Other projects
+                        Sculptures
                     </span>
                 </router-link>
             </li>
@@ -123,7 +123,7 @@ export default defineComponent({
             })
             
             if (text) {
-                gsap.to(text, {x: 2, duration: .32, ease: "power4.out"})
+                gsap.to(text, {x: 1, duration: .48, ease: "power4.out"})
             }
         }
     }
@@ -161,7 +161,6 @@ export default defineComponent({
 
     .link {
         font-family: $defaultFont;
-        text-transform: lowercase;
         font-size: inherit;
         text-decoration: none;
         color: $black;
@@ -183,8 +182,8 @@ export default defineComponent({
 }
 
 .list-icon {
-    width: .8em;
-    translate: 0 2px;
+    width: .5em;
+    translate: 0 0px;
     .icon-line, 
     .icon-ball {
         opacity: 0;
@@ -209,17 +208,16 @@ export default defineComponent({
         }
         .link {
             font-family: $accentFont;
+            text-transform: lowercase;
+        }
+        
+        .list-icon {
+            width: .8em;
+            translate: 0 2px;
         }
     }
 }
 
-@container links-section (min-height: 76px) {
-    .links-section {
-        li {
-            font-family: $accentFont;
-        }
-    }
-}
 @container links-section (min-height: 78px) {
     .links-section {
         li {

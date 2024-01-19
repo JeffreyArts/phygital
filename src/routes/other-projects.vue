@@ -11,8 +11,11 @@
 
 <script lang="ts">
 import {defineComponent} from "vue"
+import { RouteLocationNormalized } from "vue-router"
 import App from "@/stores/app"
 import IframeContainer from "@/components/iframe-container.vue"
+import { TextPlugin } from "gsap/TextPlugin"
+import gsap from "gsap"
 
 export default defineComponent ({ 
     name: "other-projects",
@@ -27,6 +30,7 @@ export default defineComponent ({
     },
     data() {
         return {
+            fadedOut: false
         }
     },
     computed: {
@@ -40,8 +44,74 @@ export default defineComponent ({
     mounted() {
         document.title = "Phygital - Other projects" 
         this.app.activeView = ""
+        gsap.registerPlugin(TextPlugin)
+
+        this.$nextTick(()=> {
+            this.fadeIn()
+        })
+
+        this.$router.beforeResolve(guard => {
+            if (this.$router.currentRoute.value.name != "Other projects" || this.fadedOut) {
+                return
+            }
+            this.fadeOut(guard)
+            return false
+        })
     },
     methods: {
+        fadeIn(){
+            // Title
+            const title = this.$el.querySelector("h1").innerText
+            if (title) {
+                gsap.set(".other-projects h1", {
+                    text: "",
+                    opacity: .2,
+                })
+                gsap.to(".other-projects h1", {
+                    text: title,
+                    opacity: 1,
+                    ease: "none",
+                    duration: .64,
+                })
+            }
+
+            
+            // Main
+            gsap.set(".other-projects-container",{
+                opacity: 0,
+                y: 48,
+            })
+
+            gsap.to(".other-projects-container",{
+                duration: .8,
+                opacity: 1,
+                y: 0,
+                ease: "power4.out",
+            })
+        },
+        fadeOut(newRoute: RouteLocationNormalized) {
+            
+            gsap.to(".other-projects h1", {
+                text: "_",
+                opacity: 0,
+                ease: "none",
+                duration: .64,
+            })
+
+
+            // Main
+            gsap.to(".other-projects-container",{
+                duration: 1.28,
+                opacity: 0,
+                y: 64,
+                ease: "power4.out",
+            })
+
+            setTimeout(() => {
+                this.fadedOut = true
+                this.$router.replace(newRoute.fullPath)
+            }, 1040)
+        },
         
     }
 })
@@ -54,14 +124,18 @@ export default defineComponent ({
 
 .other-projects {
     width: 100%;
-    overflow-y: auto;
     height: 100%;
-    // padding-right: 64px;
-
-    // max-width: calc(100% - 16px);
+    overflow: visible;
+    h1 {
+        font-family: $accentFont;
+        margin: 0;
+        font-size: 48px;
+    }
 }
+
 .other-projects-container {
-    height:calc(100% - 80px);
+    margin-top: 48px;
+    height:calc(100% - 80px - 48px);
 }
 
 
