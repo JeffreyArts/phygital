@@ -4,6 +4,7 @@ import OtherProjects from "@/routes/other-projects.vue"
 import Sculptures from "@/routes/sculptures.vue"
 import view3D from "@/routes/view-3d.vue"
 import viewSections from "@/routes/view-surface.vue"
+import "@/services/gsap-blur.ts"
 
 const routes = [
     {

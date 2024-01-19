@@ -9,6 +9,7 @@
 <script lang="ts">
 import { defineComponent } from "vue"
 import save from "@/assets/icons/save.svg?raw"
+import cross from "@/assets/icons/cross.svg?raw"
 import loaderCross from "@/assets/icons/loader.svg?raw"
 import chevronDown from "@/assets/icons/chevron-down.svg?raw"
 import chevronUp from "@/assets/icons/chevron-up.svg?raw"
@@ -32,6 +33,7 @@ export default defineComponent({
         return {
             iconList: {
                 save: save,
+                cross: cross,
                 loader: loaderCross,
                 arrowDown: chevronDown,
                 chevronDown: chevronDown,
