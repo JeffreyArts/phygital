@@ -14,6 +14,19 @@
                     <AztechGridCell>
                         <img :src="selectedSculpture.images[selectedThumbnail]" />
                     </AztechGridCell>
+                    <svg class="sculpture-modal-previous" @click="previousSculpture()" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 40 40" style="enable-background:new 0 0 40 40;" xml:space="preserve">
+                        <g>
+                            <polygon points="20,0 22.5,0 22.5,5 21.2,5 16.7,17.5 15,18.7 15,21.2 16.7,22.5 21.3,35 22.5,35 22.5,40 20,40 17.5,37.5 17.5,35 5,22.5 5,17.5 17.5,5 17.5,2.5 20,0 	"/> 
+                            <polygon points="37.5,0 40,0 40,5 38.7,5 34.2,17.5 32.5,18.7 32.5,21.2 34.2,22.5 38.8,35 40,35 40,40 37.5,40 35,37.5 35,35 22.5,22.5 22.5,17.5 35,5 35,2.5 37.5,0 	"/>
+                        </g>
+                    </svg>
+
+                    <svg class="sculpture-modal-next" @click="nextSculpture()" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 40 40" style="enable-background:new 0 0 40 40;" xml:space="preserve">
+                        <g>
+                            <polygon points="20,40 17.5,40 17.5,35 18.8,35 23.3,22.5 25,21.3 25,18.8 23.3,17.5 18.7,5 17.5,5 17.5,0 20,0 22.5,2.5 22.5,5 35,17.5 35,22.5 22.5,35 22.5,37.5 20,40 	"/>
+                            <polygon points="2.5,40 0,40 0,35 1.3,35 5.8,22.5 7.5,21.3 7.5,18.8 5.8,17.5 1.2,5 0,5 0,0 2.5,0 5,2.5 5,5 17.5,17.5 17.5,22.5 5,35 5,37.5 2.5,40 	"/>
+                        </g>
+                    </svg>
                 </figure>
                 <figure class="sculpture-details-list-images">
                     <AztechGridCell 
@@ -25,6 +38,14 @@
                             <img :src="img" />
                         </div>
                     </AztechGridCell>
+
+                    <svg class="sculpture-modal-next" @click="nextSculpture()" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 40 40" style="enable-background:new 0 0 40 40;" xml:space="preserve">
+                        <g>
+                            <polygon points="20,40 17.5,40 17.5,35 18.8,35 23.3,22.5 25,21.3 25,18.8 23.3,17.5 18.7,5 17.5,5 17.5,0 20,0 22.5,2.5 22.5,5 35,17.5 35,22.5 22.5,35 22.5,37.5 20,40 	"/>
+                            <polygon points="2.5,40 0,40 0,35 1.3,35 5.8,22.5 7.5,21.3 7.5,18.8 5.8,17.5 1.2,5 0,5 0,0 2.5,0 5,2.5 5,5 17.5,17.5 17.5,22.5 5,35 5,37.5 2.5,40 	"/>
+                        </g>
+                    </svg>
+
                 </figure>
             </section>
             <icon class="sculpture-modal-close" type="cross" @click="closeModel($event, true)" />
@@ -371,18 +392,34 @@ export default defineComponent ({
                 })
             }
 
+            // Text
+            const text = this.$el.querySelector("p").innerText
+            if (text) {
+                gsap.set(".sculptures p", {
+                    text: "",
+                    opacity: .2,
+                })
+                gsap.to(".sculptures p", {
+                    text: text,
+                    opacity: 1,
+                    ease: "power4.inOut",
+                    duration: .8,
+                })
+            }
+
             
             // Main
-            gsap.set(".sculptures-container",{
+            gsap.set(".sculpture-thumbnail",{
                 opacity: 0,
-                y: 48,
+                x: 32,
             })
 
-            gsap.to(".sculptures-container",{
-                duration: .8,
+            gsap.to(".sculpture-thumbnail",{
+                duration: 1.28,
                 opacity: 1,
-                y: 0,
-                ease: "power4.out",
+                stagger: .08,
+                x: 0,
+                ease: "power1.inOut",
             })
         },
         fadeOut(newRoute: RouteLocationNormalized) {
@@ -394,13 +431,20 @@ export default defineComponent ({
                 duration: .64,
             })
 
+            gsap.to(".sculptures p", {
+                text: "|",
+                opacity: 0,
+                ease: "power4.inOut",
+                duration: .48,
+            })
 
             // Main
-            gsap.to(".sculptures-container",{
-                duration: 1.28,
+            gsap.to(".sculpture-thumbnail",{
+                duration: 0.72,
+                stagger: .04,
+                ease: "power2.inOut",
                 opacity: 0,
-                y: 64,
-                ease: "power4.out",
+                x: 40,
             })
 
             setTimeout(() => {
@@ -436,6 +480,60 @@ export default defineComponent ({
                     ease: "power3.out"
                 })
             }
+        },
+        nextSculpture() {
+            let nextIndex = 0
+            this.sculptures.forEach((sculpture, index) => {
+                if (sculpture.name == this.selectedSculpture?.name) {
+                    if (index < this.sculptures.length - 1) {
+                        nextIndex = index+1
+                    }
+                }
+            })
+
+            gsap.killTweensOf(".sculpture-modal-next polygon")
+            gsap.to(".sculpture-modal-next polygon", {
+                x: 5,
+                duration: .32,
+                ease: "power1.inOut"
+            })
+            
+            gsap.to(".sculpture-modal-next polygon", {
+                x: 0,
+                delay: .32,
+                duration: .56,
+                ease: "power4.out"
+            })
+            
+            this.selectSculpture(this.sculptures[nextIndex], 0)
+        },
+        previousSculpture() {
+            let nextIndex = 0
+            this.sculptures.forEach((sculpture, index) => {
+                if (sculpture.name == this.selectedSculpture?.name) {
+                    if (index <= 0) {
+                        nextIndex = this.sculptures.length - 1
+                    } else {
+                        nextIndex = index-1
+                    }
+                }
+            })
+
+            gsap.killTweensOf(".sculpture-modal-previous polygon")
+            gsap.to(".sculpture-modal-previous polygon", {
+                x: -5,
+                duration: .32,
+                ease: "power1.inOut"
+            })
+            
+            gsap.to(".sculpture-modal-previous polygon", {
+                x: 0,
+                delay: .32,
+                duration: .56,
+                ease: "power4.out"
+            })
+
+            this.selectSculpture(this.sculptures[nextIndex], 0)
         }
     }
 })
@@ -507,6 +605,11 @@ export default defineComponent ({
     pointer-events: none;
     background-color: rgba(255,255,255,.96);
     
+    user-select: none; // chrome and Opera
+    -moz-user-select: none; // Firefox
+    -webkit-text-select: none; // IOS Safari
+    -webkit-user-select: none; // Safari
+ 
     &.__isSelected {
         pointer-events: all;
     }
@@ -514,13 +617,19 @@ export default defineComponent ({
 
 .sculpture-details-container {
     display: flex;
-    aspect-ratio: 16/9;
-    flex-flow: row;
+    flex-flow: column;
     justify-content: center;
+    aspect-ratio: 9/16;
     max-height: calc(100vh - 180px);
-
+    position: relative;
+    
     .aztech-grid-cell {
         display: block;
+    }
+    
+    @media all and (orientation: landscape) {
+        aspect-ratio: 16/9;
+        flex-flow: row;
     }
 }
 
@@ -529,23 +638,36 @@ export default defineComponent ({
     aspect-ratio: 1/1;
     margin: 0;
     padding: 0;
+    position: relative;
     img {
         max-width: 100%;
         float: left;
+    }
+    
+    @media all and (orientation: landscape) {
+        .sculpture-modal-next {
+            display: none;
+        }
     }
 }
 
 .sculpture-details-list-images {
     margin: 0;
     padding: 0;
-    // max-height: 720px;
-    // max-height: calc(720px - 8.5px);
-    // max-height: calc(720px - 8px);
-    // max-height: calc(100vw - 256px);
-    // width: 128px;
-    aspect-ratio: 2/4;
+    position: relative;
+    aspect-ratio: 4/2;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    .sculpture-modal-next {
+        display: none;
+    }
+    @media all and (orientation: landscape) {
+        grid-template-columns: 1fr 1fr;
+        aspect-ratio: 2/4;
+        .sculpture-modal-next {
+            display: flex;
+        }
+    }
 }
 
 .sculpture-details-list-image {
@@ -583,5 +705,23 @@ export default defineComponent ({
     &:hover {
         scale: .8;
     }
+}
+
+.sculpture-modal-next {
+    position: absolute;
+    right: -48px;
+    top: 50%;
+    height: 32px;
+    margin-top: -16px;
+    cursor: pointer;
+}
+
+.sculpture-modal-previous {
+    position: absolute;
+    left: -48px;
+    top: 50%;
+    height: 32px;
+    margin-top: -16px;
+    cursor: pointer;
 }
 </style>

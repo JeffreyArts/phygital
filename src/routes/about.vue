@@ -211,9 +211,10 @@ export default defineComponent ({
 @import "@/assets/scss/variables.scss";
 
 .about-page {
-    width: 100%;
+    width: calc(100% + 32px);
     overflow-y: auto;
     height: 100%;
+    padding-right: 32px;
 
     p {
         padding: 0;
@@ -240,6 +241,7 @@ export default defineComponent ({
     }
 
     @media all and (min-width: 800px) {
+        width: 100%;
         padding-right: 64px;
         max-width: calc(100% - 16px);
         
