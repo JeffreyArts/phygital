@@ -72,11 +72,19 @@ export default defineComponent({
             }
         }
     },
-    mounted() {
+    async mounted() {
         this.resizeEvent()
-        this.phygital.setSeed(this.seed)
+
+        
         window.addEventListener("phygital:seed", this.phygitalSeedEvent)
         window.addEventListener("resize", this.resizeEvent)
+
+        // Set seed from query ?seed if available
+        await this.$router.isReady()
+        if (this.$route.query?.seed) {
+            this.seed = this.$route.query.seed as string
+        }
+        this.phygital.setSeed(this.seed)
     },
     methods: {
         phygitalSeedEvent(e : Event) {
@@ -149,7 +157,8 @@ export default defineComponent({
             } else if (window.innerWidth> 512) {
                 maxSlots = 8
             }
-            const slotsAnimation = gsap.to(this, {
+
+            gsap.to(this, {
                 duration: 2.2,
                 ease: "power2.out",
                 slots: maxSlots,
@@ -169,8 +178,13 @@ export default defineComponent({
             })
             
             this.phygital.updateSeed(newSeed)
-            
-            
+            if (this.$route.name == "Sections View" ||
+                this.$route.name == "3D View") {
+                return
+            }
+            setTimeout(() => {
+                window.dispatchEvent(new CustomEvent("phygital:seed", { detail: "changed" }))
+            }, 540)
         },
     }
 })
