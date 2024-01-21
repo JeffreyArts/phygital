@@ -15,7 +15,7 @@
 
 
 <script lang="ts">
-import { Ref, VueElement, defineComponent } from "vue"
+import { defineComponent } from "vue"
 import icon from "@/components/icon.vue"
 import AztechUnderline from "@/components/aztech/underline-1.vue"
 import gsap from "gsap"
@@ -74,7 +74,6 @@ export default defineComponent({
     },
     async mounted() {
         this.resizeEvent()
-
         
         window.addEventListener("phygital:seed", this.phygitalSeedEvent)
         window.addEventListener("resize", this.resizeEvent)

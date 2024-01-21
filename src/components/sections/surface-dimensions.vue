@@ -5,7 +5,6 @@
             <aztech-input-number v-model="width" label="width" @update="modifyWidth" @increase="modifyWidth" @decrease="modifyWidth"/>
             <aztech-input-number v-model="height" label="height" @update="modifyHeight" @increase="modifyHeight" @decrease="modifyHeight"/>
         </div>
-
         <aztech-alert :options="options" :open="alertOpen" @close="closeAlert" >
             Changing this property will make you lose all of your changes. Are you sure you want to continue?
         </aztech-alert>
@@ -20,12 +19,12 @@ import AppStore from "@/stores/app"
 import AztechAlert from "@/components/aztech/alert.vue"
 import AztechInputNumber from "@/components/aztech/input-number.vue"
 import type { AztechAlertOption } from "@/types/aztech-alert"
-import gsap from "gsap"
 
 export default defineComponent({
     name: "surface-dimensions",
     components: {
-        AztechAlert, AztechInputNumber
+        AztechAlert,
+        AztechInputNumber,
     },
     props: {
         character: {
