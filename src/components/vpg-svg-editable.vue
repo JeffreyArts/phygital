@@ -301,6 +301,9 @@ export default defineComponent({
                 }
 
             } else if (this.newLine.length == 2) {
+                // Update newLine to clicked position because it is not updated by mousemove on touchscreens
+                this.newLine[1] = {x: this.mouseX, y: this.mouseY}
+
                 const newLinePoint = this.cordToPoint(this.newLine[1])
                 const targetGridPoint = this.getGridPoint(newLinePoint.x, newLinePoint.y) as SVGAElement | null
                 if (targetGridPoint) {
