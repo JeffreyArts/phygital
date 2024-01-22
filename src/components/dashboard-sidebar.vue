@@ -179,10 +179,13 @@ export default defineComponent({
 .__isPortrait {
     .dashboard-sidebar-container {
         .dashboard-sidebar {
-            height: 180px;
-            width: calc(12 * 60px);
-            grid-template-columns: 60px 60px 60px 60px 60px 60px 60px 60px 60px 60px 60px 60px;
-            grid-template-rows: 60px 60px 60px;
+            height: calc(3 * 64px + 16px);
+            min-width: calc(10 * 64px + 16px); // Additional 16px is for padding right
+            width: 100%;
+            padding-bottom: 16px;
+            grid-template-columns: 64px 64px 64px 64px 64px 64px 64px 64px 64px 64px;
+            grid-template-rows: 64px 64px 64px;
+            
         }
 
         //
@@ -206,12 +209,13 @@ export default defineComponent({
             grid-column: 8/11;
             grid-row: 2/4;
             padding-bottom: 14px;
+            pointer-events: none; // Cause it is overlapping #s-dimensions
         }
 
         // Repositioned items
         #s-surface-dimensions {
             position: fixed;
-            bottom: 196px;
+            bottom: calc(3 * 64px + 16px);
             height: 64px;
             width: 64px;
             left: 16px;
@@ -219,15 +223,15 @@ export default defineComponent({
 
         #s-seed {
             position: fixed;
-            top: 0;
-            right: 0;
-            height: 96px;
-            width: 188px;
+            top: 6px;
+            right: 20px;
+            height: 76px;
+            width: 158px;
         }
         #s-download,
         #s-view-edit {
             position: fixed;
-            bottom: 196px;
+            bottom: calc(3 * 64px + 16px);
             height: 64px;
             width: 96px;
             right: 16px;

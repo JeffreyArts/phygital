@@ -72,6 +72,10 @@ export default defineComponent ({
                 }
             } else {
                 mainElement.style.height = "auto"
+                const downloadSection = document.querySelector("#s-download") as HTMLElement
+                if (downloadSection.style.opacity == "0") {
+                    downloadSection.style.opacity = "1"
+                }
             }
 
 

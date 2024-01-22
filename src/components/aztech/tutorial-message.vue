@@ -56,7 +56,7 @@ export default defineComponent({
             messageWidth: 0,
             messageHeight: 0,
             timestampEntered: new Date(),
-            openingTimeout: 0 as timeout
+            openingTimeout: 0 as number
         }
     },
     watch: {
@@ -165,7 +165,7 @@ export default defineComponent({
 
             this.openingTimeout = setTimeout(() => {
                 this.openMessage(e)
-            }, 240)
+            }, 240) as unknown as number
         
         },
         mouseLeaveEvent(e: MouseEvent) {

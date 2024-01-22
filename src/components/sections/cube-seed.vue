@@ -45,7 +45,7 @@ export default defineComponent({
         return {
             regenerating: false,
             seed: "a-" +_.random(100000, 999999).toString(),
-            slots: 2,
+            slots: 4,
             seedGenerationInterval: 0 as number | ReturnType<typeof setInterval>
         }
     },
@@ -130,7 +130,7 @@ export default defineComponent({
             if (window.innerWidth> 512) {
                 this.slots = 4
             } else {
-                this.slots = 1
+                this.slots = 3
             }
         },
         regenerateSeed(event:MouseEvent) {
@@ -150,7 +150,7 @@ export default defineComponent({
 
             currentTarget.classList.add("__isGenerating")
             const target = currentTarget.querySelector("g")
-            let maxSlots = 4
+            let maxSlots = 6
             if (window.innerWidth> 360) {
                 maxSlots = 6
             } else if (window.innerWidth> 512) {

@@ -150,6 +150,7 @@ export default defineComponent({
     font-size: 11px;
     margin: 0;
     padding: 0;
+    pointer-events: all;
 
     li {
         padding: 0;

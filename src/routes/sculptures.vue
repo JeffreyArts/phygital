@@ -546,7 +546,7 @@ export default defineComponent ({
 
 .sculptures {
     width: 100%;
-    height: 100%;
+    height: calc(100% - 16px);
     padding-left: 24px;
     padding-top: 24px;
     display: flex;
@@ -563,11 +563,20 @@ export default defineComponent ({
             font-size: 48px;
         }
     }
-    
+}
+
+.__isLandscape {
+    .sculptures {
+        height: 100%;
+    }
+    .sculptures-container {
+    margin-top: 24px;
+
+    }
 }
 
 .sculptures-container {
-    margin-top: 24px;
+    margin-top: 8px;
     width: 100%;
     height:100%;
     padding-right: 24px;
