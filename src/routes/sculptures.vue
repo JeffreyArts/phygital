@@ -750,22 +750,23 @@ export default defineComponent ({
     }
     .sculpture-modal-next {
         position: fixed;
-        right: 32px;
+        right: 20px;
         top: auto;
-        height: 32px;
-        margin-top: -16px;
-        cursor: pointer;
-        bottom: 32px;
+        height: 24px;
+        bottom: 22px;
     }
 
     .sculpture-modal-previous {
         position: fixed;
-        left: 32px;
+        left: 20px;
         top: auto;
-        height: 32px;
-        margin-top: -16px;
-        cursor: pointer;
-        bottom: 32px;
+        height: 24px;
+        bottom: 22px;
+    }
+    .sculpture-modal-close {
+        right: 20px;
+        top: 20px;
+        height: 28px;
     }
 }
 </style>
