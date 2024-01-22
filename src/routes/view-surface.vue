@@ -85,6 +85,13 @@ export default defineComponent ({
                 ease: "power2.out",
             })
 
+            gsap.to(".aztech-tut-messsage.view-edit-tut", {
+                duration: .4,
+                opacity: 0,
+                delay: .24,
+                ease: "power2.out",
+            })
+
             // Main
             gsap.to(".vpg-svg-editable", {
                 duration: .96,
@@ -129,6 +136,12 @@ export default defineComponent ({
                 ease: "power3.in"
             },{
                 opacity: 1,
+            })
+            gsap.to(".aztech-tut-messsage.view-edit-tut", {
+                duration: .4,
+                opacity: 1,
+                delay: .24,
+                ease: "power2.out",
             })
             
             // MAIN

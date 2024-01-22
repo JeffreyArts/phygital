@@ -113,114 +113,125 @@ export default defineComponent({
     }
 }
 
-.dashboard-sidebar-container {
-    position: absolute;
-    overflow:auto;
-}
-
-.dashboard-sidebar-container[data-grid="3x8"] {
-    overflow: visible;
+.__isLandscape {
+    .dashboard-sidebar-container {
+        overflow: visible;
+        height: 100%;
+        aspect-ratio: 3/8;
     
-    .dashboard-sidebar {
-        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-        grid-template-columns: 1fr 1fr 1fr;
-    }
-
-    //
-    // Sections
-    //
-
-    #s-surfaces {
-        grid-column: 2/4;
-        grid-row: 2/4;
-    }
-    #s-dimensions {
-        grid-column: 2/4;
-        grid-row: 7/8;
-    }
+        .dashboard-sidebar {
+            grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
+            height: 100%;
+        }
     
-    #s-cube3d {
-        grid-column: 2/4;
-        grid-row: 4/6;
-    }
-
-    #s-seed {
-        grid-column: 2/4;
-        grid-row: 1/2;
-    }
+        //
+        // Sections
+        //
     
-    #s-download {
-        grid-column: 2/4;
-        grid-row: 6/7;
-    }
-
-    #s-links {
-        grid-column: 2/4;
-        grid-row: 8/9;
-    }
-
-    #s-view-edit {
-        grid-column: 1/2;
-        grid-row:8/9;
-    }
-    #s-surface-dimensions {
-        grid-column: 1/2;
-        grid-row: 2/4;
-    }
-
-    .view-edit-container {
-        @media screen and (min-height: 760px) {
-            width: calc(100% - 16px);
+        #s-surfaces {
+            grid-column: 2/4;
+            grid-row: 2/4;
+        }
+        #s-dimensions {
+            grid-column: 2/4;
+            grid-row: 7/8;
+        }
+        
+        #s-cube3d {
+            grid-column: 2/4;
+            grid-row: 4/6;
+            position: relative;
+        }
+    
+        #s-seed {
+            grid-column: 2/4;
+            grid-row: 1/2;
+        }
+        
+        #s-download {
+            grid-column: 2/4;
+            grid-row: 6/7;
+        }
+    
+        #s-links {
+            grid-column: 2/4;
+            grid-row: 8/9;
+        }
+    
+        #s-view-edit {
+            grid-column: 1/2;
+            grid-row:8/9;
+        }
+        #s-surface-dimensions {
+            grid-column: 1/2;
+            grid-row: 2/4;
+        }
+    
+        .view-edit-container {
+            @media screen and (min-height: 760px) {
+                width: calc(100% - 16px);
+            }
         }
     }
 }
 
-.dashboard-sidebar-container[data-grid="8x2"] {
-    .dashboard-sidebar {
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-        grid-template-rows: 1fr 1fr;
-    }
+.__isPortrait {
+    .dashboard-sidebar-container {
+        .dashboard-sidebar {
+            height: 180px;
+            width: calc(12 * 60px);
+            grid-template-columns: 60px 60px 60px 60px 60px 60px 60px 60px 60px 60px 60px 60px;
+            grid-template-rows: 60px 60px 60px;
+        }
 
-    //
-    // Sections
-    //
+        //
+        // Sections
+        //
+        #s-cube3d {
+            grid-column: 1/4;
+            grid-row: 1/4;
+        }
 
-    #s-surfaces {
-        grid-column: 1/2;
-        grid-row: 1/3;
-    }
-    #s-dimensions {
-        grid-column: 3;
-        grid-row:2;
-    }
-    #s-surface-dimensions {
-        grid-column: 3;
-        grid-row:1;
-    }
-    
-    #s-cube3d {
-        grid-column: 4/5;
-        grid-row:1;
-    }
+        #s-surfaces {
+            grid-column: 4/7;
+            grid-row: 1/4;
+        }
+        #s-dimensions {
+            grid-column: 8/11;
+            grid-row:1/3;
+        }
 
-    #s-seed {
-        grid-column: 5/6;
-        grid-row:1;
-    }
-    
-    #s-download {
-        grid-column: 6/7;
-        grid-row:1;
-    }
+        #s-links {
+            grid-column: 8/11;
+            grid-row: 2/4;
+            padding-bottom: 14px;
+        }
 
-    #s-links {
-        grid-column: 7/8;
-        grid-row:1;
-    }
+        // Repositioned items
+        #s-surface-dimensions {
+            position: fixed;
+            bottom: 196px;
+            height: 64px;
+            width: 64px;
+            left: 16px;
+        }
 
-    #s-view-edit {
-        grid-column: 8/9;
-        grid-row:1;
+        #s-seed {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 96px;
+            width: 188px;
+        }
+        #s-download,
+        #s-view-edit {
+            position: fixed;
+            bottom: 196px;
+            height: 64px;
+            width: 96px;
+            right: 16px;
+        }
     }
 }
 

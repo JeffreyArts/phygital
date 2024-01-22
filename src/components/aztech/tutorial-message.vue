@@ -12,16 +12,11 @@
                     <slot />
                 </span>
             </span>
-    
             <svg class="aztech-tut-line" v-if="line.length" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" :viewBox="`0 0 ${line.width} ${line.height}`" :style="`enable-background:new 0 0 ${line.width} ${line.height}; width: ${line.width}px`" xml:space="preserve">
                 <polyline :points="line.points.join(' ')"/>
                 <circle class="point" cx="3" cy="3" r="3"/>
-                <g v-if="direction == 'tl'">
-                    <!-- <path d="M1,0.2c-0.6,0-1,0.4-1,1c0,0.6,0.4,1,1,1c0.6,0,1-0.4,1-1C2,0.7,1.6,0.2,1,0.2L1,0.2z"/> -->
-                    <!-- <polyline points="38,28.8 34,28.8 7,1.2 1,1.2 	"/> -->
-                </g>
             </svg>
-            <svg class="aztech-tut-dot" @mouseenter="mouseEnterEvent" @mouseleave="mouseLeaveEvent" @click="openMessage" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 31 31" style="enable-background:new 0 0 31 31;" xml:space="preserve">
+            <svg class="aztech-tut-dot" @click="openMessage" @mouseenter="mouseEnterEvent" @mouseleave="mouseLeaveEvent" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 31 31" style="enable-background:new 0 0 31 31;" xml:space="preserve">
                 <circle class="outer-circle" cx="15.5" cy="15.5" r="14.5"/>
                 <circle class="dot" cx="15.5" cy="15.5" r="8"/>
                 <circle class="inner-circle" cx="15.5" cy="15.5" r="11" />
@@ -56,6 +51,10 @@ export default defineComponent({
                 length: 0,
             },
             messageOpen: false,
+            messageOpening: false,
+            messageClosing: false,
+            messageWidth: 0,
+            messageHeight: 0,
             timestampEntered: new Date(),
             openingTimeout: 0 as timeout
         }
@@ -64,17 +63,25 @@ export default defineComponent({
         messageOpen() {
             if (this.messageOpen) {
                 window.addEventListener("click", this.clickedOutside)
+            } else {
+                window.removeEventListener("click", this.clickedOutside)
             }
         }
+    },
+    mounted() {
+        
+        const message = this.$el.querySelector(".aztech-tut-message-text-container")
+        this.messageWidth = message.clientWidth
+        this.messageHeight = message.clientHeight
     },
     methods: {
         defineLine() {
             const message = this.$el.querySelector(".aztech-tut-message-text-container")?.getBoundingClientRect()
             const dot = this.$el.querySelector(".aztech-tut-dot")?.getBoundingClientRect()
-
+            gsap.set(message, {width: 148})
             
-            this.line.height = Math.round(Math.abs((message.y + message.height/2) - (dot.y + dot.height/2))) + 4
-            this.line.width = Math.round(Math.abs((message.x + message.width) - dot.x - dot.width/2 )) + 4
+            this.line.height = Math.round(Math.abs((message.y + this.messageHeight/2) - (dot.y + dot.height/2))) + 4
+            this.line.width = Math.round(Math.abs((message.x + this.messageWidth) - dot.x - dot.width/2 )) + 4
 
             this.line.points = []
             this.line.points.push(`${this.line.width} ${this.line.height }`)
@@ -117,13 +124,14 @@ export default defineComponent({
             this.closeMessage()
         },
         mouseEnterEvent(e: MouseEvent) {
-            this.defineLine()
-            const dot = this.$el.querySelector(".aztech-tut-dot .dot")
-            this.timestampEntered = new Date()
+            if (this.messageClosing || this.messageOpening) {
+                if (this.openingTimeout) {
+                    clearTimeout(this.openingTimeout)
+                }
+                return
+            }
 
-            this.openingTimeout = setTimeout(() => {
-                this.openMessage(e)
-            }, 240)
+            const dot = this.$el.querySelector(".aztech-tut-dot .dot")
 
             const tl = gsap.timeline({ repeat: -1 })
             tl.to(dot, {
@@ -146,8 +154,28 @@ export default defineComponent({
                 ease: "power2.in",
                 duration: .64,
             })
+
+            // Do not perform actions to open message when it is already open
+            if (this.messageOpen) {
+                return 
+            }
+
+            this.defineLine()
+            this.timestampEntered = new Date()
+
+            this.openingTimeout = setTimeout(() => {
+                this.openMessage(e)
+            }, 240)
+        
         },
         mouseLeaveEvent(e: MouseEvent) {
+            if (this.messageClosing || this.messageOpening) {
+                if (this.openingTimeout) {
+                    clearTimeout(this.openingTimeout)
+                }
+                return
+            }
+
             const timestamp = new Date()
             const timeDifferenceInMillis = timestamp.getTime() - this.timestampEntered.getTime()
             const timeDifferenceInSeconds = timeDifferenceInMillis / 1000
@@ -157,14 +185,16 @@ export default defineComponent({
                 this.closeMessage()
             }
 
-            const dot = this.$el.querySelector(".aztech-tut-dot .dot")
-            gsap.killTweensOf(dot)
-
-            gsap.to(dot, {
-                fill: "transparent",
-                ease: "power3.inOut",
-                duration: .4,
-            })
+            if (!this.messageOpen) {
+                const dot = this.$el.querySelector(".aztech-tut-dot .dot")
+                gsap.killTweensOf(dot)
+                
+                gsap.to(dot, {
+                    fill: "transparent",
+                    ease: "power3.inOut",
+                    duration: .4,
+                })
+            }
 
             const innerCircle = this.$el.querySelector(".aztech-tut-dot .inner-circle")
             gsap.killTweensOf(innerCircle)
@@ -175,16 +205,31 @@ export default defineComponent({
                 ease: "none",
                 duration: .4
             })
-            
-            
         },
         closeMessage() {
-            this.messageOpen = false
+            if (this.messageClosing) {
+                return
+            }
+            this.messageClosing = true
             const tutLine = this.$el.querySelector(".aztech-tut-line")
             const tutLinePolyline = this.$el.querySelector(".aztech-tut-line polyline")
             const tutLinePoint = this.$el.querySelector(".aztech-tut-line circle")
             
             const innerCircle = this.$el.querySelector(".aztech-tut-dot .inner-circle")
+            const dot = this.$el.querySelector(".aztech-tut-dot .dot")
+
+            const message = this.$el.querySelector(".aztech-tut-message-text-container")
+            const messageWidth = this.messageWidth
+            const messageHeight = this.messageHeight
+            
+
+            gsap.killTweensOf(dot)
+                
+            gsap.to(dot, {
+                fill: "transparent",
+                ease: "power3.inOut",
+                duration: .4,
+            })
             gsap.killTweensOf(innerCircle)
             gsap.to(innerCircle, {
                 rotate: 360,
@@ -204,10 +249,9 @@ export default defineComponent({
                 onComplete: () => {
                     gsap.set(tutLine, {opacity: 0})
                 }
-                
             })
+            
             gsap.to(tutLinePoint, {
-                // delay: 0,
                 scale: 0,
                 delay: .32,
                 duration:.48,
@@ -217,10 +261,7 @@ export default defineComponent({
                 }
             })
 
-            const message = this.$el.querySelector(".aztech-tut-message-text-container")
-            const width = message.clientWidth
-            const height = message.clientHeight
-
+            // Message box
             gsap.to(message, {
                 opacity: 0,
                 ease: "power4.inOut",
@@ -228,10 +269,12 @@ export default defineComponent({
                 delay:.8,
                 onComplete: () => {
                     gsap.to(message, {
-                        width: Math.round(width+2),
-                        height: Math.round(height+2),
+                        width: Math.round(messageWidth) + 2, // + 2 to compensate for 1px border
+                        height: Math.round(messageHeight) + 2, // + 2 to compensate for 1px border
                         y:0,
                     })
+                    this.messageOpen = false
+                    this.messageClosing = false
                 }
             })
 
@@ -241,27 +284,30 @@ export default defineComponent({
                 duration: .64,
                 delay:.4,
             })
-            // delay:1
 
             gsap.to(message, {
                 height: 2,
-                y: Math.round(-height/2) + 1,
+                y: Math.round(-messageHeight/2) + 1,
                 ease: "power2.in",
                 duration: .64,
             })
         },
         openMessage(e: MouseEvent) {
-            if (this.messageOpen) {
-                // this.closeMessage()
+            if (this.messageClosing || this.messageOpening) {
                 return
             }
 
+            if (this.messageOpen &&  !this.messageOpening) {
+                this.closeMessage()
+                return
+            }
+            
+            this.messageOpening = true
+
             this.defineLine()
-            this.messageOpen = true
 
 
             const dot = this.$el.querySelector(".aztech-tut-dot .dot")
-            gsap.killTweensOf(dot)
             gsap.to(dot, {
                 opacity: 1,
                 ease: "power3.inOut",
@@ -320,8 +366,8 @@ export default defineComponent({
                 })
 
                 const message = this.$el.querySelector(".aztech-tut-message-text-container")
-                const width = message.clientWidth
-                const height = message.clientHeight
+                const width = this.messageWidth
+                const height = this.messageHeight
                 gsap.set(message, {
                     width: 2,
                     height: 2,
@@ -347,7 +393,18 @@ export default defineComponent({
                     y: 0,
                     ease: "power4.inOut",
                     duration: .64,
-                    delay:1
+                    delay:1,
+                    onComplete: () => {
+                        this.messageOpen = true
+                        this.messageOpening = false
+
+                        gsap.killTweensOf(dot)
+                        gsap.to(dot, {
+                            opacity: 1,
+                            ease: "power3.inOut",
+                            duration: .4,
+                        })
+                    }
                 })
             })
         },
@@ -403,7 +460,6 @@ export default defineComponent({
     z-index: 1;
     
     .dot { 
-        // opacity: 0;
         fill: transparent;
     }
 

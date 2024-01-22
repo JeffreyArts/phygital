@@ -547,6 +547,10 @@ export default defineComponent ({
 .sculptures {
     width: 100%;
     height: 100%;
+    padding-left: 24px;
+    padding-top: 24px;
+    display: flex;
+    flex-flow: column;
 
     h1 {
         font-family: $accentFont;
@@ -563,18 +567,23 @@ export default defineComponent ({
 }
 
 .sculptures-container {
-    margin-top: 40px;
-    height:calc(100% - 80px - 48px);
-    width: calc(100% - 24px);
+    margin-top: 24px;
+    width: 100%;
+    height:100%;
+    padding-right: 24px;
     display: grid;
-    padding-right: 40px;
+    overflow-y: auto;
+    overflow-x: hidden;
     grid-template-columns: 1fr;
     gap: 32px;
-    overflow: auto;
     
     @media all and (min-width: 512px) {
+        margin-top: 40px;
         gap: 64px 32px;
         grid-template-columns: 1fr 1fr;
+        height:calc(100% - 80px - 48px);
+        width: calc(100% - 24px);
+        padding-right: 40px;
     }
     
     @media all and (min-width: 1040px) {
@@ -620,7 +629,7 @@ export default defineComponent ({
     flex-flow: column;
     justify-content: center;
     aspect-ratio: 9/16;
-    max-height: calc(100vh - 180px);
+    // max-height: calc(100vh - 180px);
     position: relative;
     
     .aztech-grid-cell {

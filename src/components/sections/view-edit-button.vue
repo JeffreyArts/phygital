@@ -81,10 +81,7 @@ export default defineComponent({
     },
     data: () => {
         return {
-            editMode: false,
-            editModeVisible: true,
-            viewModeVisible: false,
-            
+            editMode: false, // Defined by AppStore
         }
     },
     computed: {
@@ -109,7 +106,9 @@ export default defineComponent({
             gsap.set("#hand", {morphSVG: "#eye-open"})
             gsap.set(".view-edit-deco-bottom-right #fill > *", {fill: "transparent"})
             gsap.set(".view-edit-deco-top-left #fill > *", {fill: "transparent"})
-            setTimeout(this.wink, 1000)
+            setTimeout(this.wink, 1280)
+            setTimeout(this.wink, 6400)
+            setTimeout(this.wink, 7000)
         }
     }, 
     methods: {
@@ -253,8 +252,15 @@ export default defineComponent({
 
 .view-edit-tut {
     position: absolute;
-    right: 8px;
+    right: -4px;
     top: -16px;
+}
+
+.__isLandscape {
+    .view-edit-tut {
+        right: 14px;
+        top: -24px;
+    }
 }
 
 @container view-edit-container (min-width: 128px) {

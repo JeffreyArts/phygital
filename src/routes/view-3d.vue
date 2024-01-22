@@ -1,7 +1,6 @@
 <template>
     <div class="view-3d">
         <vpg-3d />
-        <!-- v-bind:datamodel="pattern3D" :model-changed="updatePattern" @active:camera="cameraUpdate" @mousedown="mouseDown = true" @mouseup="mouseDown = false" /> -->
     </div>
 </template>
 
@@ -57,12 +56,13 @@ export default defineComponent ({
     },
     methods: {
         fadeIn() {
+            const body = document.body as HTMLElement
             gsap.set(".view-3d canvas", {
                 scale: .8,
                 y: "+8",
                 opacity: 0,
             })
-
+            
             gsap.to(".view-3d canvas", {
                 duration: .64,
                 scale: 1,
@@ -71,11 +71,17 @@ export default defineComponent ({
                 opacity: 1,
             })
             
+            if (body.classList.contains("__isPortrait")) {
+                gsap.to("#s-download", {
+                    duration: .64,
+                    opacity: 1,
+                    ease: "power3.in",
+                })
+            }
         },
-        fadeOut(newRoute: RouteLocationNormalized) {
-            // section: Surface dimensions
+        fadeOut(newRoute: RouteLocationNormalized) {            
             
-
+            const body = document.body as HTMLElement
             // Main
             gsap.to(".view-3d canvas", {
                 duration: .4,
@@ -88,6 +94,14 @@ export default defineComponent ({
                     this.$router.replace(newRoute.fullPath)
                 }
             })
+
+            if (body.classList.contains("__isPortrait")) {
+                gsap.to("#s-download", {
+                    duration: .64,
+                    opacity: 0,
+                    ease: "power3.out",
+                })
+            }
         },
     }
 })
