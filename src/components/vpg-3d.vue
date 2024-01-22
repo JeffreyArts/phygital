@@ -79,12 +79,14 @@ export default {
         },
     },
     mounted() {
-        this.container.width = this.$el.parentElement.clientWidth
-        this.container.height = this.$el.parentElement.clientWidth
-        this.define3dEnvironment()
-
-        this.updateCanvasSize()
-        this.updateModel()
+        this.$nextTick(() => {
+            this.container.width = this.$el.parentElement.clientWidth
+            this.container.height = this.$el.parentElement.clientWidth
+            this.define3dEnvironment()
+    
+            this.updateCanvasSize()
+            this.updateModel()
+        })
 
         window.addEventListener("phygital:seed", this.phygitalSeedEvent)
         window.addEventListener("resize", this.updateCanvasSize)
