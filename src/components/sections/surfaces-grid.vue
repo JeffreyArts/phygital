@@ -137,17 +137,29 @@ export default defineComponent({
 
 <style lang="scss">
 @import "@/assets/scss/variables.scss";
-.cube-surfaces-grid,
-.cube-surfaces-footer,
-.cube-surfaces-header {
+.cube-surfaces-grid {
     width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, calc(100%/3));
+    height: calc(100% - 48px);
+    display: flex;
+    flex-wrap: wrap;
     text-align: center;
 }
 
+.cube-surfaces-footer,
+.cube-surfaces-header {
+    width: 100%;
+    height: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .cube-surfaces-cell {
+        width: 33.333%;
+        text-align: center;
+    }
+}
+
 .cube-surfaces-container {
-    padding: 4px 1px;
     width: 100%;
     height: 100%;
     display: flex;
@@ -165,8 +177,10 @@ export default defineComponent({
 
 .cube-surfaces-grid {
     .cube-surfaces-cell {
+        width: 33.333%;
         padding: 8px;
         transition: .24s ease all;
+        display: inline-block;  
         
         &.__isForbidden {
             cursor: not-allowed;

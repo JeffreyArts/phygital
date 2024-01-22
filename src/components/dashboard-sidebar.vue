@@ -183,7 +183,6 @@ export default defineComponent({
             min-width: calc(10 * 64px + 16px); // Additional 16px is for padding right
             width: 100%;
             padding-top: 16px;
-            padding-bottom: 16px;
             grid-template-columns: 64px 64px 64px 64px 64px 64px 64px 64px 64px 64px;
             grid-template-rows: 64px 64px 64px;
             
