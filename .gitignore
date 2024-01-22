@@ -31,3 +31,4 @@ gsap-bonus.tgz
 *.ai
 *.pages
 .env.*
+package-lock.json
