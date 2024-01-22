@@ -103,6 +103,18 @@ export default defineComponent ({
                 }
             })
 
+            const body = document.body as HTMLElement
+            if (body.classList.contains("__isPortrait")) {
+                if (newRoute.name != "Sections View") {
+                    gsap.to("#s-seed", {
+                        duration: .64,
+                        opacity: 0,
+                        pointerEvents: "none",
+                        ease: "power3.out",
+                    })
+                }
+            }
+
         },
         fadeIn() {
 
@@ -160,8 +172,12 @@ export default defineComponent ({
             })
 
 
-
-
+            gsap.to("#s-seed", {
+                duration: .64,
+                opacity: 1,
+                pointerEvents: "all",
+                ease: "power3.in",
+            })
         }   
     }
 })

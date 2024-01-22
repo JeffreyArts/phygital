@@ -78,10 +78,18 @@ export default defineComponent ({
                     ease: "power3.in",
                 })
             }
+
+            gsap.to("#s-seed", {
+                duration: .64,
+                opacity: 1,
+                pointerEvents: "all",
+                ease: "power3.in",
+            })
         },
         fadeOut(newRoute: RouteLocationNormalized) {            
-            
+
             const body = document.body as HTMLElement
+
             // Main
             gsap.to(".view-3d canvas", {
                 duration: .4,
@@ -101,7 +109,17 @@ export default defineComponent ({
                     opacity: 0,
                     ease: "power3.out",
                 })
+                if (newRoute.name != "Sections View") {
+                    gsap.to("#s-seed", {
+                        duration: .64,
+                        opacity: 0,
+                        pointerEvents: "none",
+                        ease: "power3.out",
+                    })
+                }
             }
+
+
         },
     }
 })

@@ -179,9 +179,10 @@ export default defineComponent({
 .__isPortrait {
     .dashboard-sidebar-container {
         .dashboard-sidebar {
-            height: calc(3 * 64px + 16px);
+            height: calc(3 * 64px + 32px);
             min-width: calc(10 * 64px + 16px); // Additional 16px is for padding right
             width: 100%;
+            padding-top: 16px;
             padding-bottom: 16px;
             grid-template-columns: 64px 64px 64px 64px 64px 64px 64px 64px 64px 64px;
             grid-template-rows: 64px 64px 64px;
@@ -215,7 +216,7 @@ export default defineComponent({
         // Repositioned items
         #s-surface-dimensions {
             position: fixed;
-            bottom: calc(3 * 64px + 16px);
+            bottom: calc(3 * 64px + 32px);
             height: 64px;
             width: 64px;
             left: 16px;
@@ -228,13 +229,20 @@ export default defineComponent({
             height: 76px;
             width: 158px;
         }
-        #s-download,
-        #s-view-edit {
+        #s-download {
             position: fixed;
-            bottom: calc(3 * 64px + 16px);
+            bottom: calc(3 * 64px + 32px);
+            right: 0;
             height: 64px;
             width: 96px;
+        }
+
+        #s-view-edit {
+            position: fixed;
+            bottom: calc(3 * 64px + 32px);
             right: 16px;
+            height: 64px;
+            width: 96px;
         }
     }
 }

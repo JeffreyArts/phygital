@@ -70,11 +70,27 @@ export default defineComponent ({
                         downloadSection.style.opacity = "0"
                     }
                 }
+
+                if ((this.$route.name != "3D View" && this.$route.name != "Section View")) {
+                    const seedSection = document.querySelector("#s-seed") as HTMLElement
+                    if (seedSection) {
+                        seedSection.style.opacity = "0"
+                        seedSection.style.pointerEvents = "none"
+                    }
+                }
             } else {
                 mainElement.style.height = "auto"
                 const downloadSection = document.querySelector("#s-download") as HTMLElement
                 if (downloadSection.style.opacity == "0") {
                     downloadSection.style.opacity = "1"
+                }
+                
+                if ((this.$route.name != "3D View" && this.$route.name != "Section View")) {
+                    const seedSection = document.querySelector("#s-seed") as HTMLElement
+                    if (seedSection.style.opacity == "0") {
+                        seedSection.style.opacity = "1"
+                        seedSection.style.pointerEvents = "all"
+                    }
                 }
             }
 

@@ -1,6 +1,6 @@
 <template>
     <div class="about-page">
-        <h1 @click="open = !open">_ about</h1>
+        <h1>_ about</h1>
 
         <div class="about-page-offset">
             
@@ -21,26 +21,6 @@
             <p id="section3">With Phygital — a blend of the words physical & digital — I have chosen to polish the interface of my work process and publish it into the world, allowing anyone to use it for personal purposes at no cost (this includes the source code). Because I believe that technological advancements should be accessible by everyone. If you like what I do and want to support me. You can do so by letting me know via <a href="https://www.instagram.com/jeffrey.arts/">Instagram</a>, sending me an <a href="mailto:contact@jeffreyarts.nl">e-mail</a> or by purchasing one of the <a href="https://www.artmajeur.com/jeffrey-arts">sculptures</a> that I've made.</p>
             <p id="section4">Special thanks go out to <a href="https://fontforzula.gumroad.com">fontforzula</a>, who made the visual assets that I have used to build this digital interface with.</p>
         </div>
-
-        <aztechModal class="modal-acknowledgements" ref="content" :open="open" @close="closeModal">
-        <div class="content">
-            <h2>Acknowledgements</h2>
-            <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt a laborum. Et velit delectus doloribus maiores, soluta fugiat, adipisci qui veritatis quidem quis facilis, reiciendis ut consectetur voluptatibus aperiam.Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt a laborum. Et velit delectus doloribus maiores, soluta fugiat, adipisci qui veritatis quidem quis facilis, reiciendis ut consectetur voluptatibus aperiam.Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt a laborum. Et velit delectus doloribus maiores, soluta fugiat, adipisci qui veritatis quidem quis facilis, reiciendis ut consectetur voluptatibus aperiam.Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt a laborum. Et velit delectus doloribus maiores, soluta fugiat, adipisci qui veritatis quidem quis facilis, reiciendis ut consectetur voluptatibus aperiam.Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt a laborum. Et velit delectus doloribus maiores, soluta fugiat, adipisci qui veritatis quidem quis facilis, reiciendis ut consectetur voluptatibus aperiam.Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt a laborum. Et velit delectus doloribus maiores, soluta fugiat, adipisci qui veritatis quidem quis facilis, reiciendis ut consectetur voluptatibus aperiam.Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt a laborum. Et velit delectus doloribus maiores, soluta fugiat, adipisci qui veritatis quidem quis facilis, reiciendis ut consectetur voluptatibus aperiam.
-            </p>
-            <ul>
-                <li>
-                    <a href="https://fontforzula.gumroad.com" target="_blank">Font for Zula</a> for the Spacenoid font and the Aztech vector pack
-                </li>
-                <li>
-                    <a href="https://svgjs.dev/" target="_blank">SVG.js</a> for the manipulation of SVG's
-                </li>
-                <li>
-                    <a href="https://threejs.org/" target="_blank">ThreeJS</a> for making it easier to work with 3D on the web
-                </li>
-            </ul>
-        </div>
-    </aztechModal>
     </div>
 </template>
 
@@ -213,7 +193,7 @@ export default defineComponent ({
 .about-page {
     width: calc(100% + 32px);
     overflow-y: auto;
-    height: 100%;
+    height: calc(100% - 24px);
     padding-right: 32px;
 
     p {
@@ -238,6 +218,8 @@ export default defineComponent ({
         font-family: $accentFont;
         margin: 0;
         font-size: 48px;
+        margin-top: 16px;
+        margin-left: 24px;
     }
 
     @media all and (min-width: 800px) {
@@ -255,9 +237,9 @@ export default defineComponent ({
     background-image:none;
     background-repeat: repeat-y;
     background-size: 36px;
-    margin-top: 32px;
-    padding-right: 8px;
-    padding-bottom: 64px;
+    padding-left: 24px;
+    padding-right: 24px;
+    margin-top: 24px;
     
     @media all and (min-width: 800px) {
         padding-left: 58px;
@@ -265,6 +247,21 @@ export default defineComponent ({
     }
 }
 
+.__isLandscape {
+    .about-page {
+        height: 100%;
+        h1 {
+            margin-top: 0;
+            margin-left: 0;
+        }
+    }
+
+    .about-page-offset {
+        margin-top: 32px;
+        padding-right: 8px;
+        padding-bottom: 64px;
+    }
+}
 .about-content {
     margin-top: 56px;
     margin-bottom: 64px;

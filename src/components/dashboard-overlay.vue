@@ -171,8 +171,8 @@ export default defineComponent({
                 delay: .16,
                 duration: 1.28,
                 fontSize: 16,
-                paddingTop: 8,
-                paddingBottom: 8,
+                paddingTop: 2,
+                paddingBottom: 6,
                 ease: "power2.out"
             })
             timeline.to(".dashboard-overlay-footer", {

@@ -742,4 +742,30 @@ export default defineComponent ({
     margin-top: -16px;
     cursor: pointer;
 }
+
+.__isPortrait {
+    .sculpture-details-container {
+        padding-right: 16px;
+        padding-left: 16px;
+    }
+    .sculpture-modal-next {
+        position: fixed;
+        right: 32px;
+        top: auto;
+        height: 32px;
+        margin-top: -16px;
+        cursor: pointer;
+        bottom: 32px;
+    }
+
+    .sculpture-modal-previous {
+        position: fixed;
+        left: 32px;
+        top: auto;
+        height: 32px;
+        margin-top: -16px;
+        cursor: pointer;
+        bottom: 32px;
+    }
+}
 </style>
