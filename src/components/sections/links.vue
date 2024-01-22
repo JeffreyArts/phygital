@@ -37,6 +37,18 @@
                     </span>
                 </a>
             </li>
+            <li>
+                <a href="https://github.com/JeffreyArts/phygital" target="_blank" class="link" @mouseenter="mouseEnterEvent" @mouseleave="mouseLeaveEvent">
+                    <svg class="list-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 118.7 180" style="enable-background:new 0 0 118.7 180;" xml:space="preserve">
+                        <polygon class="icon"/>
+                        <polygon class="icon-line" points="0,161.6 9.2,152.4 109.5,152.4 118.7,161.6 118.7,180 107.1,180 8.2,180 0,180"/>
+                        <polygon class="icon-ball" points="24,70.7 33.2,61.5 85.5,61.5 94.7,70.7 94.7,123 85.5,132.2 33.2,132.2 24,123 "/>
+                    </svg>
+                    <span class="text">
+                        Source code
+                    </span>
+                </a>
+            </li>
         </ul>
     </div>
 </template>
@@ -198,7 +210,7 @@ export default defineComponent({
 }
 @container links-section (min-height: 69px) {
     .links-section {
-        font-size: 12px;
+        font-size: 11px;
     }
 }
 @container links-section (min-height: 72px) {
@@ -215,6 +227,14 @@ export default defineComponent({
         .list-icon {
             width: .8em;
             translate: 0 2px;
+        }
+    }
+}
+.__isPortrait {
+    .links-section {
+        font-size: 11px;
+        li {
+            margin-top: 0;
         }
     }
 }
