@@ -427,6 +427,7 @@ export default defineComponent({
     display: block;
     border: 1px solid $black;
     opacity: 0;
+    pointer-events: none;
 }
 
 .aztech-tut-message-text {
@@ -445,6 +446,7 @@ export default defineComponent({
     top: 0;
     left: 0;
     opacity: 0;
+    pointer-events: none;
 
     polyline {
         stroke: $black;

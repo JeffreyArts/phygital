@@ -18,6 +18,7 @@ import PhygitalStore from "@/stores/phygital"
 import AppStore from "@/stores/app"
 import AztechAlert from "@/components/aztech/alert.vue"
 import AztechInputNumber from "@/components/aztech/input-number.vue"
+import AztechInputToggle from "@/components/aztech/input-toggle.vue"
 import type { AztechAlertOption } from "@/types/aztech-alert"
 
 export default defineComponent({
@@ -25,6 +26,7 @@ export default defineComponent({
     components: {
         AztechAlert,
         AztechInputNumber,
+        AztechInputToggle
     },
     props: {
         character: {
@@ -43,6 +45,7 @@ export default defineComponent({
     data: () => {
         return {
             alertOpen: false,
+            mirroredEdit: true,
             options: [] as Array<AztechAlertOption>
         }
     },
@@ -77,6 +80,8 @@ export default defineComponent({
         },
     },
     mounted() {
+        this.mirroredEdit = this.phygital.mirroredEdit
+
         this.options.push( {
             label: "Continue",
             type: "primary",
@@ -177,6 +182,10 @@ export default defineComponent({
             }
 
             this.phygital.updateSurfaces()
+        },
+        toggleMirror() {
+            this.mirroredEdit = !this.mirroredEdit
+            this.phygital.mirroredEdit = this.mirroredEdit
         }
     }
 })

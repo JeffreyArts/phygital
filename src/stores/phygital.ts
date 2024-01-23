@@ -93,6 +93,7 @@ export const PhygitalStore = defineStore({
         originalSeed: "",
         generatingSeed: false,
         blockSize: 4,
+        mirroredEdit: true,
     }),
     actions: {
         setSeed(seed:string) {
@@ -229,6 +230,13 @@ export const PhygitalStore = defineStore({
         },
         addLine(newLine: Array<{x: number, y:number}>, surface: "top" | "bottom" | "left" | "right" | "front" | "back") {
             this.surfaces[surface].polylines.push(newLine)
+
+            if (this.mirroredEdit){
+                const oppositeSurface = this.getOppositeSurface(surface)
+                if (oppositeSurface) {
+                    this.surfaces[oppositeSurface].polylines.push(newLine)
+                }
+            }
             this.seed = "custom"
         },
         removeLine(newLine: Array<{x: number, y:number}>, surface: "top" | "bottom" | "left" | "right" | "front" | "back") {
@@ -329,16 +337,12 @@ export const PhygitalStore = defineStore({
             })
             
             if (surfaceSide === "top") {
-                // mergedObject.material = pattern3D[0].material
-                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#f00" })
                 mergedObject.name = "surface-top"
                 mergedObject.position.z = - diameter/2
                 mergedObject.position.x = - diameter/2
                 mergedObject.position.y = surfaces.left.height - diameter/2
             }
             if (surfaceSide === "bottom") {
-                // mergedObject.material = pattern3D[0].material
-                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#ff0" })
                 mergedObject.name = "surface-bottom"
                 mergedObject.position.z = - diameter/2 
                 mergedObject.position.x = - diameter/2 
@@ -346,29 +350,24 @@ export const PhygitalStore = defineStore({
             }
             
             if (surfaceSide === "front") {
-                // mergedObject.material = pattern3D[0].material
-                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#0f0" })
                 mergedObject.name = "surface-front"
                 mergedObject.rotateX(Math.PI/180* 90)
                 mergedObject.position.z = -diameter + surfaces.left.width-1
-
+                
                 mergedObject.position.x = - diameter/2  
                 mergedObject.position.y = surface.height
             }
             
             if (surfaceSide === "back") {
-                // mergedObject.material = pattern3D[0].material
-                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#0ff" })
                 mergedObject.name = "surface-back"
                 mergedObject.rotateX(Math.PI/180* 90)
-                mergedObject.position.z = -diameter
-                mergedObject.position.x = -diameter/2
+                mergedObject.rotateZ(Math.PI/180* 180)
+                // mergedObject.position.z = -1
+                mergedObject.position.x = diameter/2 + surface.width/2
                 mergedObject.position.y = surface.height
             }
 
             if (surfaceSide === "left") {
-                // mergedObject.material = pattern3D[0].material
-                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#00f" })
                 mergedObject.name = "surface-left"
                 mergedObject.rotateX(Math.PI/180* 90)
                 mergedObject.rotateZ(Math.PI/180* 90)
@@ -377,8 +376,6 @@ export const PhygitalStore = defineStore({
             }
             
             if (surfaceSide === "right") {
-                // mergedObject.material = pattern3D[0].material
-                // mergedObject.material = new THREE.MeshLambertMaterial( { color: "#f0f" })
                 mergedObject.name = "surface-right"
                 mergedObject.rotateY(Math.PI/180* 180)
                 mergedObject.rotateX(Math.PI/180* 90)

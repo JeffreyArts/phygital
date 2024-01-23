@@ -54,6 +54,13 @@ export default defineComponent ({
     },
     methods: {
         fadeOut(newRoute: RouteLocationNormalized) {
+            // section: Edit options
+            gsap.to("#s-edit-options", {
+                duration: .64,
+                opacity: 0,
+                ease: "power3.out",
+            })
+
             // section: Surface dimensions
             gsap.to(".surface-dimensions .aztech-input-number", {
                 opacity: 0,
@@ -172,10 +179,19 @@ export default defineComponent ({
             })
 
 
+            // Section: seed
+            gsap.set("#s-seed", { pointerEvents: "all", opacity: 0 })
             gsap.to("#s-seed", {
                 duration: .64,
                 opacity: 1,
-                pointerEvents: "all",
+                ease: "power3.in",
+            })
+            
+            // Section: edit-options
+            gsap.set("#s-edit-options", { opacity: 0 })
+            gsap.to("#s-edit-options", {
+                duration: .64,
+                opacity: 1,
                 ease: "power3.in",
             })
         }   

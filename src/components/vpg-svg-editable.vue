@@ -123,7 +123,7 @@ export default defineComponent({
     computed: {
         vpgPattern() {
             if (this.phygital?.surfaces && this.app) {
-                const activeSurface =this.app.activeSurface as "top" | "bottom" | "front" | "back" | "left" | "right"
+                const activeSurface = this.app.activeSurface as "top" | "bottom" | "front" | "back" | "left" | "right"
                 return this.phygital.surfaces[activeSurface] as Surface
             }
             return null
@@ -664,7 +664,18 @@ export default defineComponent({
                 const y1 = parseInt(polylineElement.getAttribute("dataY1") || "777", 10) - this.offset.y
                 const x2 = parseInt(polylineElement.getAttribute("dataX2") || "777", 10) - this.offset.x
                 const y2 = parseInt(polylineElement.getAttribute("dataY2") || "777", 10) - this.offset.y
-                return (polyline[0].x == x1 && polyline[1].x == x2 && polyline[0].y == y1 && polyline[1].y == y2)
+                const matchedPolyline =  (polyline[0].x == x1 && polyline[1].x == x2 && polyline[0].y == y1 && polyline[1].y == y2)
+                
+                if (this.phygital.mirroredEdit && matchedPolyline){
+                    const oppositeSurface = this.phygital.getOppositeSurface(this.app.activeSurface)
+                    if (oppositeSurface) {
+                        _.remove(this.phygital.surfaces[oppositeSurface].polylines, mirroredPolyline => {
+                            return (mirroredPolyline[0].x == x1 && mirroredPolyline[1].x == x2 && mirroredPolyline[0].y == y1 && mirroredPolyline[1].y == y2)
+                        })
+                    }
+                }
+
+                return matchedPolyline
             })
             this.phygital.seed = "custom"
 

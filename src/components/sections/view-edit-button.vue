@@ -258,8 +258,8 @@ export default defineComponent({
 
 .__isLandscape {
     .view-edit-tut {
-        right: 14px;
-        top: -24px;
+        right: 10px;
+        top: -10px;
     }
 }
 

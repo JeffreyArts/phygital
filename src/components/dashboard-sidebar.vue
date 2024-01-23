@@ -22,6 +22,9 @@
             <section id="s-links">
                 <section-links/>
             </section>
+            <section id="s-edit-options" v-if="app.activeView === 'view-surfaces'">
+                <section-edit-options />
+            </section>
             <section id="s-view-edit" v-if="app.activeView === 'view-surfaces'">
                 <section-view-edit-button />
             </section>
@@ -35,13 +38,12 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
-import _ from "lodash"
-import gsap from "gsap"
 import App from "@/stores/app"
 import sectionSeed from "@/components/sections/cube-seed.vue"
 import sectionMetaDimensions from "@/components/sections/meta-dimensions.vue"
 import sectionDownload from "@/components/sections/download-model.vue"
 import sectionSurfaces from "@/components/sections/surfaces-grid.vue"
+import sectionEditOptions from "@/components/sections/edit-options.vue"
 import sectionViewEditButton from "@/components/sections/view-edit-button.vue"
 import sectionSurfaceDimensions from "@/components/sections/surface-dimensions.vue"
 import sectionLinks from "@/components/sections/links.vue"
@@ -57,7 +59,8 @@ export default defineComponent({
         sectionViewEditButton,
         sectionSurfaceDimensions,
         sectionLinks,
-        sectionVpg3d
+        sectionVpg3d,
+        sectionEditOptions
     },
     setup() {
         const app = App()
@@ -167,6 +170,11 @@ export default defineComponent({
             grid-column: 1/2;
             grid-row: 2/4;
         }
+        #s-edit-options {
+            grid-column: 1/2;
+            grid-row: 7/8;
+            padding-bottom: 10px;
+        }
     
         .view-edit-container {
             @media screen and (min-height: 760px) {
@@ -242,6 +250,15 @@ export default defineComponent({
             right: 16px;
             height: 64px;
             width: 96px;
+        }
+
+        #s-edit-options {
+            position: fixed;
+            bottom: calc(3 * 64px + 32px);
+            left: 50%;
+            height: 64px;
+            translate: -50% 6px;
+            padding-bottom: 0;
         }
     }
 }
