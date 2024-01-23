@@ -1,6 +1,6 @@
 <template>
     <div class="download-model-section" ref="container">
-        <div class="download-container" @click="downloadModel">
+        <div class="download-container" @click="downloadModel" @mouseenter="mouseEnterEvent" @mouseleave="mouseLeaveEvent">
             <icon class="download-icon" type="save"></icon>
             <label class="download-label">download model</label>
         </div>
@@ -11,11 +11,12 @@
 <script lang="ts">
 import { defineComponent } from "vue"
 import icon from "@/components/icon.vue"
-import Phygital from "@/stores/phygital"
+import PhygitalStore from "@/stores/phygital"
+import AppStore from "@/stores/app"
 import { SculptureGroup } from "@/stores/phygital"
 import * as THREE from "three"
 
-import gsap from "gsap"
+import gsap from "@/services/gsap-wrapper"
 
 export default defineComponent({
     name: "download-model",
@@ -30,9 +31,11 @@ export default defineComponent({
         },
     },
     setup() {
-        const phygital = Phygital()
+        const phygital = PhygitalStore()
+        const app = AppStore()
         return {
-            phygital
+            phygital, 
+            app
         }
     },
     mounted() {
@@ -93,6 +96,22 @@ export default defineComponent({
             this.phygital.update3DModel(model, "front")
             this.phygital.downloadSTL(model, filename)
         },
+        mouseEnterEvent() {
+            const label = this.$el.querySelector(".download-label")
+            gsap.to(label, {
+                scale: 1.1,
+                duration: .24,
+                ease: "power3.out"
+            })
+        },
+        mouseLeaveEvent() {
+            const label = this.$el.querySelector(".download-label")
+            gsap.to(label, {
+                scale: 1,
+                duration: .32,
+                ease: "power3.out"
+            })
+        }
     }
 })
 </script>
@@ -122,23 +141,11 @@ export default defineComponent({
     justify-content: start;
     align-items: center;
     font-family: $accentFont;
-    
-    &:hover {
-        cursor: pointer;
-        
-        .icon-save-arrow {
-            animation: hoverSaveIcon .4s ease infinite alternate;
-        }
-        .download-label {
-            translate: 0 0;
-            scale: 1.1;
-        }
-    }
+    cursor: pointer;
     
     .icon {
         height: 32px;
     }
-
 
     .icon-save-arrow {
         transition: ease .24s all;
@@ -146,7 +153,6 @@ export default defineComponent({
 }
 
 .download-label {
-    transition: ease .24s all;
     transform-origin: top center;
     cursor: pointer;
     font-size: 12px;

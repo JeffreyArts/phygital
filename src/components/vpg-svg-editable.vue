@@ -81,7 +81,7 @@ use the .vpg-svg-content for styling the content inside the box. Best way is to 
 <script lang="ts">
 import { defineComponent } from "vue"
 import { phygitalSeedEvent, Surface } from "@/stores/phygital"
-import gsap from "gsap"
+import gsap from "@/services/gsap-wrapper"
 
 import DrawSVGPlugin from "gsap/DrawSVGPlugin"
 import PhygitalStore from "@/stores/phygital"
@@ -195,8 +195,8 @@ export default defineComponent({
                     this.cancelNewLine()
                 }
                 Promise.all([
-                    this.hideGrid(),
-                    this.hidePolylines()
+                    this.hideGrid(this.app.showAnimations),
+                    this.hidePolylines(this.app.showAnimations)
                 ]).then(() => {
                     this.updatePattern()
                 })
@@ -252,8 +252,8 @@ export default defineComponent({
                     this.cancelNewLine()
                 } 
                 Promise.all([
-                    this.hideGrid(),
-                    this.hidePolylines()
+                    this.hideGrid(this.app.showAnimations),
+                    this.hidePolylines(this.app.showAnimations)
                 ]).then(() => {
                     window.dispatchEvent(new CustomEvent("phygital:seed", {detail: "changed"}))
                 })
@@ -496,7 +496,7 @@ export default defineComponent({
                     },
                     stagger: {
                         grid: [this.horizontalLines, this.verticalLines],
-                        each: 24/Math.max(this.horizontalLines, this.verticalLines)/32,
+                        each: animate ? 24/Math.max(this.horizontalLines, this.verticalLines)/32 : 0,
                         from: "center"
                     }
                 })

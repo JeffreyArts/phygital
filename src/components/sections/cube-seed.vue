@@ -18,7 +18,7 @@
 import { defineComponent } from "vue"
 import icon from "@/components/icon.vue"
 import AztechUnderline from "@/components/aztech/underline-1.vue"
-import gsap from "gsap"
+import gsap from "@/services/gsap-wrapper"
 import _ from "lodash"
 import { phygitalSeedEvent } from "@/stores/phygital"
 import Phygital from "@/stores/phygital"

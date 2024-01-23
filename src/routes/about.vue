@@ -31,15 +31,13 @@ import { RouteLocationNormalized } from "vue-router"
 import App from "@/stores/app"
 import PhygitalStore from "@/stores/phygital"
 import AztechGridCell from "@/components/aztech/grid-cell.vue"
-import gsap from "gsap"
+import gsap from "@/services/gsap-wrapper"
 import { TextPlugin } from "gsap/TextPlugin"
-import aztechModal from "@/components/aztech/modal.vue"
 
 export default defineComponent ({ 
     name: "purchaseWork",
     components: {
-        AztechGridCell,
-        aztechModal
+        AztechGridCell
     },
     props: [],
     setup() {
@@ -176,10 +174,15 @@ export default defineComponent ({
                 ease: "power4.out",
             })
 
-            setTimeout(() => {
-                this.fadedOut = true
-                this.$router.replace(newRoute.fullPath)
-            }, 1040)
+
+            const that = this
+            gsap.to("body", {
+                duration: 1,
+                onComplete() {
+                    that.fadedOut = true
+                    that.$router.replace(newRoute.fullPath)
+                }
+            })
         },
     }
 })

@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
-import gsap from "gsap"
+import gsap from "@/services/gsap-wrapper"
 import aztechMonitor from "@/components/aztech/monitor.vue"
 // import type {AztechModalOption} from "@/types/aztech-modal"
 

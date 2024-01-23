@@ -5,7 +5,7 @@
 <script lang="ts">
 import _ from "lodash"
 import * as THREE from "three"
-import gsap from "gsap" 
+import gsap from "@/services/gsap-wrapper" 
 import Phygital from "@/stores/phygital"
 import AppStore from "@/stores/app"
 
@@ -120,14 +120,13 @@ export default {
 
         phygitalSeedEvent(e : Event) {
             const event = e as phygitalSeedEvent   
-            
             if (event.detail == "prepareChange") {   
                 Promise.all([
                     this.fadeOut()
                 ]).then(() => {
                     setTimeout(() => {
                         window.dispatchEvent(new CustomEvent("phygital:seed", {detail: "changed"}))
-                    }, 320)
+                    }, this.app.showAnimations ? 320 : 0) 
 
                 })
             }

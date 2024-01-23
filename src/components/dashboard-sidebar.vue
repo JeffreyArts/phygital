@@ -22,6 +22,9 @@
             <section id="s-links">
                 <section-links/>
             </section>
+            <section id="s-app-options">
+                <section-app-options />
+            </section>
             <section id="s-edit-options" v-if="app.activeView === 'view-surfaces'">
                 <section-edit-options />
             </section>
@@ -43,6 +46,7 @@ import sectionSeed from "@/components/sections/cube-seed.vue"
 import sectionMetaDimensions from "@/components/sections/meta-dimensions.vue"
 import sectionDownload from "@/components/sections/download-model.vue"
 import sectionSurfaces from "@/components/sections/surfaces-grid.vue"
+import sectionAppOptions from "@/components/sections/app-options.vue"
 import sectionEditOptions from "@/components/sections/edit-options.vue"
 import sectionViewEditButton from "@/components/sections/view-edit-button.vue"
 import sectionSurfaceDimensions from "@/components/sections/surface-dimensions.vue"
@@ -60,7 +64,8 @@ export default defineComponent({
         sectionSurfaceDimensions,
         sectionLinks,
         sectionVpg3d,
-        sectionEditOptions
+        sectionEditOptions,
+        sectionAppOptions
     },
     setup() {
         const app = App()
@@ -126,6 +131,7 @@ export default defineComponent({
             grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
             grid-template-columns: 1fr 1fr 1fr;
             height: 100%;
+            gap: 0 8px;
         }
     
         //
@@ -188,12 +194,11 @@ export default defineComponent({
     .dashboard-sidebar-container {
         .dashboard-sidebar {
             height: calc(3 * 64px + 32px);
-            min-width: calc(10 * 64px + 16px); // Additional 16px is for padding right
+            min-width: calc(13 * 64px + 16px); // Additional 16px is for padding right
             width: 100%;
             padding-top: 16px;
-            grid-template-columns: 64px 64px 64px 64px 64px 64px 64px 64px 64px 64px;
-            grid-template-rows: 64px 64px 64px;
-            
+            grid-template-columns: 64px 64px 64px 64px 64px 64px 64px 64px 64px 64px 64px 64px 64px;
+            grid-template-rows: 64px 64px 64px;   
         }
 
         //
@@ -209,14 +214,24 @@ export default defineComponent({
             grid-row: 1/4;
         }
         #s-dimensions {
-            grid-column: 8/11;
+            grid-column: 10/13;
             grid-row:1/3;
+        }
+        #s-app-options {
+            grid-column: 7/10;
+            grid-row:1/2;
+            padding-top: 30px;
+            padding-left: 16px;
+            .app-options-section {
+                justify-content: flex-start;
+            }
         }
 
         #s-links {
-            grid-column: 8/11;
+            grid-column: 7/11;
             grid-row: 2/4;
-            padding-bottom: 14px;
+            padding-bottom: 30px;
+            padding-left: 16px;
             pointer-events: none; // Cause it is overlapping #s-dimensions
         }
 

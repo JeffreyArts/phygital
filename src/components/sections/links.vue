@@ -57,7 +57,7 @@
 <script lang="ts">
 import { defineComponent } from "vue"
 import Phygital from "@/stores/phygital"
-import gsap from "gsap"
+import gsap from "@/services/gsap-wrapper"
 import { MorphSVGPlugin } from "gsap/MorphSVGPlugin"
 
 export default defineComponent({
@@ -230,15 +230,6 @@ export default defineComponent({
         }
     }
 }
-.__isPortrait {
-    .links-section {
-        font-size: 11px;
-        li {
-            margin-top: 0;
-        }
-    }
-}
-
 @container links-section (min-height: 78px) {
     .links-section {
         li {
@@ -253,16 +244,23 @@ export default defineComponent({
         }
     }
 }
-@container links-section (min-height: 96px) {
+@container links-section (min-width: 200px) {
     .links-section {
         .link {
-            // .vague {
-            //     display: inline-block;
-            //     opacity: .32;
-            // }
+            .vague {
+                display: inline-block;
+                opacity: .32;
+            }
         }
     }
 }
 
-
+.__isPortrait {
+    .links-section {
+        font-size: 11px;
+        li {
+            margin-top: 0;
+        }
+    }
+}
 </style>

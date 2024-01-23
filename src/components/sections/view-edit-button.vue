@@ -65,7 +65,7 @@ import PhygitalStore from "@/stores/phygital"
 import AppStore from "@/stores/app"
 import { MorphSVGPlugin } from "gsap/MorphSVGPlugin"
 import AztechTutMessage from "@/components/aztech/tutorial-message.vue"
-import gsap from "gsap"
+import gsap from "@/services/gsap-wrapper"
 
 export default defineComponent({
     name: "view-edit-button",
@@ -106,9 +106,12 @@ export default defineComponent({
             gsap.set("#hand", {morphSVG: "#eye-open"})
             gsap.set(".view-edit-deco-bottom-right #fill > *", {fill: "transparent"})
             gsap.set(".view-edit-deco-top-left #fill > *", {fill: "transparent"})
-            setTimeout(this.wink, 1280)
-            setTimeout(this.wink, 6400)
-            setTimeout(this.wink, 7000)
+
+            if (this.app.showAnimations) {
+                setTimeout(this.wink, 1280)
+                setTimeout(this.wink, 6400)
+                setTimeout(this.wink, 7000)
+            }
         }
     }, 
     methods: {
@@ -178,21 +181,27 @@ export default defineComponent({
             }
         },
         animateText(el1:HTMLElement, el2:HTMLElement) {
-            // Animate text
-            gsap.set(el1, {opacity: 0, x: -16})
-            gsap.to(el2, {
-                duration: 0.48,
-                opacity: 0,
-                x: -16,
-                onComplete: () => {
-                    gsap.set(el2, {x: 0})
-                }
-            })
-            gsap.to(el1, {
-                duration: 0.48,
-                opacity: 1,
-                x: 0,
-            })
+            if (this.app.showAnimations) {
+
+                // Animate text
+                gsap.set(el1, {opacity: 0, x: -16})
+                gsap.to(el2, {
+                    duration: 0.48,
+                    opacity: 0,
+                    x: -16,
+                    onComplete: () => {
+                        gsap.set(el2, {x: 0})
+                    }
+                })
+                gsap.to(el1, {
+                    duration: 0.48,
+                    opacity: 1,
+                    x: 0,
+                })
+            } else {
+                gsap.set(el1, {opacity:1, x:0})
+                gsap.set(el2, {opacity:0, x:0})
+            }
         }
     }
 })

@@ -11,7 +11,7 @@ import {RouteLocationNormalized} from "vue-router"
 import App from "@/stores/app"
 import PhygitalStore from "@/stores/phygital"
 import vpg3d from "@/components/vpg-3d.vue"
-import gsap from "gsap"
+import gsap from "@/services/gsap-wrapper"
 
 export default defineComponent ({ 
     name: "view3D",

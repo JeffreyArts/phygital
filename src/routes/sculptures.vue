@@ -61,7 +61,7 @@ import App from "@/stores/app"
 import sculptureThumbnail from "@/components/sculpture-thumbnail.vue"
 import AztechGridCell from "@/components/aztech/grid-cell.vue"
 import { TextPlugin } from "gsap/TextPlugin"
-import gsap from "gsap"
+import gsap from "@/services/gsap-wrapper"
 import Icon from "@/components/icon.vue"
 
 interface Sculpture {
@@ -447,10 +447,14 @@ export default defineComponent ({
                 x: 40,
             })
 
-            setTimeout(() => {
-                this.fadedOut = true
-                this.$router.replace(newRoute.fullPath)
-            }, 1040)
+            const that = this
+            gsap.to("body", {
+                duration: 1,
+                onComplete() {
+                    that.fadedOut = true
+                    that.$router.replace(newRoute.fullPath)
+                }
+            })
         },
         closeModel(e:MouseEvent | null, force=false) {
             const modalElement = this.$refs.modal as HTMLElement

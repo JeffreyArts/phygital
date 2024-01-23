@@ -28,8 +28,8 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
-import gsap from "gsap"
-
+import gsap from "@/services/gsap-wrapper"
+import AppStore from "@/stores/app"
 
 export default defineComponent({
     name: "aztech-tutorial-message",
@@ -41,6 +41,11 @@ export default defineComponent({
         openAutomatically: {
             default: false
         }
+    },
+    setup() {
+        const app = AppStore()
+
+        return { app}
     },
     data: () => {
         return {
@@ -69,7 +74,14 @@ export default defineComponent({
         }
     },
     mounted() {
-        
+        this.$nextTick(() => {
+            if (!this.app.showTips) {
+                gsap.set(this.$el, {
+                    opacity: 0,
+                    pointerEvents: "none"
+                })
+            }
+        })
         const message = this.$el.querySelector(".aztech-tut-message-text-container")
         this.messageWidth = message.clientWidth
         this.messageHeight = message.clientHeight

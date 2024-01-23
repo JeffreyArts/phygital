@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
-import gsap from "gsap"
+import gsap from "@/services/gsap-wrapper"
 
 export default defineComponent({
     name: "aztech-input-toggle",
@@ -110,7 +110,6 @@ export default defineComponent({
             })
 
             targetPolygons.forEach((t:HTMLElement,i:number) => {
-                console.log(t)
                 gsap.to(t, {
                     morphSVG: selectedPolygons[i], 
                     duration: 0.8,
@@ -170,7 +169,6 @@ export default defineComponent({
 .aztech-input-toggle {
     display: flex;
     flex-flow: row;
-    gap: 8px;
     position: relative;
     &.__isDisabled {
         padding-left: 0;
@@ -195,14 +193,16 @@ export default defineComponent({
 .aztec-input-toggle-text-container {
     display: flex;
     flex-flow: row;
-    gap: 8px;
+    gap: 6px;
     font-family: $defaultFont;
-    font-size: 14px;
+    font-size: 12px;
     align-items: center;
 }
 
 .aztech-input-toggle-text-label {
     line-height: .96;
+    display: inline-block;
+    width: calc(100% - 30px);
 }
 
 </style>

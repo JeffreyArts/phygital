@@ -1,4 +1,5 @@
 import { defineStore } from "pinia"
+import Cookies from "js-cookie"
 
 export type ViewState = "view-3d" | "view-surfaces" | ""
 export type OrientationType = "landscape" | "portrait"
@@ -11,14 +12,15 @@ interface AppState {
   editMode: boolean,
 }
 
-
 export const AppState = defineStore({
     id: "appStates",
     state: () => ({
         activeView: "view-3d",
         orentation: "landscape",
         activeSurface: "front",
-        editMode: false
+        editMode: false,
+        showTips: Cookies.get("showTips") == "false" ? false : true,
+        showAnimations: Cookies.get("showAnimations") == "true" ? true : false
     }),
     actions: {
     },

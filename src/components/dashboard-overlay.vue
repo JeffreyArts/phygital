@@ -37,7 +37,7 @@
 <script lang="ts"> 
 import { defineComponent } from "vue"
 import _ from "lodash"
-import gsap from "gsap"
+import gsap from "@/services/gsap-wrapper"
 
 export default defineComponent({
     name: "dashboard-component",

@@ -15,7 +15,7 @@ import { RouteLocationNormalized } from "vue-router"
 import App from "@/stores/app"
 import IframeContainer from "@/components/iframe-container.vue"
 import { TextPlugin } from "gsap/TextPlugin"
-import gsap from "gsap"
+import gsap from "@/services/gsap-wrapper"
 
 export default defineComponent ({ 
     name: "other-projects",

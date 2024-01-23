@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
-import gsap from "gsap"
+import gsap from "@/services/gsap-wrapper"
 import AztechButton from "@/components/aztech/button.vue"
 import warningIcon from  "@/assets/aztech/hand-explanation-mark.svg?raw"
 import type {AztechAlertOption} from "@/types/aztech-alert"

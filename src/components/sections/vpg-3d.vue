@@ -5,7 +5,7 @@
 <script lang="ts">
 import _ from "lodash"
 import * as THREE from "three"
-import gsap from "gsap" 
+import gsap from "@/services/gsap-wrapper" 
 import Phygital from "@/stores/phygital"
 import AppStore from "@/stores/app"
 
@@ -443,7 +443,6 @@ export default {
                 targetPosition.y = radius * Math.cos(0 * (Math.PI / 180))
                 targetPosition.z = radius * Math.sin(0 * (Math.PI / 180))
             }
-            console.log((Math.atan2(deltaZ, deltaX)*180)/Math.PI)
 
 
             gsap.to(this.camera.position, {

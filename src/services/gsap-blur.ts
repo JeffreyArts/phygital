@@ -1,4 +1,4 @@
-import gsap from "gsap"
+import gsap from "@/services/gsap-wrapper"
 
 const blurPlugin = {
     blurProperty: gsap.utils.checkPrefix("filter"),

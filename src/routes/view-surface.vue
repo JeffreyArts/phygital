@@ -10,7 +10,7 @@ import {defineComponent} from "vue"
 import {RouteLocationNormalized} from "vue-router"
 import AppStore from "@/stores/app"
 import vpgSvgEditable from "@/components/vpg-svg-editable.vue"
-import gsap from "gsap"
+import gsap from "@/services/gsap-wrapper"
 
 export default defineComponent ({ 
     name: "routeViewSection",
