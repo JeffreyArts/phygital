@@ -1,19 +1,20 @@
 <template>
     <div class="aztech-input-number" :class="[isDisabled ? '__isDisabled' : '']">
-        <svg class="aztech-input-number-svg" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"  viewBox="0 0 8 20" xml:space="preserve" @click="onClick">
-            <polygon class="aztech-input-number-down" points="8,12 4,20 0,12 8,12 "/>
-            <polygon class="aztech-input-number-up" points="0,8 4,0 8,8 0,8 "/>
-        </svg>
         <div class="aztec-input-number-text-container">
             <label class="aztech-input-number-text-label">{{ label }}</label>
             <div class="aztech-input-number-text-value-container">
+                <svg class="aztech-input-number-svg __isDown" @click="onClick($event, -1)" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"  viewBox="0 0 8 8" xml:space="preserve">
+                    <polygon class="aztech-input-number-up" points="0,0 8,0 4,8 "/>
+                </svg>
                 <span class="aztech-input-number-text-value">
                     {{ value }}
                 </span>
-                <input class="aztech-input-number-input" :disabled="disabled" pattern="[0-9]*" type="number" @change="updateValue" v-model="modelValueClone" />
                 <span class="aztech-input-number-text-unit" v-if="unit">
                     {{ unit }}
                 </span>
+                <svg class="aztech-input-number-svg __isUp" @click="onClick($event, 1)" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"  viewBox="0 0 8 8" xml:space="preserve">
+                    <polygon class="aztech-input-number-up" points="0,8 4,0 8,8 "/>
+                </svg>
             </div>
         </div>
     </div>
@@ -82,22 +83,19 @@ export default defineComponent({
         }
     },
     methods: {
-        onClick(event:MouseEvent) {
+        onClick(event:MouseEvent, value = 0) {
             const svgEl = event.currentTarget as HTMLElement
             if (!svgEl) return
-            const d = svgEl.getClientRects()[0]
-            const height = d.height
-            const yPos = event.clientY - d.top
-            if (yPos < height/2) {
-                this.increase()
+            
+            if (value > 0) {
+                this.increase(value)
             } else {
-                this.decrease()
+                this.decrease(value)
             }
         },
-        increase() {
+        increase(value = 1) {
             if (this.disabled) return
-            this.$emit("increase", this.modelValue + 1)
-            // this.modelValue++
+            this.$emit("increase", this.modelValue + value)
         },
         updateValue() {
             const value = parseInt(this.modelValueClone, 10)
@@ -108,9 +106,9 @@ export default defineComponent({
             }
             this.$emit("update", value)
         },
-        decrease() {
+        decrease(value = -1) {
             if (this.disabled) return
-            this.$emit("decrease", this.modelValue - 1)
+            this.$emit("decrease", this.modelValue + value)
         },
     }
 })
@@ -118,19 +116,37 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import "@/assets/scss/variables.scss";
-
+.__isPortrait {
+    .aztech-input-number {
+        padding-left: 0;
+    }
+    .aztech-input-number-svg {
+        position: static;
+        scale: 1.28;
+    }
+}
 .aztech-input-number {
     display: flex;
     flex-flow: row;
     gap: 8px;
+    padding-left: 16px;
+    position: relative;
     &.__isDisabled {
+        padding-left: 0;
         .aztech-input-number-svg {
             display: none;
         }
     }
 }
+
 .aztech-input-number-svg {
     width: 8px;
+    position: absolute;
+    left: 0;
+    top: 8px;
+    &.__isDown {
+        top: 20px;
+    }
 }
 
 .aztec-input-number-text-container {
@@ -138,20 +154,8 @@ export default defineComponent({
     flex-flow: column;
     font-family: $defaultFont;
     font-size: 14px;
-    position: relative;
 }
-.aztech-input-number-input {
-    position: absolute;
-    left: 0;
-    right: 0;
-    width: 50px;
-    z-index: 1;
-    cursor: default;
-    opacity: 0;
-    &:focus {
-        outline: 0 none transparent;
-    }
-}
+
 .aztech-input-number-text-value-container {
     display: flex;
     flex-flow: row;
@@ -170,4 +174,5 @@ export default defineComponent({
         cursor: pointer;
     }
 }
+
 </style>
