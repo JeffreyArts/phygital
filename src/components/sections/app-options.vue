@@ -57,13 +57,13 @@ export default defineComponent({
             } else {
                 this.hideTips()
             }
-            Cookies.set("showTips", this.tips, { sameSite: "strict" })
+            Cookies.set("showTips", this.tips.toString(), { sameSite: "strict" })
             this.app.showTips = this.tips
         },
         toggleAnimation() {
             this.animations = !this.animations
             this.app.showAnimations = this.animations
-            Cookies.set("showAnimations", this.animations, { sameSite: "strict" })
+            Cookies.set("showAnimations", this.animations.toString(), { sameSite: "strict" })
         },
         showTips() {
             gsap.to(".aztech-tut-messsage", {
