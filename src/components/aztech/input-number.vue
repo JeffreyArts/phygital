@@ -116,15 +116,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import "@/assets/scss/variables.scss";
-.__isPortrait {
-    .aztech-input-number {
-        padding-left: 0;
-    }
-    .aztech-input-number-svg {
-        position: static;
-        scale: 1.28;
-    }
-}
 .aztech-input-number {
     display: flex;
     flex-flow: row;
@@ -175,4 +166,13 @@ export default defineComponent({
     }
 }
 
+@media all and (pointer: coarse) {
+    .aztech-input-number {
+        padding-left: 0;
+    }
+    .aztech-input-number-svg {
+        position: static;
+        scale: 1.28;
+    }
+}
 </style>
