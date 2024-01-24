@@ -36,7 +36,7 @@ gsapWrapper.to = (
     }
     return gsap.to(target, options)
 }
-// (targets: TweenTarget, duration: number, fromVars: TweenVars, toVars: TweenVars)
+
 gsapWrapper.fromTo = (
     target: gsap.TweenTarget,
     durationOrFromVars: number | gsap.TweenVars,
@@ -66,6 +66,11 @@ gsapWrapper.fromTo = (
         options.duration = 0
         options.delay = 0
         options.ease = "none"
+        if (typeof options.stagger == "number") {
+            options.stagger = 0
+        } else if (typeof options.stagger === "object" && options.stagger !== null) {
+            options.stagger.each = 0
+        } 
     }
 
     return gsap.fromTo(target, {

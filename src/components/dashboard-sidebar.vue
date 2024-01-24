@@ -3,6 +3,14 @@
         <aside class="dashboard-sidebar">
             <section id="s-seed">
                 <section-seed/>
+                <aztech-tut-message direction="bl" class="seed-section-tut">
+                    <span v-if="app.orientation == 'landscape'">
+                        You can generate new models by clicking the generate button below
+                    </span>
+                    <span v-if="app.orientation == 'portrait'">
+                        You can generate new models by clicking the generate button above
+                    </span>
+                </aztech-tut-message>
             </section>
             <section id="s-surfaces">
                 <section-surfaces :activeView="app.activeView"/>
@@ -30,6 +38,10 @@
             </section>
             <section id="s-view-edit" v-if="app.activeView === 'view-surfaces'">
                 <section-view-edit-button />
+
+                <aztech-tut-message class="view-edit-section-tut">
+                    Click on the hand to toggle the edit mode on or off
+                </aztech-tut-message>
             </section>
             <section id="s-surface-dimensions" v-if="app.activeView === 'view-surfaces'">
                 <sectionSurfaceDimensions />
@@ -42,6 +54,7 @@
 <script lang="ts">
 import { defineComponent } from "vue"
 import App from "@/stores/app"
+import AztechTutMessage from "@/components/aztech/tutorial-message.vue"
 import sectionSeed from "@/components/sections/cube-seed.vue"
 import sectionMetaDimensions from "@/components/sections/meta-dimensions.vue"
 import sectionDownload from "@/components/sections/download-model.vue"
@@ -65,7 +78,8 @@ export default defineComponent({
         sectionLinks,
         sectionVpg3d,
         sectionEditOptions,
-        sectionAppOptions
+        sectionAppOptions,
+        AztechTutMessage
     },
     setup() {
         const app = App()
@@ -188,6 +202,18 @@ export default defineComponent({
             }
         }
     }
+    
+    .view-edit-section-tut {
+        position: absolute;
+        right: 6px;
+        top: -12px;
+    }
+
+    .seed-section-tut {
+        position: absolute;
+        right: 4px;
+        top: 4px; 
+    }
 }
 
 .__isPortrait {
@@ -276,6 +302,18 @@ export default defineComponent({
             padding-bottom: 0;
         }
     }
+
+    .view-edit-section-tut {
+        position: absolute;
+        right: -4px;
+        top: -16px;
+    }
+
+    .seed-section-tut {
+        position: absolute;
+        right: -16px;
+        bottom: 0px;
+    }
 }
 
 #s-cube3d {
@@ -297,4 +335,7 @@ export default defineComponent({
         }
     }
 }
+
+
+
 </style>

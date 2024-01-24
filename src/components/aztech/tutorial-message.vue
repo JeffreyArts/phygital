@@ -1,5 +1,8 @@
 <template>
-    <div class="aztech-tut-messsage">
+    <div class="aztech-tut-messsage" :class="[
+            direction == 'tl' ? '__isTopLeft' : '',
+            direction == 'bl' ? '__isBottomLeft' : '',
+        ]">
         <div class="aztech-tut-messsage-container" >
             <span class="aztech-tut-message-text-container">
                 <span class="aztech-tut-message-text" :class="[
@@ -95,9 +98,15 @@ export default defineComponent({
             this.line.width = Math.round(Math.abs((messageBoundingClient.x + messageBoundingClient.width) - dot.x - dot.width/2 )) 
 
             this.line.points = []
-            this.line.points.push(`${this.line.width} ${this.line.height }`)
-            this.line.points.push("12 3")
-            this.line.points.push("2 3")
+            if (this.direction == "tl") {
+                this.line.points.push(`${this.line.width} ${this.line.height }`)
+                this.line.points.push("12 3")
+                this.line.points.push("2 3")
+            } else if (this.direction == "bl") {
+                this.line.points.push(`${this.line.width} 0`)
+                this.line.points.push(`12 ${this.line.height-3 }`)
+                this.line.points.push(`3 ${this.line.height-3 }`)
+            }
             this.line.length = this.calculateLineLength(this.line.points)
 
 
@@ -274,10 +283,14 @@ export default defineComponent({
                     gsap.set(tutLinePoint, {opacity: 0})
                 }
             })
+            let messageY = -Math.round(this.messageHeight/2 ) + 3
+            if (this.direction == "bl") {
+                messageY = Math.round(this.messageHeight*1.5 - this.messageHeight/2)- 3 
+            }
             // Message box
             gsap.to(message, {
                 height: 2,
-                y: -Math.round(this.messageHeight/2 ) + 3,
+                y: messageY,
                 ease: "power2.in",
                 duration: .48,
             })
@@ -352,38 +365,54 @@ export default defineComponent({
                 }
             })
             
+            const tutLine = this.$el.querySelector(".aztech-tut-line")
+            const tutLinePolyline = this.$el.querySelector(".aztech-tut-line polyline")
+            const tutLinePoint = this.$el.querySelector(".aztech-tut-line circle")
+            gsap.killTweensOf(tutLine)
+            gsap.killTweensOf(tutLinePolyline)
+            gsap.killTweensOf(tutLinePoint)
+            
+            
+            let tutLineY = -31
+            let tutLinePointY = 0
+
+            if (this.direction == "bl") {
+                tutLineY = 16
+                tutLinePointY = this.line.height - 6
+            }
+            
+            gsap.set(tutLine, {
+                opacity: 1,
+                y: tutLineY
+            })
+            gsap.set(tutLinePolyline , {
+                strokeDasharray: this.line.length,
+                strokeDashoffset: this.line.length,
+            })
+
+            gsap.set(tutLinePoint, {
+                scale: 0,
+                opacity: 1,
+                y: tutLinePointY,
+                transformOrigin: "50% 50%"
+            })
             
             this.$nextTick(() => {
                 
-                const tutLine = this.$el.querySelector(".aztech-tut-line")
-                const tutLinePolyline = this.$el.querySelector(".aztech-tut-line polyline")
-                const tutLinePoint = this.$el.querySelector(".aztech-tut-line circle")
-                gsap.killTweensOf(tutLine)
-                gsap.killTweensOf(tutLinePolyline)
-                gsap.killTweensOf(tutLinePoint)
-            
-            
-                gsap.set(tutLine, {
-                    opacity: 1
-                })
-                gsap.set(tutLinePolyline , {
-                    strokeDasharray: this.line.length,
-                    strokeDashoffset: this.line.length,
-                })
-                gsap.set(tutLinePoint, {
-                    scale: 0,
-                    opacity: 1,
-                    transformOrigin: "50% 50%"
-                })
 
                 const message = this.$el.querySelector(".aztech-tut-message-text-container")
                 const width = this.messageWidth
                 const height = this.messageHeight
 
+                let messageY = -Math.round(this.messageHeight/2 ) + 3
+                if (this.direction == "bl") {
+                    messageY = this.messageHeight - 3
+                }
+
                 gsap.set(message, {
                     width: 0,
                     height: 2,
-                    y: -Math.round(this.messageHeight/2 ) + 3
+                    y: messageY
                 })
                 
                 const that = this
@@ -409,9 +438,15 @@ export default defineComponent({
                                     duration:.48,
                                     ease: "none"
                                 })
+                                
+                                let messageY = 0
+                                if (that.direction == "bl") {
+                                    messageY = that.messageHeight*1.5 - 3
+                                }
+                                
                                 gsap.to(message, {
                                     height: Math.round(height),
-                                    y: 0,
+                                    y: messageY,
                                     ease: "power4.inOut",
                                     duration: .64,
                                     onComplete: () => {
@@ -443,6 +478,7 @@ export default defineComponent({
 @import "@/assets/scss/variables.scss";
 .aztech-tut-messsage-container {
     position: relative;
+    z-index: 1990;
     display: inline-block;
 }
 
@@ -513,4 +549,5 @@ export default defineComponent({
     width: 32px;
     height: 32px;
 }
+
 </style>

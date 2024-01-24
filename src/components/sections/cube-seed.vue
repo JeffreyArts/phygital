@@ -26,7 +26,8 @@ import Phygital from "@/stores/phygital"
 export default defineComponent({
     name: "cube-seed",
     components: {
-        icon, AztechUnderline
+        icon, 
+        AztechUnderline
     },
     props: {
         character: {

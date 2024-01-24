@@ -51,10 +51,6 @@
                 <span class="view-edit-text" ref="view-text">Edit</span>
             </div>
         </div>
-        
-        <aztech-tut-message class="view-edit-tut" open-automatically>
-            Click on the hand to toggle the edit mode on or off
-        </aztech-tut-message>
     </div>
 </template>
 
@@ -271,19 +267,6 @@ export default defineComponent({
     bottom: 0; 
     right: 0;
     height: 14px;
-}
-
-.view-edit-tut {
-    position: absolute;
-    right: -4px;
-    top: -16px;
-}
-
-.__isLandscape {
-    .view-edit-tut {
-        right: 10px;
-        top: -10px;
-    }
 }
 
 @container view-edit-container (min-width: 128px) {
