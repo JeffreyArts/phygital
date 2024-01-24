@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div ref="container">
         <aside class="dashboard-sidebar">
             <section id="s-seed">
                 <section-seed/>
@@ -51,6 +51,8 @@
                 <sectionSurfaceDimensions />
             </section>
         </aside>
+        <div class="left-shadow"></div>    
+        <div class="right-shadow"></div>
     </div>
 </template>
 
@@ -107,9 +109,38 @@ export default defineComponent({
     
     },
     mounted() {
-        //
+        
+        // Add scroll event
+        const scrollContainer = this.$refs.container as HTMLElement
+        if (scrollContainer) {
+            scrollContainer.onscroll = this.onScrollEvent
+            this.updateShadows(scrollContainer)
+        }
+
     },
     methods: {
+        onScrollEvent(e:Event) {
+            const target = e.target as HTMLElement
+            
+            if (!target) {
+                return
+            }
+            this.updateShadows(target)
+        },
+        updateShadows(target: HTMLElement) {
+            // Set left
+            if (target.scrollLeft < 1) {
+                target.classList.add("__isLeft")
+            } else {
+                target.classList.remove("__isLeft")
+            }
+            // Set right
+            if (target.scrollLeft+ target.offsetWidth + 5 > target.scrollWidth) {
+                target.classList.add("__isRight")
+            } else {
+                target.classList.remove("__isRight")
+            }
+        },
         setSelection(event:MouseEvent) {
             this.selection.x = event.clientX
             this.selection.y = event.clientY
@@ -132,6 +163,9 @@ export default defineComponent({
 
 <style lang="scss">
 @import "./../assets/scss/variables.scss";
+.dashboard-sidebar-container {
+    position: relative;
+}
 .dashboard-sidebar {
     display: grid;
     section {
@@ -231,6 +265,18 @@ export default defineComponent({
 
 .__isPortrait {
     .dashboard-sidebar-container {
+
+        &.__isLeft {
+            .left-shadow {
+                opacity: 0;
+            }
+        }
+        &.__isRight {
+            .right-shadow {
+                opacity: 0;
+            }
+        }
+        
         .dashboard-sidebar {
             height: calc(3 * 64px + 32px);
             min-width: calc(13 * 64px + 16px); // Additional 16px is for padding right
@@ -238,6 +284,7 @@ export default defineComponent({
             padding-top: 16px;
             grid-template-columns: 64px 64px 64px 64px 64px 64px 64px 64px 64px 64px 64px 64px 64px;
             grid-template-rows: 64px 64px 64px;   
+
         }
 
         //
@@ -324,7 +371,7 @@ export default defineComponent({
 
     .seed-section-tut {
         position: absolute;
-        right: -16px;
+        right: -8px;
         bottom: 0px;
     }
 
@@ -360,5 +407,34 @@ export default defineComponent({
 }
 
 
+.left-shadow {
+    background-color: #1c1c1e;
+    border-radius: 100%;
+    bottom: 0;
+    filter: blur(16px);
+    height: 220px;
+    left: -4px;
+    opacity: .8;
+    pointer-events: none;
+    position: fixed;
+    transition: opacity .4s ease-out;
+    width: 8px;
+    z-index: 1990;
+}
+
+.right-shadow {
+    background-color: #1c1c1e;
+    border-radius: 100%;
+    bottom: 0;
+    filter: blur(16px);
+    height: 220px;
+    opacity: .8;
+    pointer-events: none;
+    position: fixed;
+    right: -4px;
+    transition: opacity .4s ease-out;
+    width: 8px;
+    z-index: 1990;
+}
 
 </style>

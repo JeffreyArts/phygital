@@ -1,8 +1,8 @@
 <template>
-    <div class="about-page">
+    <div class="about-page" ref="container">
         <h1>_ about</h1>
 
-        <div class="about-page-offset">
+        <div class="about-page-offset" >
             
             <p id="section1">In this time of technological advancements I see a decreasing amount of people benefiting from all of the technological innovations. With this project, I explore how I can use this same technology in my artistic proces to create beautiful physical sculptures which I make by pouring concrete. As with most of the digital technologies, this digital interface improves the pace in which I can imagine these sculptures. But more importantly, by exploring the technical limitations and possibilities of the technology, it defines my path of how I explore beauty in geometric symmetry.</p>
             
@@ -21,6 +21,8 @@
             <p id="section3">With Phygital — a blend of the words physical & digital — I have chosen to polish the interface of my work process and publish it into the world, allowing anyone to use it for personal purposes at no cost (this includes the source code). Because I believe that technological advancements should be accessible by everyone. If you like what I do and want to support me. You can do so by letting me know via <a href="https://www.instagram.com/jeffrey.arts/">Instagram</a>, sending me an <a href="mailto:contact@jeffreyarts.nl">e-mail</a> or by purchasing one of the <a href="https://www.artmajeur.com/jeffrey-arts">sculptures</a> that I've made.</p>
             <p id="section4">Special thanks go out to <a href="https://fontforzula.gumroad.com">fontforzula</a>, who made the visual assets that I have used to build this digital interface with.</p>
         </div>
+        <div class="bottom-shadow"></div>
+        <div class="top-shadow"></div>
     </div>
 </template>
 
@@ -77,9 +79,39 @@ export default defineComponent ({
             this.fadeOut(guard)
             return false
         })
+        // Add scroll event
+        const scrollContainer = this.$refs.container as HTMLElement
+        if (scrollContainer) {
+            scrollContainer.onscroll = this.onScrollEvent
+            this.updateShadows(scrollContainer)
+        }
 
     },
     methods: {
+        onScrollEvent(e:Event) {
+            const target = e.target as HTMLElement
+            
+            if (!target) {
+                return
+            }
+
+            this.updateShadows(target) 
+        },
+        updateShadows(target: HTMLElement) {
+
+            // Set top
+            if (target.scrollTop < 1) {
+                target.classList.add("__isTop")
+            } else {
+                target.classList.remove("__isTop")
+            }
+            // Set bottom
+            if (target.scrollTop+ target.offsetHeight + 5 > target.scrollHeight) {
+                target.classList.add("__isBottom")
+            } else {
+                target.classList.remove("__isBottom")
+            }
+        },
         closeModal() {
             if (!this.isOpen ) {
                 return
@@ -198,6 +230,18 @@ export default defineComponent ({
     overflow-y: auto;
     height: calc(100% - 24px);
     padding-right: 32px;
+    position: relative;
+
+    &.__isTop {
+        .top-shadow {
+            opacity:0;
+        } 
+    }
+    &.__isBottom {
+        .bottom-shadow {
+            opacity:0;
+        } 
+    }
 
     p {
         padding: 0;
@@ -243,6 +287,7 @@ export default defineComponent ({
     padding-left: 24px;
     padding-right: 24px;
     margin-top: 24px;
+    padding-bottom: 40px;
     
     @media all and (min-width: 800px) {
         padding-left: 58px;

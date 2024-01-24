@@ -1,12 +1,16 @@
 <template>
     <div class="sculptures">
-        <h1>_ sculptures</h1>
-
-        <p>| Collection of physicalized objects</p>
+        <header class="sculptures-header">
+            <h1>_ sculptures</h1>
+            
+            <p>| Collection of physicalized objects</p>
+        </header>
 
         <div class="sculptures-container" ref="container">
-            <sculpture-thumbnail :src="sculpture.images[0]" :title="sculpture.name" v-for="(sculpture, i) in sculptures" :key="i" @click="selectSculpture(sculpture)" @mouseenter="mouseEnterEvent" @mouseleave="mouseLeaveEvent"/>
-
+            <div class="sculptures-container-wrapper">
+                <sculpture-thumbnail :src="sculpture.images[0]" :title="sculpture.name" v-for="(sculpture, i) in sculptures" :key="i" @click="selectSculpture(sculpture)" @mouseenter="mouseEnterEvent" @mouseleave="mouseLeaveEvent"/>
+            </div>
+            
             <div class="top-shadow"></div>
             <div class="bottom-shadow"></div>
         </div>
@@ -344,6 +348,7 @@ export default defineComponent ({
         const scrollContainer = this.$refs.container as HTMLElement
         if (scrollContainer) {
             scrollContainer.onscroll = this.onScrollEvent
+            this.updateShadows(scrollContainer)
         }
 
         window.addEventListener("keydown", this.keydownEventListener)
@@ -364,6 +369,10 @@ export default defineComponent ({
                 return
             }
 
+            this.updateShadows(target) 
+        },
+        updateShadows(target: HTMLElement) {
+
             // Set top
             if (target.scrollTop < 1) {
                 target.classList.add("__isTop")
@@ -376,8 +385,6 @@ export default defineComponent ({
             } else {
                 target.classList.remove("__isBottom")
             }
-            
-            
         },
         selectSculpture(sculpture: Sculpture, index = 0) {
             const modalElement = this.$refs.modal as HTMLElement
@@ -682,7 +689,6 @@ export default defineComponent ({
 .sculptures {
     width: 100%;
     height: calc(100% - 16px);
-    padding-left: 24px;
     padding-top: 24px;
     display: flex;
     flex-flow: column;
@@ -705,8 +711,33 @@ export default defineComponent ({
         height: 100%;
     }
     .sculptures-container {
-    margin-top: 24px;
+        margin-top: 24px;
+    }
+}
 
+.sculptures-header {
+    padding-left: 24px;
+}
+.sculptures-container-wrapper {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    display: grid;
+    padding-right: 24px;
+    padding-left: 24px;
+
+    @media all and (min-width: 512px) {
+        gap: 64px 32px;
+        grid-template-columns: 1fr 1fr;
+        padding-right: 40px;
+    }
+
+    @media all and (min-width: 1040px) {
+        gap: 96px 64px;
+    }
+
+    @media all and (min-width: 1440px) {
+        gap: 128px 64px;
+        grid-template-columns: 1fr 1fr 1fr;
     }
 }
 
@@ -714,12 +745,8 @@ export default defineComponent ({
     margin-top: 8px;
     width: 100%;
     height:100%;
-    padding-right: 24px;
-    display: grid;
     overflow-y: auto;
     overflow-x: hidden;
-    grid-template-columns: 1fr;
-    gap: 32px;
     position: relative;
     
     &.__isTop {
@@ -735,24 +762,10 @@ export default defineComponent ({
 
     @media all and (min-width: 512px) {
         margin-top: 40px;
-        gap: 64px 32px;
-        grid-template-columns: 1fr 1fr;
         height:calc(100% - 80px - 48px);
         width: calc(100% - 24px);
-        padding-right: 40px;
     }
     
-    @media all and (min-width: 1040px) {
-        gap: 96px 64px;
-        // padding-top: 64px;
-        // grid-template-columns: 1fr 1fr 1fr;
-    }
-    
-    @media all and (min-width: 1440px) {
-        gap: 128px 64px;
-        // padding-top: 64px;
-        grid-template-columns: 1fr 1fr 1fr;
-    }
 }
 
 
@@ -920,28 +933,31 @@ export default defineComponent ({
 .top-shadow {
     border-radius: 100%;
     height: 8px;
-    width: 100%;
-    bottom: calc(100% + 8px);
+    width: calc(100% - 16px);
+    left: 8px;
+    bottom: calc(100% - 4px);
+    top: -4px;
     background-color: #1c1c1e;
     filter: blur(16px);
     opacity: .8;
     position: sticky;
     pointer-events: none;
-    z-index: 2024;
-    transition: opacity .32s ease;
+    z-index: 1990;
+    transition: opacity .4s ease-out;
 }
 
 .bottom-shadow {
     border-radius: 100%;
     height: 8px;
-    width: 100%;
-    bottom: - 16px;
+    width: calc(100% - 16px);
+    left: 8px;
+    bottom: - 4px;
     background-color: #1c1c1e;
     filter: blur(16px);
     opacity: .8;
     position: sticky;
     pointer-events: none;
-    z-index: 2024;
-    transition: opacity .32s ease;
+    z-index: 1990;
+    transition: opacity .4s ease-out;
 }
 </style>
