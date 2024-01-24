@@ -303,9 +303,16 @@ export default defineComponent({
                     gsap.set(tutLinePoint, {opacity: 0})
                 }
             })
-            let messageY = -Math.round(this.messageHeight/2 ) + 3
+            let offset = 3
+            // For some unclear reason Safari calculates differently, this is a hotfix for the issue
+            if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+                offset = 2.2
+            }
+
+
+            let messageY = -Math.round(this.messageHeight/2 ) + offset
             if (this.direction == "bl") {
-                messageY = Math.round(this.messageHeight*1.5 - this.messageHeight/2)- 3 
+                messageY = Math.round(this.messageHeight*1.5 - this.messageHeight/2 - offset) 
             }
             // Message box
             gsap.to(message, {
@@ -423,10 +430,15 @@ export default defineComponent({
                 const message = this.$el.querySelector(".aztech-tut-message-text-container")
                 const width = this.messageWidth
                 const height = this.messageHeight
+                let offset = 3
+                // For some unclear reason Safari calculates differently, this is a hotfix for the issue
+                if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
+                    offset = 2.2
+                }
 
-                let messageY = -Math.round(this.messageHeight/2 ) + 3
+                let messageY = -Math.round(this.messageHeight/2 ) + offset
                 if (this.direction == "bl") {
-                    messageY = this.messageHeight - 3
+                    messageY = this.messageHeight -offset
                 }
 
                 gsap.set(message, {
@@ -461,7 +473,7 @@ export default defineComponent({
                                 
                                 let messageY = 0
                                 if (that.direction == "bl") {
-                                    messageY = that.messageHeight*1.5 - 3
+                                    messageY = that.messageHeight*1.5 - offset
                                 }
                                 
                                 gsap.to(message, {
