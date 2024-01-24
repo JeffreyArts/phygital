@@ -356,13 +356,12 @@ export const PhygitalStore = defineStore({
                 mergedObject.position.x = - diameter/2  
                 mergedObject.position.y = surface.height
             }
-            
+
             if (surfaceSide === "back") {
                 mergedObject.name = "surface-back"
                 mergedObject.rotateX(Math.PI/180* 90)
                 mergedObject.rotateZ(Math.PI/180* 180)
-                // mergedObject.position.z = -1
-                mergedObject.position.x = diameter/2 + surface.width/2
+                mergedObject.position.x = surface.width - 1 - diameter/2
                 mergedObject.position.y = surface.height
             }
 

@@ -108,7 +108,6 @@ export default defineComponent({
         mouseEnterEvent(event: MouseEvent){ 
             
             document.querySelectorAll(".sculpture-thumbnail").forEach( (domElement, i) => {
-                // console.log(domElement == event.currentTarget, event.currentTarget, domElement)
                 if (domElement == event.currentTarget) {
                     gsap.killTweensOf(domElement)
                     setTimeout(() => {

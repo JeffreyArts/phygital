@@ -45,7 +45,6 @@ export default defineComponent({
         }
     },
     mounted() {
-        console.log("Cookies.get(\"showAnimations\")", Cookies.get("showAnimations"))
         this.tips = this.app.showTips
         this.animations = this.app.showAnimations
     },

@@ -1,7 +1,6 @@
 <template>
     <div class="aztech-tut-messsage">
         <div class="aztech-tut-messsage-container" >
-
             <span class="aztech-tut-message-text-container">
                 <span class="aztech-tut-message-text" :class="[
                     direction == 'tl' ? '__isTopLeft' : '',
@@ -86,12 +85,13 @@ export default defineComponent({
     },
     methods: {
         defineLine() {
-            const message = this.$el.querySelector(".aztech-tut-message-text-container")?.getBoundingClientRect()
+            const messageBoundingClient = this.$el.querySelector(".aztech-tut-message-text-container")?.getBoundingClientRect()
             const dot = this.$el.querySelector(".aztech-tut-dot")?.getBoundingClientRect()
-            gsap.set(message, {width: 148})
+            this.messageWidth = Math.round(messageBoundingClient.width)
+            this.messageHeight = Math.round(messageBoundingClient.height)
             
-            this.line.height = Math.round(Math.abs((message.y + this.messageHeight/2) - (dot.y + dot.height/2))) + 4
-            this.line.width = Math.round(Math.abs((message.x + this.messageWidth) - dot.x - dot.width/2 )) + 4
+            this.line.height = Math.round(Math.abs((messageBoundingClient.y + messageBoundingClient.height/2) - (dot.y + dot.height/2))) 
+            this.line.width = Math.round(Math.abs((messageBoundingClient.x + messageBoundingClient.width) - dot.x - dot.width/2 )) 
 
             this.line.points = []
             this.line.points.push(`${this.line.width} ${this.line.height }`)
@@ -175,7 +175,7 @@ export default defineComponent({
 
             this.openingTimeout = setTimeout(() => {
                 this.openMessage(e)
-            }, 240) as unknown as number
+            }, 320) as unknown as number
         
         },
         mouseLeaveEvent(e: MouseEvent) {
@@ -251,15 +251,6 @@ export default defineComponent({
                 }
             })
 
-            gsap.to(tutLinePolyline, {
-                duration: .64,
-                strokeDashoffset: this.line.length,
-                delay: .96,
-                ease: "power2.out",
-                onComplete: () => {
-                    gsap.set(tutLine, {opacity: 0})
-                }
-            })
             
             gsap.to(tutLinePoint, {
                 scale: 0,
@@ -270,39 +261,45 @@ export default defineComponent({
                     gsap.set(tutLinePoint, {opacity: 0})
                 }
             })
-
             // Message box
             gsap.to(message, {
-                opacity: 0,
-                ease: "power4.inOut",
-                duration: .16,
-                delay:.8,
-                onComplete: () => {
-                    gsap.to(message, {
-                        width: Math.round(messageWidth) + 2, // + 2 to compensate for 1px border
-                        height: Math.round(messageHeight) + 2, // + 2 to compensate for 1px border
-                        y:0,
-                    })
-                    this.messageOpen = false
-                    this.messageClosing = false
-                }
+                height: 2,
+                y: -Math.round(this.messageHeight/2 ) + 3,
+                ease: "power2.in",
+                duration: .48,
             })
-
+            const that = this
             gsap.to(message, {
                 width: 0,
                 ease: "power2.in",
                 duration: .64,
                 delay:.4,
-            })
+                onComplete: () => {
+                    gsap.set(message, {
+                        opacity: 0,
+                        width: messageWidth,
+                        height: messageHeight,
+                        y:0,
+                    })
 
-            gsap.to(message, {
-                height: 2,
-                y: Math.round(-messageHeight/2) + 1,
-                ease: "power2.in",
-                duration: .64,
+                    gsap.to(tutLinePolyline, {
+                        duration: .32,
+                        strokeDashoffset: that.line.length,
+                        ease: "power3.out",
+                        onComplete: () => {
+                            gsap.set(tutLine, {opacity: 0})
+                            this.messageOpen = false
+                            this.messageClosing = false
+                        }
+                    })
+                }
             })
         },
         openMessage(e: MouseEvent) {
+            if (this.openingTimeout) {
+                clearTimeout(this.openingTimeout) 
+            }
+
             if (this.messageClosing || this.messageOpening) {
                 return
             }
@@ -360,62 +357,63 @@ export default defineComponent({
                     transformOrigin: "50% 50%"
                 })
 
-
-                gsap.to(tutLinePolyline, {
-                    duration: .64,
-                    strokeDashoffset: 0,
-                    delay: 0,
-                    ease: "power2.out",
-                
-                })
-                gsap.to(tutLinePoint, {
-                    delay: 1,
-                    scale: 1,
-                    duration:.48,
-                    ease: "none"
-                })
-
                 const message = this.$el.querySelector(".aztech-tut-message-text-container")
                 const width = this.messageWidth
                 const height = this.messageHeight
+
                 gsap.set(message, {
-                    width: 2,
+                    width: 0,
                     height: 2,
-                    y: Math.round(-height/2) + 1
+                    y: -Math.round(this.messageHeight/2 ) + 3
                 })
-
-                gsap.to(message, {
-                    opacity: 1,
-                    ease: "power4.inOut",
-                    duration: .16,
-                    delay:.4
-                })
-
-                gsap.to(message, {
-                    width: width,
-                    ease: "power4.inOut",
-                    duration: .64,
-                    delay:.4
-                })
-
-                gsap.to(message, {
-                    height: Math.round(height) + 2,
-                    y: 0,
-                    ease: "power4.inOut",
-                    duration: .64,
-                    delay:1,
-                    onComplete: () => {
-                        this.messageOpen = true
-                        this.messageOpening = false
-
-                        gsap.killTweensOf(dot)
-                        gsap.to(dot, {
+                
+                const that = this
+                gsap.to(tutLinePolyline, {
+                    duration: .32,
+                    strokeDashoffset: 0,
+                    delay: 0,
+                    ease: "power2.in",
+                    onComplete () {
+                        
+                        gsap.set(message, {
                             opacity: 1,
-                            ease: "power3.inOut",
-                            duration: .4,
                         })
+
+                        gsap.to(message, {
+                            width: width,
+                            ease: "power2.out",
+                            duration: .32,
+                            onComplete: () => {
+                                gsap.to(tutLinePoint, {
+                                    delay: 0,
+                                    scale: 1,
+                                    duration:.48,
+                                    ease: "none"
+                                })
+                                gsap.to(message, {
+                                    height: Math.round(height),
+                                    y: 0,
+                                    ease: "power4.inOut",
+                                    duration: .64,
+                                    onComplete: () => {
+                                        that.messageOpening = false
+                                        that.messageOpen = true
+
+                                        gsap.killTweensOf(dot)
+                                        gsap.to(dot, {
+                                            opacity: 1,
+                                            ease: "power3.inOut",
+                                            duration: .4,
+                                        })
+                                    }
+                                })
+                            }
+                        })
+                        
+
                     }
                 })
+                
             })
         },
     }
