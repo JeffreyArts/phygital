@@ -1,5 +1,7 @@
 #! /bin/sh
 set -e
+export LC_CTYPE=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 echo > deploy.log
 
@@ -40,14 +42,8 @@ while [[ $# -gt 0 ]]; do
     case $key in
         --skip)
             shift
-            if [[ -z $1 ]]; then
-                print_options
-                exit 0
-            fi
-
-            IFS=',' read -r -a skip_options <<< "$1"
-            for option in "${skip_options[@]}"; do
-                case $option in
+            while [[ -n $1 && ! $1 =~ ^- ]]; do
+                case $1 in
                     build)
                         skip_build=true
                         ;;
@@ -64,13 +60,13 @@ while [[ $# -gt 0 ]]; do
                         skip_cleanup=true
                         ;;
                     *)
-                        echo "Invalid skip option: $option"
+                        echo "Invalid skip option: $1"
                         print_options
                         exit 1
                         ;;
                 esac
+                shift
             done
-            shift
             ;;
         *)
             echo "Unknown option: $key"
@@ -78,6 +74,7 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
 
 # Define Environment variable
 if [ -z "$1" ]; then
@@ -142,8 +139,15 @@ echo ""
 if [ "$skip_build" = false ]; then
 start_log "👷‍♂️ Building project"
 {
-  yarn run build
-} >> deploy.log 2>&1
+  yarn build
+} 2>&1 | tee -a deploy.log
+
+# Check the exit status of the last command
+if [ "${PIPESTATUS[0]}" -ne 0 ]; then
+  echo "Error: yarn build failed."
+  exit 1
+fi
+
 end_log "👷‍♂️ Project build"
 fi
 
@@ -187,27 +191,25 @@ fi
 # Unzip the zip file and copy the contents to the appropriate location on the remote server
 if [ "$skip_deploy" = false ]; then
   start_log "🖥️  Deploying website" 
-{
-  # Check if the `/current` directory exists and backup if it does
-  if ssh $DEPLOYMENT_USER@$DEPLOYMENT_HOST test -d "$DEPLOYMENT_PATH/current"; then
-      timestamp=$(date +%Y%m%d-%H%M%S)
-      ssh $DEPLOYMENT_USER@$DEPLOYMENT_HOST "cp -r $DEPLOYMENT_PATH/current $DEPLOYMENT_PATH/bk_$timestamp; \
-      chown -R $DEPLOYMENT_USER:web $DEPLOYMENT_PATH/bk_$timestamp; \
-      "
-  fi
+  {
+    # Check if the `/current` directory exists and backup if it does
+    if ssh $DEPLOYMENT_USER@$DEPLOYMENT_HOST test -d "$DEPLOYMENT_PATH/current"; then
+        timestamp=$(date +%Y%m%d-%H%M%S)
+        ssh $DEPLOYMENT_USER@$DEPLOYMENT_HOST "cp -r $DEPLOYMENT_PATH/current $DEPLOYMENT_PATH/bk_$timestamp; \
+        chown -R $DEPLOYMENT_USER:web $DEPLOYMENT_PATH/bk_$timestamp; \
+        "
+    fi
 
-  # Unzip deploy.zip to `/tmp` directory and move the contents over to the `/current` directory
-  ssh $DEPLOYMENT_USER@$DEPLOYMENT_HOST "\
-      unzip $DEPLOYMENT_PATH/deploy.zip -d $DEPLOYMENT_PATH/tmp; 
-      rm $DEPLOYMENT_PATH/current -rf; \
-      mv $DEPLOYMENT_PATH/tmp/dist $DEPLOYMENT_PATH/current; \
-      chown -R $DEPLOYMENT_USER:web $DEPLOYMENT_PATH/current; \
-      rm $DEPLOYMENT_PATH/tmp -rf; \
-      rm $DEPLOYMENT_PATH/deploy.zip; \
-      exit"
-      
-} >> deploy.log 2>&1
-      #chmod -R 755 $DEPLOYMENT_PATH/current/images
+    # Unzip deploy.zip to `/tmp` directory and move the contents over to the `/current` directory
+    ssh $DEPLOYMENT_USER@$DEPLOYMENT_HOST "\
+        unzip $DEPLOYMENT_PATH/deploy.zip -d $DEPLOYMENT_PATH/tmp; 
+        rm $DEPLOYMENT_PATH/current -rf; \
+        mv $DEPLOYMENT_PATH/tmp/dist $DEPLOYMENT_PATH/current; \
+        chown -R $DEPLOYMENT_USER:web $DEPLOYMENT_PATH/current; \
+        rm $DEPLOYMENT_PATH/tmp -rf; \
+        exit"
+  } >> deploy.log 2>&1
+        
   end_log "🖥️  Website deployed" 
 fi
 
@@ -216,25 +218,54 @@ fi
   ##########################
  # 🗑️ Cleanup old files 🗑️ #
 ##########################
-# Clean up old backups if there are more than X
+# Clean up old files
 if [ "$skip_cleanup" = false ]; then
 start_log "🗑️ Cleanup back-ups" 
 {
+
 if ssh $DEPLOYMENT_USER@$DEPLOYMENT_HOST test -d "$DEPLOYMENT_PATH"; then
-    num_backups=$(ssh "$DEPLOYMENT_USER@$DEPLOYMENT_HOST" "find $DEPLOYMENT_PATH -maxdepth 1 -type d -name 'bk_*' | wc -l")
-    if [ $num_backups -gt $MAX_BACKUPS ]; then
-        ssh $DEPLOYMENT_USER@$DEPLOYMENT_HOST "find $DEPLOYMENT_PATH/ -name "bk_*" -type d -print0 | head -zn -$MAX_BACKUPS | xargs -0 rm -rf"
-        if [ $? -ne 0 ]; then
-          echo "Failed to remove excess backups on remote host"
-        else
-          echo "Removed excess backups on remote host"
-        fi
+    # Clean up old backups if there are more than X
+    num_backups=$(ssh "$DEPLOYMENT_USER@$DEPLOYMENT_HOST" "find '$DEPLOYMENT_PATH' -maxdepth 1 -type d -name 'bk_*' | wc -l")
+    echo "Number of active backups: $num_backups"
+    
+    if [ "$num_backups" -gt "$MAX_BACKUPS" ]; then
+        excess_backups_array=()
+
+        while IFS= read -r backup; do
+            excess_backups_array+=("$backup")
+        done < <(ssh "$DEPLOYMENT_USER@$DEPLOYMENT_HOST" "find '$DEPLOYMENT_PATH/' -name 'bk_*' -type d | head -n -$MAX_BACKUPS")
+
+        # Iterate over the array
+        for backup in "${excess_backups_array[@]}"; do
+            ssh "$DEPLOYMENT_USER@$DEPLOYMENT_HOST" "rm -rf '$backup' 2>&1"
+
+            if [ $? -ne 0 ]; then
+                echo "❌ Failed to remove '$backup' on remote host"
+            else
+                echo "✅ Removed '$backup' from remote host"
+            fi
+        done < <(printf '%s\0' "$excess_backups")
+
     fi
+    num_backups=$(ssh "$DEPLOYMENT_USER@$DEPLOYMENT_HOST" "find '$DEPLOYMENT_PATH' -maxdepth 1 -type d -name 'bk_*' | wc -l")
+    echo "Number of active backups: $num_backups"
+fi
+
+# Remove the remote zip file
+if [ "$skip_zip" = false ]; then
+ ssh $DEPLOYMENT_USER@$DEPLOYMENT_HOST "\
+    rm $DEPLOYMENT_PATH/deploy.zip;\
+    exit"
+    
+  echo "remove $DEPLOYMENT_PATH/deploy.zip"
 fi
 
 # Remove the local zip file
-rm deploy.zip
-} >> deploy.log 2>&1
+if [ "$skip_zip" = false ]; then
+  rm deploy.zip
+  echo "remove local /deploy.zip"
+fi
+} 2>&1 | tee -a deploy.log
 
 end_log "🗑️ Back-ups cleaned" 
 fi
