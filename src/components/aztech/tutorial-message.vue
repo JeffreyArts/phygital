@@ -19,6 +19,7 @@
                 <circle class="outer-circle" cx="15.5" cy="15.5" r="14.5"/>
                 <circle class="dot" cx="15.5" cy="15.5" r="8"/>
                 <circle class="inner-circle" cx="15.5" cy="15.5" r="11" />
+                <path class="question-mark" d="M19.5,13.4h-1.3v1.4h-1.3v2.8h-2.7v-2.8h1.3v-1.4h1.3v-2.8h-2.7v2.8h-2.7v-2.8h1.3V9.2h5.3v1.4h1.3V13.4z M16.8,21.8h-2.7 V19h2.7V21.8z"/>
             </svg>
         </div>
     </div>
@@ -141,6 +142,7 @@ export default defineComponent({
                 return
             }
 
+
             const dot = this.$el.querySelector(".aztech-tut-dot .dot")
 
             const tl = gsap.timeline({ repeat: -1 })
@@ -177,6 +179,11 @@ export default defineComponent({
                 this.openMessage(e)
             }, 320) as unknown as number
         
+            const questionMark = this.$el.querySelector(".aztech-tut-dot .question-mark")
+            gsap.to(questionMark, {
+                opacity: 0,
+                duration: .4
+            })
         },
         mouseLeaveEvent(e: MouseEvent) {
             if (this.messageClosing || this.messageOpening) {
@@ -213,6 +220,12 @@ export default defineComponent({
                 x:0,
                 y:0,
                 ease: "none",
+                duration: .4
+            })
+
+            const questionMark = this.$el.querySelector(".aztech-tut-dot .question-mark")
+            gsap.to(questionMark, {
+                opacity: 1,
                 duration: .4
             })
         },
@@ -290,6 +303,12 @@ export default defineComponent({
                             gsap.set(tutLine, {opacity: 0})
                             this.messageOpen = false
                             this.messageClosing = false
+
+                            const questionMark = that.$el.querySelector(".aztech-tut-dot .question-mark")
+                            gsap.to(questionMark, {
+                                opacity: 1,
+                                duration: .8
+                            })
                         }
                     })
                 }
