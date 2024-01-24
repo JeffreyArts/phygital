@@ -19,7 +19,7 @@
                 <section-meta-dimensions />
 
                 <aztech-tut-message class="meta-dimensions-section-tut" :visible="app.tutMessages.metaDimensionsSection">
-                    A calculator for calculating the final dimensions of the phygitalized model
+                    A handy calculator for calculating the final dimensions of the phygitalized model
                 </aztech-tut-message>
             </section>
             <section id="s-cube3d" @click="select3dView" @mousedown="setSelection" @mousemove="cancelSelection">
@@ -351,6 +351,7 @@ export default defineComponent({
             right: 16px;
             height: 64px;
             width: 96px;
+            z-index: 1; // Force it to overlay download button
         }
 
         #s-edit-options {

@@ -159,6 +159,10 @@ export default defineComponent({
     line-height: 1;
 }
 
+.download-icon {
+    align-items: normal;
+}
+
 @container download-model-section (min-width: 180px) {
     .download-container {
         flex-flow: row;
