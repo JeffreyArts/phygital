@@ -41,6 +41,11 @@ export default {
         }
     },
     watch: {
+        "$route": {
+            handler() {
+                this.setCameraToStartPosition()
+            }
+        },
         "phygital.surfaces.top.polylines": {
             handler() {
                 this.updateModelSurface("top")
@@ -49,7 +54,6 @@ export default {
                 this.updateModelSurface("right")
                 this.updateModelSurface("front")
                 this.updateModelSurface("back")
-                this.setCameraToStartPosition()
                 
             },
             deep:true,
@@ -58,7 +62,6 @@ export default {
         "phygital.surfaces.bottom.polylines": {
             handler() {
                 this.updateModelSurface("bottom")
-                this.setCameraToStartPosition()
             },
             deep:true,
             immediate: true
@@ -66,7 +69,6 @@ export default {
         "phygital.surfaces.left.polylines": {
             handler() {
                 this.updateModelSurface("left")
-                this.setCameraToStartPosition()
             },
             deep:true,
             immediate: true
@@ -74,7 +76,6 @@ export default {
         "phygital.surfaces.right.polylines": {
             handler() {
                 this.updateModelSurface("right")
-                this.setCameraToStartPosition()
             },
             deep:true,
             immediate: true
@@ -82,7 +83,6 @@ export default {
         "phygital.surfaces.front.polylines": {
             handler() {
                 this.updateModelSurface("front")
-                this.setCameraToStartPosition()
             },
             deep:true,
             immediate: true
@@ -90,7 +90,6 @@ export default {
         "phygital.surfaces.back.polylines": {
             handler() {
                 this.updateModelSurface("back")
-                this.setCameraToStartPosition()
             },
             deep:true,
             immediate: true
