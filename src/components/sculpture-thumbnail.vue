@@ -1,5 +1,5 @@
 <template>
-    <div class="sculpture-thumbnail"  ref="container" @mouseenter="mouseEnterEvent" @mouseleave="mouseLeaveEvent">
+    <div class="sculpture-thumbnail"  ref="container">
         <!-- :style="height > 32 ? `height:${height}px` : ``" -->
         <svg ref="header" class="sculpture-thumbnail-header-svg" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" :viewBox="`0 0 ${width} 11`" xml:space="preserve">
             <polygon :points="`
@@ -105,113 +105,6 @@ export default defineComponent({
             const footerText = this.$el.querySelector(".sculpture-thumbnail-footer-text")
             this.footerHeight = footerText.clientHeight
         },
-        mouseEnterEvent(event: MouseEvent){ 
-            
-            document.querySelectorAll(".sculpture-thumbnail").forEach( (domElement, i) => {
-                if (domElement == event.currentTarget) {
-                    gsap.killTweensOf(domElement)
-                    setTimeout(() => {
-                        gsap.to(domElement, {
-                            opacity: 1,
-                            blur:0,
-                            filter: "grayscale(0%)",
-                            duration: .4,
-                            ease: "power4.out"
-                        })
-                    })
-                    return
-                }
-
-                gsap.killTweensOf(domElement)
-                gsap.to(domElement, {
-                    blur: 4,
-                    filter: "grayscale(100%)",
-                    duration: 5,
-                    ease: "power4.out"
-                })
-                gsap.to(domElement, {
-                    opacity: .2,
-                    duration: .8,
-                    ease: "power4.out"
-                })
-            })
-
-
-            gsap.killTweensOf(event.currentTarget)
-            gsap.to(event.currentTarget, {
-                filter: "grayscale(0%)",
-                duration: .64,
-                ease: "power4.out"
-            })
-
-            const dotsHeader = this.$el.querySelectorAll(".sculpture-thumbnail-header-svg .dot")
-            const dotsFooter = this.$el.querySelectorAll(".sculpture-thumbnail-footer-svg .dot")
-            if (dotsHeader) {    
-                gsap.to(dotsHeader, {
-                    stagger: {
-                        each: .08,
-                        from: "start"
-                    },
-                    duration: .64,
-                    opacity: 1,
-                    ease: "power3.out"
-                })
-            }
-
-            if (dotsFooter) {    
-                gsap.to(dotsFooter, {
-                    stagger: {
-                        each: .08,
-                        from: "start"
-                    },
-                    duration: .64,
-                    opacity: 1,
-                    ease: "power3.out"
-                })
-            }
-        },
-        mouseLeaveEvent(event: MouseEvent){
-            
-            const dotsHeader = this.$el.querySelectorAll(".sculpture-thumbnail-header-svg .dot")
-            if (dotsHeader) {    
-                gsap.to(dotsHeader, {
-                    stagger: {
-                        each: .08,
-                        from: "end"
-                    },
-                    duration: .64,
-                    opacity: 0,
-                    ease: "power3.out"
-                })
-            }
-            
-            const dotsFooter = this.$el.querySelectorAll(".sculpture-thumbnail-footer-svg .dot")
-            if (dotsFooter) {    
-                gsap.to(dotsFooter, {
-                    stagger: {
-                        each: .08,
-                        from: "end"
-                    },
-                    duration: .64,
-                    opacity: 0,
-                    ease: "power3.out"
-                })
-            }
-
-            document.querySelectorAll(".sculpture-thumbnail").forEach( (domElement) => {
-                gsap.killTweensOf(domElement)
-                gsap.to(domElement, {
-                    opacity: 1,
-                    duration: .96,
-                    filter: "grayscale(0%)",
-                    blur: 0,
-                    ease: "power4.out"
-                })
-                if (domElement == event.currentTarget) {
-                    return
-                }
-            })
-        }
     },
 })
 </script>

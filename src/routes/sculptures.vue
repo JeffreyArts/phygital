@@ -4,8 +4,11 @@
 
         <p>| Collection of physicalized objects</p>
 
-        <div class="sculptures-container">
-            <sculpture-thumbnail :src="sculpture.images[0]" :title="sculpture.name" v-for="(sculpture, i) in sculptures" :key="i" @click="selectSculpture(sculpture)"/>
+        <div class="sculptures-container" ref="container">
+            <sculpture-thumbnail :src="sculpture.images[0]" :title="sculpture.name" v-for="(sculpture, i) in sculptures" :key="i" @click="selectSculpture(sculpture)" @mouseenter="mouseEnterEvent" @mouseleave="mouseLeaveEvent"/>
+
+            <div class="top-shadow"></div>
+            <div class="bottom-shadow"></div>
         </div>
 
         <div class="sculpture-modal" ref="modal" :class="selectedSculpture ? '__isSelected' : ''" @click="closeModel">
@@ -321,16 +324,13 @@ export default defineComponent ({
         }
     },
     mounted() {
+        gsap.registerPlugin(TextPlugin)
         document.title = "Phygital - Sculptures" 
         this.app.activeView = ""
-        gsap.registerPlugin(TextPlugin)
         
         this.$nextTick(()=> {
             this.fadeIn()
         })
-
-        
-        gsap.set
         
         this.$router.beforeResolve(guard => {
             if (this.$router.currentRoute.value.name != "Sculptures" || this.fadedOut) {
@@ -339,6 +339,12 @@ export default defineComponent ({
             this.fadeOut(guard)
             return false
         })
+
+        // Add scroll event
+        const scrollContainer = this.$refs.container as HTMLElement
+        if (scrollContainer) {
+            scrollContainer.onscroll = this.onScrollEvent
+        }
 
         window.addEventListener("keydown", this.keydownEventListener)
     },
@@ -350,6 +356,28 @@ export default defineComponent ({
             if (e.key.toLowerCase() == "escape") {
                 this.closeModel(null, true)
             }
+        },
+        onScrollEvent(e:Event) {
+            const target = e.target as HTMLElement
+            
+            if (!target) {
+                return
+            }
+
+            // Set top
+            if (target.scrollTop < 1) {
+                target.classList.add("__isTop")
+            } else {
+                target.classList.remove("__isTop")
+            }
+            // Set bottom
+            if (target.scrollTop+ target.offsetHeight + 5 > target.scrollHeight) {
+                target.classList.add("__isBottom")
+            } else {
+                target.classList.remove("__isBottom")
+            }
+            
+            
         },
         selectSculpture(sculpture: Sculpture, index = 0) {
             const modalElement = this.$refs.modal as HTMLElement
@@ -538,6 +566,109 @@ export default defineComponent ({
             })
 
             this.selectSculpture(this.sculptures[nextIndex], 0)
+        },
+        mouseEnterEvent(event: MouseEvent){ 
+            
+            document.querySelectorAll(".sculpture-thumbnail").forEach( (domElement, i) => {
+                if (domElement == event.currentTarget) {
+                    setTimeout(() => {
+                        gsap.to(domElement, {
+                            opacity: 1,
+                            blur:0,
+                            filter: "grayscale(0%)",
+                            duration: .4,
+                            ease: "power4.out"
+                        })
+                    })
+                    return
+                }
+
+                gsap.to(domElement, {
+                    blur: 4,
+                    filter: "grayscale(100%)",
+                    duration: 5,
+                    ease: "power4.out"
+                })
+                gsap.to(domElement, {
+                    opacity: .2,
+                    duration: .8,
+                    ease: "power4.out"
+                })
+            })
+
+
+            gsap.to(event.currentTarget, {
+                filter: "grayscale(0%)",
+                duration: .64,
+                ease: "power4.out"
+            })
+
+            const dotsHeader = this.$el.querySelectorAll(".sculpture-thumbnail-header-svg .dot")
+            const dotsFooter = this.$el.querySelectorAll(".sculpture-thumbnail-footer-svg .dot")
+            if (dotsHeader) {    
+                gsap.to(dotsHeader, {
+                    stagger: {
+                        each: .08,
+                        from: "start"
+                    },
+                    duration: .64,
+                    opacity: 1,
+                    ease: "power3.out"
+                })
+            }
+
+            if (dotsFooter) {    
+                gsap.to(dotsFooter, {
+                    stagger: {
+                        each: .08,
+                        from: "start"
+                    },
+                    duration: .64,
+                    opacity: 1,
+                    ease: "power3.out"
+                })
+            }
+        },
+        mouseLeaveEvent(event: MouseEvent){
+            
+            const dotsHeader = this.$el.querySelectorAll(".sculpture-thumbnail-header-svg .dot")
+            if (dotsHeader) {    
+                gsap.to(dotsHeader, {
+                    stagger: {
+                        each: .08,
+                        from: "end"
+                    },
+                    duration: .64,
+                    opacity: 0,
+                    ease: "power3.out"
+                })
+            }
+            
+            const dotsFooter = this.$el.querySelectorAll(".sculpture-thumbnail-footer-svg .dot")
+            if (dotsFooter) {    
+                gsap.to(dotsFooter, {
+                    stagger: {
+                        each: .08,
+                        from: "end"
+                    },
+                    duration: .64,
+                    opacity: 0,
+                    ease: "power3.out"
+                })
+            }
+
+            document.querySelectorAll(".sculpture-thumbnail").forEach( (domElement) => {
+                gsap.to(domElement, {
+                    opacity: 1,
+                    duration: .96,
+                    filter: "grayscale(0%)",
+                    blur: 0,
+                    ease: "power4.out"
+                })
+                if (domElement == event.currentTarget) {
+                    return
+                }
+            })
         }
     }
 })
@@ -589,7 +720,19 @@ export default defineComponent ({
     overflow-x: hidden;
     grid-template-columns: 1fr;
     gap: 32px;
+    position: relative;
     
+    &.__isTop {
+        .top-shadow {
+            opacity: 0;
+        }
+    }
+    &.__isBottom {
+        .bottom-shadow {
+            opacity: 0;
+        }
+    }
+
     @media all and (min-width: 512px) {
         margin-top: 40px;
         gap: 64px 32px;
@@ -772,5 +915,33 @@ export default defineComponent ({
         top: 20px;
         height: 28px;
     }
+}
+
+.top-shadow {
+    border-radius: 100%;
+    height: 8px;
+    width: 100%;
+    bottom: calc(100% + 8px);
+    background-color: #1c1c1e;
+    filter: blur(16px);
+    opacity: .8;
+    position: sticky;
+    pointer-events: none;
+    z-index: 2024;
+    transition: opacity .32s ease;
+}
+
+.bottom-shadow {
+    border-radius: 100%;
+    height: 8px;
+    width: 100%;
+    bottom: - 16px;
+    background-color: #1c1c1e;
+    filter: blur(16px);
+    opacity: .8;
+    position: sticky;
+    pointer-events: none;
+    z-index: 2024;
+    transition: opacity .32s ease;
 }
 </style>
