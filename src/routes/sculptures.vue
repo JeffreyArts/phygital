@@ -2,7 +2,7 @@
     <div class="sculptures">
         <h1>_ sculptures</h1>
 
-        <p>| Collection of materialized objects</p>
+        <p>| Collection of physicalized objects</p>
 
         <div class="sculptures-container">
             <sculpture-thumbnail :src="sculpture.images[0]" :title="sculpture.name" v-for="(sculpture, i) in sculptures" :key="i" @click="selectSculpture(sculpture)"/>

@@ -41,8 +41,8 @@ export default defineComponent({
             type: String,
             default: "tl" // as "tl" | "tr" | "bl" | "br" (tl = top-left, tr = top-right etc..)
         },
-        openAutomatically: {
-            default: false
+        visible: {
+            default: true,
         }
     },
     setup() {
@@ -74,6 +74,19 @@ export default defineComponent({
             } else {
                 window.removeEventListener("click", this.clickedOutside)
             }
+        },
+        visible() {
+            if (!this.visible) {
+                gsap.to(this.$el, {
+                    opacity: 0,
+                    duration: .4
+                })
+            } else {
+                gsap.to(this.$el, {
+                    opacity: 1,
+                    duration: .4
+                })
+            }
         }
     },
     mounted() {
@@ -83,6 +96,13 @@ export default defineComponent({
                 pointerEvents: "none"
             })
         }
+
+        if (this.visible) {
+            gsap.set(this.$el, {opacity: 1})
+        } else {
+            gsap.set(this.$el, {opacity: 0})
+        }
+
         const message = this.$el.querySelector(".aztech-tut-message-text-container")
         this.messageWidth = message.clientWidth
         this.messageHeight = message.clientHeight
@@ -498,7 +518,7 @@ export default defineComponent({
     background-color: #fff;
     font-size: 12px;
     font-family: $defaultFont;
-    width: 148px;
+    min-width: 148px;
     padding: 8px;
 }
 .aztech-tut-line {

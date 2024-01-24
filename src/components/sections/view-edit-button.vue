@@ -60,13 +60,11 @@ import { defineComponent } from "vue"
 import PhygitalStore from "@/stores/phygital"
 import AppStore from "@/stores/app"
 import { MorphSVGPlugin } from "gsap/MorphSVGPlugin"
-import AztechTutMessage from "@/components/aztech/tutorial-message.vue"
 import gsap from "@/services/gsap-wrapper"
 
 export default defineComponent({
     name: "view-edit-button",
     components: {
-        AztechTutMessage,
     },
     setup() {
         const phygital = PhygitalStore()
@@ -123,6 +121,8 @@ export default defineComponent({
             const editEl = this.$refs["edit-text"] as HTMLElement
             if (!viewEl || !editEl) return
             
+
+            this.app.tutMessages.viewEditSection = false
             // kill any existing tweens
             gsap.killTweensOf("#hand")
             gsap.killTweensOf(".view-edit-deco-bottom-right #fill > *")

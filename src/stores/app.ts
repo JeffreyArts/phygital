@@ -20,7 +20,12 @@ export const AppState = defineStore({
         activeSurface: "front",
         editMode: false,
         showTips: Cookies.get("showTips") == "false" ? false : true,
-        showAnimations: Cookies.get("showAnimations") == "false" ? false : true
+        showAnimations: Cookies.get("showAnimations") == "false" ? false : true,
+        tutMessages: {
+            viewEditSection: true,
+            seedSection: true,
+            metaDimensionsSection: true,
+        }
     }),
     actions: {
     },

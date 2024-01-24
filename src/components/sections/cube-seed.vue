@@ -21,7 +21,8 @@ import AztechUnderline from "@/components/aztech/underline-1.vue"
 import gsap from "@/services/gsap-wrapper"
 import _ from "lodash"
 import { phygitalSeedEvent } from "@/stores/phygital"
-import Phygital from "@/stores/phygital"
+import PhygitalStore from "@/stores/phygital"
+import AppStore from "@/stores/app"
 
 export default defineComponent({
     name: "cube-seed",
@@ -37,9 +38,11 @@ export default defineComponent({
         },
     },
     setup() {
-        const phygital = Phygital()
+        const phygital = PhygitalStore()
+        const app = AppStore()
         return {
-            phygital
+            phygital,
+            app
         }
     },
     data: () => {
@@ -147,7 +150,7 @@ export default defineComponent({
             }
 
             this.regenerating = true
-
+            this.app.tutMessages.seedSection = false
 
             currentTarget.classList.add("__isGenerating")
             const target = currentTarget.querySelector("g")

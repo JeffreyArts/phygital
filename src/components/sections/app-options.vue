@@ -65,22 +65,15 @@ export default defineComponent({
             Cookies.set("showAnimations", this.animations.toString(), { sameSite: "strict" })
         },
         showTips() {
-            gsap.to(".aztech-tut-messsage", {
-                opacity: 1,
-                duration: .64,
-                stagger: .2,
-                pointerEvents: "all",
-                ease: "power3.in"
-            })
+            this.app.tutMessages.seedSection = true
+            this.app.tutMessages.metaDimensionsSection = true
+            this.app.tutMessages.viewEditSection = true
         },
         hideTips() {
-            gsap.to(".aztech-tut-messsage", {
-                opacity: 0,
-                duration: .64,
-                pointerEvents: "none",
-                stagger: .2,
-                ease: "power3.out"
-            })
+            this.app.tutMessages.seedSection = false
+            this.app.tutMessages.metaDimensionsSection = false
+            this.app.tutMessages.viewEditSection = false
+            
         }
     }
 })

@@ -18,14 +18,16 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
-import Phygital from "@/stores/phygital"
+import PhygitalStore from "@/stores/phygital"
+import AppStore from "@/stores/app"
 import AztechLine from "@/components/aztech/line-1.vue"
 import AztechInputNumber from "@/components/aztech/input-number.vue"
 
 export default defineComponent({
     name: "cube-config",
     components: {
-        AztechLine, AztechInputNumber
+        AztechLine, 
+        AztechInputNumber
     },
     props: {
         character: {
@@ -35,9 +37,11 @@ export default defineComponent({
         },
     },
     setup() {
-        const phygital = Phygital()
+        const phygital = PhygitalStore()
+        const app = AppStore()
         return {
-            phygital
+            phygital,
+            app
         }
     },
     computed: {
@@ -61,6 +65,7 @@ export default defineComponent({
             //
         },
         modifyBlockSize(newSize:number) {
+            this.app.tutMessages.metaDimensionsSection = false
             this.phygital.blockSize = newSize
         }
     }

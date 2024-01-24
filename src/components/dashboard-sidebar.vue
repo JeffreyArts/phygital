@@ -3,7 +3,7 @@
         <aside class="dashboard-sidebar">
             <section id="s-seed">
                 <section-seed/>
-                <aztech-tut-message direction="bl" class="seed-section-tut">
+                <aztech-tut-message direction="bl" class="seed-section-tut" :visible="app.tutMessages.seedSection">
                     <span v-if="app.orientation == 'landscape'">
                         You can generate new models by clicking the generate button below
                     </span>
@@ -17,6 +17,10 @@
             </section>
             <section id="s-dimensions">
                 <section-meta-dimensions />
+
+                <aztech-tut-message class="meta-dimensions-section-tut" :visible="app.tutMessages.metaDimensionsSection">
+                    A calculator for calculating the final dimensions of the phygitalized model
+                </aztech-tut-message>
             </section>
             <section id="s-cube3d" @click="select3dView" @mousedown="setSelection" @mousemove="cancelSelection">
                 <section-vpg-3d name="sidebar" />
@@ -38,11 +42,11 @@
             </section>
             <section id="s-view-edit" v-if="app.activeView === 'view-surfaces'">
                 <section-view-edit-button />
-
-                <aztech-tut-message class="view-edit-section-tut">
+                <aztech-tut-message class="view-edit-section-tut" :visible="app.tutMessages.viewEditSection">
                     Click on the hand to toggle the edit mode on or off
                 </aztech-tut-message>
             </section>
+            
             <section id="s-surface-dimensions" v-if="app.activeView === 'view-surfaces'">
                 <sectionSurfaceDimensions />
             </section>
@@ -214,6 +218,15 @@ export default defineComponent({
         right: 4px;
         top: 4px; 
     }
+
+    .meta-dimensions-section-tut {
+        position: absolute;
+        left: 96px;
+        bottom: 0px;
+        .aztech-tut-message-text {
+            width: 220px;
+        }
+    }
 }
 
 .__isPortrait {
@@ -313,6 +326,16 @@ export default defineComponent({
         position: absolute;
         right: -16px;
         bottom: 0px;
+    }
+
+    .meta-dimensions-section-tut {
+        position: absolute;
+        bottom: 0px;
+        left: 96px;
+        top: 72px;
+        .aztech-tut-message-text {
+            width: 220px;
+        }
     }
 }
 

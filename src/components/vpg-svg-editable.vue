@@ -918,7 +918,7 @@ export default defineComponent({
         stroke: #e4e5ea;
         stroke-width: 2px;
         fill: transparent;
-        opacity:.48;
+        opacity:.72;
         // transition: .32s all ease; // Maybe set only for opacity?
     }
     .inner-ring {
