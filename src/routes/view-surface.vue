@@ -156,12 +156,15 @@ export default defineComponent ({
             },{
                 opacity: 1,
             })
-            gsap.to(".aztech-tut-messsage.view-edit-tut", {
-                duration: .4,
-                opacity: 1,
-                delay: .24,
-                ease: "power2.out",
-            })
+
+            if (this.app.showTips) {
+                gsap.to(".aztech-tut-messsage.view-edit-tut", {
+                    duration: .4,
+                    opacity: 1,
+                    delay: .24,
+                    ease: "power2.out",
+                })
+            }
             
             // MAIN
             gsap.set(".vpg-svg-editable svg", {
@@ -182,14 +185,6 @@ export default defineComponent ({
             // Section: seed
             gsap.set("#s-seed", { pointerEvents: "all", opacity: 0 })
             gsap.to("#s-seed", {
-                duration: .64,
-                opacity: 1,
-                ease: "power3.in",
-            })
-            
-            // Section: edit-options
-            gsap.set("#s-edit-options", { opacity: 0 })
-            gsap.to("#s-edit-options", {
                 duration: .64,
                 opacity: 1,
                 ease: "power3.in",

@@ -244,7 +244,7 @@ export default defineComponent({
         }
     }
 }
-@container links-section (min-width: 200px) {
+@container links-section (min-width: 208px) {
     .links-section {
         .link {
             .vague {

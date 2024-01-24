@@ -74,14 +74,12 @@ export default defineComponent({
         }
     },
     mounted() {
-        this.$nextTick(() => {
-            if (!this.app.showTips) {
-                gsap.set(this.$el, {
-                    opacity: 0,
-                    pointerEvents: "none"
-                })
-            }
-        })
+        if (!this.app.showTips) {
+            gsap.set(this.$el, {
+                opacity: 0,
+                pointerEvents: "none"
+            })
+        }
         const message = this.$el.querySelector(".aztech-tut-message-text-container")
         this.messageWidth = message.clientWidth
         this.messageHeight = message.clientHeight

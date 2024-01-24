@@ -75,6 +75,7 @@ export default defineComponent ({
                 gsap.to("#s-download", {
                     duration: .64,
                     opacity: 1,
+                    pointerEvents: "all",
                     ease: "power3.in",
                 })
             }
@@ -107,6 +108,7 @@ export default defineComponent ({
                 gsap.to("#s-download", {
                     duration: .64,
                     opacity: 0,
+                    pointerEvents: "none",
                     ease: "power3.out",
                 })
                 if (newRoute.name != "Sections View") {

@@ -94,19 +94,23 @@ export default defineComponent({
         const editEl = this.$refs["edit-text"] as HTMLElement
         if (!viewEl || !editEl) return
         
+        
         if (this.editMode) {
             gsap.set(editEl, {opacity: 1, x: 0})
             gsap.set(viewEl, {opacity: 0, x: -16})
             gsap.set("#hand", {morphSVG: "#gear"})
             gsap.set(".view-edit-deco-bottom-right #fill > *", {fill: "#1c1c1e"})
             gsap.set(".view-edit-deco-top-left #fill > *", {fill: "#1c1c1e"})
+            gsap.set("#s-edit-options", { opacity: 1})
+
         } else {
             // gsap.set(viewEl, {opacity: 1, x: 0})
             gsap.set(editEl, {opacity: 0, x: -16})
             gsap.set("#hand", {morphSVG: "#eye-open"})
             gsap.set(".view-edit-deco-bottom-right #fill > *", {fill: "transparent"})
             gsap.set(".view-edit-deco-top-left #fill > *", {fill: "transparent"})
-
+            gsap.set("#s-edit-options", { opacity: 0})
+            
             if (this.app.showAnimations) {
                 setTimeout(this.wink, 1280)
                 setTimeout(this.wink, 6400)
@@ -145,6 +149,11 @@ export default defineComponent({
                     duration: 0.48,
                     stagger: 0.08
                 })
+                gsap.to("#s-edit-options", {
+                    opacity: 1,
+                    duration: 0.48,
+                    ease:"power3.in"
+                })
             } else {
                 // gsap.set("#hand", {morphSVG: "#eye-closed"})
                 gsap.to("#hand", {
@@ -170,6 +179,11 @@ export default defineComponent({
                         each: 0.08,
                         from: "end",
                     }
+                })
+                gsap.to("#s-edit-options", {
+                    opacity: 0,
+                    duration: 0.48,
+                    ease:"power3.in"
                 })
             }
         },
