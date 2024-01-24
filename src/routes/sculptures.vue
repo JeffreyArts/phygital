@@ -642,7 +642,7 @@ export default defineComponent ({
     flex-flow: column;
     justify-content: center;
     aspect-ratio: 9/16;
-    // max-height: calc(100vh - 180px);
+    max-height: calc(100vh - 180px);
     position: relative;
     
     .aztech-grid-cell {
