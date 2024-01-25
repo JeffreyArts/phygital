@@ -7,16 +7,17 @@ gsapWrapper.to = (
     durationOrVars: number | gsap.TweenVars,
     vars?: gsap.TweenVars
 ) => {
-    let duration = 1
+    let options = {} as gsap.TweenVars
 
     if (typeof durationOrVars === "number") {
-        duration = durationOrVars
+        options.duration = durationOrVars
     } else {
         vars = durationOrVars
     }
-    const options = {
+
+    options = {
+        ...options,
         ...vars,
-        duration,
     } as gsap.TweenVars
 
     // Pinia datastore
@@ -42,19 +43,20 @@ gsapWrapper.fromTo = (
     fromOrToVars: gsap.TweenVars,
     toVars?: gsap.TweenVars
 ) => {
-    let duration = 1 
+    let options = {} as gsap.TweenVars
+
     let fromVars = fromOrToVars
     if (typeof durationOrFromVars === "number") {
-        duration = durationOrFromVars
+        options.duration = durationOrFromVars
         fromVars = fromOrToVars
     } else {
         toVars = fromOrToVars
         fromVars = durationOrFromVars
     }
 
-    const options = {
+    options = {
+        ...options,
         ...toVars,
-        duration
     } as gsap.TweenVars
 
     // Pinia datastore

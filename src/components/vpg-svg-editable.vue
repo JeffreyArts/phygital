@@ -151,38 +151,9 @@ export default defineComponent({
                 }
 
                 if (editMode) {
-                    gsap.to(".grid-point", {
-                        opacity: 1,
-                        ease: "back.out(3.2)",
-                        duration: 0.8,
-                        stagger: {
-                            grid: [this.horizontalLines, this.verticalLines],
-                            each: 24/Math.max(this.horizontalLines, this.verticalLines)/32,
-                            from: "edges",
-                        }
-                    })
-                    gsap.to(".vpg-line", {
-                        strokeWidth: this.strokeWidth,
-                        strokeLinecap: "round",
-                        duration: 0.8,
-                        ease: "back.out(3.2)",
-                    })
+                    this.enterEditMode()
                 } else {
-                    gsap.to(".grid-point", {
-                        opacity: 0,
-                        duration: 1,
-                        stagger: {
-                            grid: [this.horizontalLines, this.verticalLines],
-                            each: 24/Math.max(this.horizontalLines, this.verticalLines)/32,
-                            from: "center"
-                        }
-                    })
-                    gsap.to(".vpg-line", {
-                        strokeWidth: Math.round(this.cellSize / 2),
-                        strokeLinecap: "square",
-                        duration: 1.44,
-                        ease: "back.out(1.7)",
-                    })
+                    this.leaveEditMode()
                 }
             }
         },
@@ -215,11 +186,12 @@ export default defineComponent({
         
     },
     mounted() {
-        if (window.innerWidth < 640) {
+        if (document.body.classList.contains("__isPortrait")) {
             this.strokeWidth = 14
         } else {
             this.strokeWidth = 30
         }
+
 
         if (this.vpgPattern && this.isDev) {
             window.removeEventListener("phygital:seed", this.phygitalSeedEvent)
@@ -385,7 +357,93 @@ export default defineComponent({
                 }
             }
         },
+        leaveEditMode(){
 
+            const pointOptions = {
+                ease: "back.out(3.2)",
+                duration: 0.4,
+                stagger: {
+                    grid: [this.horizontalLines, this.verticalLines],
+                    each: 24/Math.max(this.horizontalLines, this.verticalLines)/32,
+                    from: "edges",
+                }
+            } as gsap.TweenVars
+
+            gsap.to(".grid-point", {
+                opacity: 0,
+                ...pointOptions
+            })
+
+            gsap.to(".vpg-line", {
+                strokeWidth: Math.round(this.cellSize / 2),
+                strokeLinecap: "square",
+                duration: 1.44,
+                ease: "back.out(1.7)",
+            })
+            gsap.to(".grid-point .center-ring", {
+                r: 4,
+                ...pointOptions
+            })
+            gsap.to(".grid-point .inner-ring", {
+                r: 8,
+                ...pointOptions
+            })
+            gsap.to(".grid-point .outer-ring", {
+                r: 12,
+                ...pointOptions
+            })
+        },
+        enterEditMode(){
+
+            const pointOptions = {
+                ease: "back.out(3.2)",
+                duration: 0.4,
+                stagger: {
+                    grid: [this.horizontalLines, this.verticalLines],
+                    each: 24/Math.max(this.horizontalLines, this.verticalLines)/32,
+                    from: "edges",
+                }
+            } as gsap.TweenVars
+
+            gsap.to(".grid-point", {
+                opacity: 1,
+                ...pointOptions
+            })
+            if (document.body.classList.contains("__isPortrait")) {
+                gsap.to(".grid-point .center-ring", {
+                    r: 2,
+                    ...pointOptions
+                })
+                gsap.to(".grid-point .inner-ring", {
+                    r: 4,
+                    ...pointOptions
+                })
+                gsap.to(".grid-point .outer-ring", {
+                    r: 6,
+                    ...pointOptions
+                })
+            } else {
+                gsap.to(".grid-point .center-ring", {
+                    r: 4,
+                    ...pointOptions
+                })
+                gsap.to(".grid-point .inner-ring", {
+                    r: 8,
+                    ...pointOptions
+                })
+                gsap.to(".grid-point .outer-ring", {
+                    r: 12,
+                    ...pointOptions
+                })
+            }
+
+            gsap.to(".vpg-line", {
+                strokeWidth: this.strokeWidth,
+                strokeLinecap: "round",
+                duration: 0.8,
+                ease: "back.out(3.2)",
+            })
+        },
         
         // Helper methods
         updatePattern() {
@@ -399,7 +457,10 @@ export default defineComponent({
             
             this.$nextTick(() => {
                 this.showPolylines()     
-                this.showGrid()     
+                this.showGrid()    
+                if (this.app.editMode)  {
+                    this.enterEditMode()
+                }
             })
         },
         getGridPoint(x:number,y:number) {            
@@ -676,12 +737,13 @@ export default defineComponent({
                 return matchedPolyline
             })
             this.phygital.seed = "custom"
-
+            
             gsap.killTweensOf(polylineElement)
             gsap.set(polylineElement, {opacity: 1})
 
             const animationElement = polylineElement.cloneNode(true) as SVGPolylineElement
             animationElement.classList.add("__isRemoved")
+            // animationElement.style.stroke = "#f09" // Simplify debugging
             const patternGroup = el.querySelector("svg .vpg-pattern")
             patternGroup?.appendChild(animationElement)
 
@@ -692,8 +754,9 @@ export default defineComponent({
                 
                 gsap.to(animationElement, {
                     opacity: 0,
-                    duration: 0.32,
+                    duration: .32,
                     scale: 1.44,
+                    ease: "power3,out",
                     onComplete: () => {
                         if (!patternGroup) {
                             return
