@@ -47,6 +47,11 @@ export default defineComponent({
     mounted() {
         this.tips = this.app.showTips
         this.animations = this.app.showAnimations
+        if (this.app.showTips) {
+            this.showTips()
+        } else {
+            this.hideTips()
+        }
     },
     methods: {
         toggleTips() {

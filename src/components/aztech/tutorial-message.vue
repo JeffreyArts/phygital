@@ -98,9 +98,9 @@ export default defineComponent({
         }
 
         if (this.visible) {
-            gsap.set(this.$el, {opacity: 1})
+            gsap.set(this.$el, {opacity: 1, pointerEvents: "all"})
         } else {
-            gsap.set(this.$el, {opacity: 0})
+            gsap.set(this.$el, {opacity: 0, pointerEvents: "none"})
         }
 
         const message = this.$el.querySelector(".aztech-tut-message-text-container")
