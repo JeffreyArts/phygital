@@ -178,6 +178,10 @@ export default defineComponent({
         overflow: visible;
         height: 100%;
         aspect-ratio: 3/8;
+        .left-shadow,
+        .right-shadow {
+            opacity: 0;
+        }
     
         .dashboard-sidebar {
             grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;

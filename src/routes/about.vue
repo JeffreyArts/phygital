@@ -4,7 +4,7 @@
 
         <div class="about-page-offset" >
             
-            <p id="section1">In this time of technological advancements I see a decreasing amount of people benefiting from all of the technological innovations. With this project, I explore how I can use this same technology in my artistic proces to create beautiful physical sculptures which I make by pouring concrete. As with most of the digital technologies, this digital interface improves the pace in which I can imagine these sculptures. But more importantly, by exploring the technical limitations and possibilities of the technology, it defines my path of how I explore beauty in geometric symmetry.</p>
+            <p id="section1">Phygital — a blend of the words physical & digital — is an artistic research project in which I explore how a generative computer algorithm can be used to create three-dimensional physical objects. This website — Interphygital — operates as the interface for creating digital three-dimensional sketches and provides me with additional tools to explore the beauty of symmetry in geometry.</p>
             
             <div id="section2" class="about-content">
                 <AztechGridCell class="about-content-section">
@@ -18,8 +18,8 @@
                 </AztechGridCell>
             </div>
 
-            <p id="section3">With Phygital — a blend of the words physical & digital — I have chosen to polish the interface of my work process and publish it into the world, allowing anyone to use it for personal purposes at no cost (this includes the source code). Because I believe that technological advancements should be accessible by everyone. If you like what I do and want to support me. You can do so by letting me know via <a href="https://www.instagram.com/jeffrey.arts/">Instagram</a>, sending me an <a href="mailto:contact@jeffreyarts.nl">e-mail</a> or by purchasing one of the <a href="https://www.artmajeur.com/jeffrey-arts">sculptures</a> that I've made.</p>
-            <p id="section4">Special thanks go out to <a href="https://fontforzula.gumroad.com">fontforzula</a>, who made the visual assets that I have used to build this digital interface with.</p>
+            <p id="section3">With this project, I want to open up my work process to other individuals, cause I believe that (technological) advancements should be made collectively. That is why you are free to use this technology (including its source code) for personal use. If you're interested in what I do and would like to stay up to date on future endeavors or would like to get in touch with me. You can find me online at <a href="https://www.instagram.com/jeffrey.arts/">Instagram</a>, <a href="https://www.jeffreyarts.nl">JeffreyArts.nl</a> or <a href="https://www.artmajeur.com/jeffrey-arts">Artmajeur</a>.</p>
+            <p id="section4">Special thanks go out to <a href="https://fontforzula.gumroad.com" target="_blank">fontforzula</a>, who made the visual assets that I have used to create this digital interface.</p>
         </div>
         <div class="bottom-shadow"></div>
         <div class="top-shadow"></div>
