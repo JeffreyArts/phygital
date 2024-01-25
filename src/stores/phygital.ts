@@ -2,12 +2,14 @@ import { defineStore, Store } from "pinia"
 import { Algorithm } from "visual-pattern-generator"
 import shuffleSeed from "@/services/shuffle-seed"
 import _ from "lodash"
-import { saveAs } from "file-saver"
+import fileSaver from "file-saver"
 import * as exportSTL  from "threejs-export-stl"
 import * as THREE from "three"
 import polylinesToThreejs from "@/services/polylines-to-threejs"
 import removeObject from "@/services/threejs-remove-object"
 import { CSG } from "three-csg-ts"
+
+const { saveAs } = fileSaver
 
 export type Surface = {
   mirrorX: 0 | 1 | 2;
@@ -27,13 +29,15 @@ export interface phygitalSeedEvent extends Event {
     detail: "prepareChange" | "changed" 
 }
 
-window.addEventListener("phygital:seed", (e : Event) => {
-    const event = e as phygitalSeedEvent
-    if (event.detail == "changed") {
-        PhygitalStore().updateSurfaces()
-        PhygitalStore().generatingSeed = false
-    }
-})
+if (typeof window !== "undefined") {
+    window.addEventListener("phygital:seed", (e : Event) => {
+        const event = e as phygitalSeedEvent
+        if (event.detail == "changed") {
+            PhygitalStore().updateSurfaces()
+            PhygitalStore().generatingSeed = false
+        }
+    })
+}
 
 export const PhygitalStore = defineStore({
     id: "phygital",

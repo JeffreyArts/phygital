@@ -58,7 +58,7 @@
 import { defineComponent } from "vue"
 import Phygital from "@/stores/phygital"
 import gsap from "@/services/gsap-wrapper"
-import { MorphSVGPlugin } from "gsap/MorphSVGPlugin"
+
 
 export default defineComponent({
     name: "links-section",
@@ -76,8 +76,6 @@ export default defineComponent({
         }
     },
     mounted() {
-        gsap.registerPlugin(MorphSVGPlugin)
-
         const icon = this.$el.querySelectorAll("svg .icon") as SVGPathElement
         const line = this.$el.querySelectorAll("svg .icon-line") as SVGPathElement
         gsap.set(icon, {morphSVG: line})

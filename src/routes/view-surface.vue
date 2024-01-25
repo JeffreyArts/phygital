@@ -92,7 +92,7 @@ export default defineComponent ({
                 ease: "power2.out",
             })
 
-            gsap.to(".aztech-tut-messsage.view-edit-tut", {
+            gsap.to(".view-edit-section-tut", {
                 duration: .4,
                 opacity: 0,
                 delay: .24,
@@ -158,7 +158,7 @@ export default defineComponent ({
             })
 
             if (this.app.showTips) {
-                gsap.to(".aztech-tut-messsage.view-edit-tut", {
+                gsap.to(".view-edit-section-tut", {
                     duration: .4,
                     opacity: 1,
                     delay: .24,

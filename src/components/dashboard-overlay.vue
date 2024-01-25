@@ -63,29 +63,20 @@ export default defineComponent({
                 opacity: 1
             })
 
-
             gsap.to(".do-c",{
                 opacity: 1,
                 duration: .24,
                 ease: "linear"
             })
             
-            gsap.fromTo(".dashboard-overlay-by",{
-                scale: .3,
-            },{
+            gsap.to(".dashboard-overlay-by",{
+                duration: .32,
+                ease: "power3.out"
+            })
+            gsap.to(".dashboard-overlay-by",{
                 scale: 1,
                 duration: 1.08,
-                // delay: .64,
             })
-
-            // const timeline = gsap.timeline({
-            //     onComplete: () => {
-            //         setTimeout(() => {
-            //             if (this.fadedOut) return
-            //             // this.fadeOut()
-            //         }, 1600)
-            //     }
-            // })
             
             gsap.to(".dashboard-overlay-container", {
                 scale: 1,
@@ -213,7 +204,7 @@ export default defineComponent({
 .dashboard-overlay {
     position: fixed;
     inset: 0 0 0 0;
-    z-index: 2023;
+    z-index: 2024;
     background-color: #fff;
     display: flex;
     align-items: center;
@@ -223,6 +214,7 @@ export default defineComponent({
 }
 .dashboard-overlay-by {
     fill: currentColor;
+    scale: .32;
     height: 1em; 
     margin: .5em 0;
 }

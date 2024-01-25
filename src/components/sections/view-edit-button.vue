@@ -59,7 +59,6 @@
 import { defineComponent } from "vue"
 import PhygitalStore from "@/stores/phygital"
 import AppStore from "@/stores/app"
-import { MorphSVGPlugin } from "gsap/MorphSVGPlugin"
 import gsap from "@/services/gsap-wrapper"
 
 export default defineComponent({
@@ -81,7 +80,6 @@ export default defineComponent({
     computed: {
     },
     mounted() {
-        gsap.registerPlugin(MorphSVGPlugin)
         this.editMode = this.app.editMode        
         
         const viewEl = this.$refs["view-text"] as HTMLElement

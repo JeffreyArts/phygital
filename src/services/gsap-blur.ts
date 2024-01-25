@@ -1,7 +1,7 @@
 import gsap from "@/services/gsap-wrapper"
 
 const blurPlugin = {
-    blurProperty: gsap.utils.checkPrefix("filter"),
+    blurProperty: gsap.utils?.checkPrefix("filter"),
     blurExp: /blur\((.+)?px\)/,
     getBlurMatch: (target:any) => {
         return ((gsap.getProperty(target, blurPlugin.blurProperty) || "") as string).match(blurPlugin.blurExp) || []
@@ -37,12 +37,9 @@ const blurPlugin = {
     }
 }
 
-gsap.registerPlugin({
+export default {
     name: "blur",
     get: blurPlugin.registerGet,
     init: blurPlugin.registerInit,
     render: blurPlugin.registerRender
-})
-
-
-export default blurPlugin
+}

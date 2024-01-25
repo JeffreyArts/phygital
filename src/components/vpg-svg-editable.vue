@@ -83,7 +83,6 @@ import { defineComponent } from "vue"
 import { phygitalSeedEvent, Surface } from "@/stores/phygital"
 import gsap from "@/services/gsap-wrapper"
 
-import DrawSVGPlugin from "gsap/DrawSVGPlugin"
 import PhygitalStore from "@/stores/phygital"
 import AppStore from "@/stores/app"
 import _ from "lodash"
@@ -222,7 +221,6 @@ export default defineComponent({
             this.strokeWidth = 30
         }
 
-        gsap.registerPlugin(DrawSVGPlugin)
         if (this.vpgPattern && this.isDev) {
             window.removeEventListener("phygital:seed", this.phygitalSeedEvent)
             window.removeEventListener("phygital:update", this.phygitalUpdateEvent)

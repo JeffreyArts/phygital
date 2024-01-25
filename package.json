@@ -5,12 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vue-tsc && vite build",
+    "build": "vue-tsc && vite-ssg build",
     "deploy": "NODE_ENV=production bash deploy.sh",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@svgdotjs/svg.js": "^3.2.0",
     "@vitejs/plugin-vue": "^5.0.2",
     "axios": "^1.4.0",
     "dayjs": "^1.11.7",
@@ -28,6 +27,7 @@
     "three-csg-ts": "^3.1.13",
     "threejs-export-stl": "^0.0.4",
     "visual-pattern-generator": "^1.2.7",
+    "vite-ssg": "^0.23.6",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
   },

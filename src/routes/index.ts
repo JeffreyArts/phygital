@@ -1,10 +1,8 @@
-import { createWebHistory, createRouter } from "vue-router"
 import About from "@/routes/about.vue"
 import OtherProjects from "@/routes/other-projects.vue"
 import Sculptures from "@/routes/sculptures.vue"
 import view3D from "@/routes/view-3d.vue"
 import viewSections from "@/routes/view-surface.vue"
-import "@/services/gsap-blur.ts"
 
 const routes = [
     {
@@ -41,10 +39,10 @@ const routes = [
     }
 ]
 
-
-const router = createRouter({
-    history: createWebHistory(),
+const routerOptions = {
+    // history: createWebHistory(),
     routes,
-})
-
-export default router
+}
+// const router = createRouter(routerOptions)
+export {routerOptions}
+export default routerOptions

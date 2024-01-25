@@ -3,13 +3,24 @@ use the .vpg-svg-content for styling the content inside the box. Best way is to 
  -->
 
 <template>
-    <figure class="vpg-svg" ref="vpgSVG" />
+    <figure class="vpg-svg" ref="vpgSVG" v-if="width >= 1 && height >= 1 ">
+        <svg 
+            :viewBox="`0,0, ${width - .5},  ${height - .5}`"
+            :width="width - .5"
+            :heigt="height - .5"
+        >
+            <polyline v-for="(polyline, p) in polylinePoints" :key="p" 
+                :points="`${polyline[0].x} ${polyline[0].y}, ${polyline[1].x} ${polyline[1].y}`"
+                fill="none"
+                ref="polyline"
+            />
+        </svg>
+    </figure>
 </template>
 
 
 <script lang="ts">
 import { defineComponent } from "vue"
-import { SVG } from "@svgdotjs/svg.js"
 import _ from "lodash"
 
 
@@ -20,57 +31,39 @@ export default defineComponent({
             type: Object,
             required: true,
         },
-        // vpgWidth: {
-        //     type: Number,
-        //     required: true,
-        // },
     },
     data: () => {
         return {
-            svg: SVG(),
             width: 0,
             height: 0,
-            observer: null as null | MutationObserver
+            polylinePoints: [] as Array<Array<{x: number, y: number}>>,
         }
     },
     watch: {
         "vpgPattern.polylines": {
             handler() {
-                this.width = this.vpgPattern.width
-                this.height = this.vpgPattern.height
                 this.updateSVG()
             },
             deep: true
         }
-        
     },
     mounted() {
-        this.width = this.vpgPattern.width
-        this.height = this.vpgPattern.height
         this.updateSVG()
     },
     methods: {
         updateSVG() {
-            var svgContainer = this.$refs["vpgSVG"] as HTMLElement
-            this.svg = SVG()
-            this.svg.viewbox(0,0,this.width - .5, this.height- .5)
-            // this.svg.viewbox(0,0,this.width + 1, this.height+1) // 1 unit bigger than pattern size to create padding
-            
-            svgContainer.innerHTML = ""
-
-            _.each(this.vpgPattern.polylines, p => {
-                var polyline = _.map(p, cord => {
+            this.width = this.vpgPattern.width
+            this.height = this.vpgPattern.height
+            this.polylinePoints = _.map(this.vpgPattern.polylines, p => {
+                return _.map(p, cord => {
                     // This, plus enlarging viewbox prevents lines to be cut off from edges
-                    return `${cord.x+.25},${cord.y+.25}`
+                    return {
+                        x: cord.x+.25,
+                        y: cord.y+.25  
+                    }
                     // return `${cord.x+1},${cord.y+1}`
-                }).join(" ")
-
-                this.svg.polyline(polyline).attr({
-                    fill:"none",
                 })
             })
-
-            this.svg.addTo(svgContainer)
         },
         
     }

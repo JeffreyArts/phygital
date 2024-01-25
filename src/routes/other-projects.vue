@@ -14,7 +14,6 @@ import {defineComponent} from "vue"
 import { RouteLocationNormalized } from "vue-router"
 import App from "@/stores/app"
 import IframeContainer from "@/components/iframe-container.vue"
-import { TextPlugin } from "gsap/TextPlugin"
 import gsap from "@/services/gsap-wrapper"
 
 export default defineComponent ({ 
@@ -44,7 +43,6 @@ export default defineComponent ({
     mounted() {
         document.title = "Phygital - Other projects" 
         this.app.activeView = ""
-        gsap.registerPlugin(TextPlugin)
 
         this.$nextTick(()=> {
             this.fadeIn()

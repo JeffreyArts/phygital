@@ -1,6 +1,5 @@
 import gsap from "gsap"
 import appStore from "@/stores/app"
-
 const gsapWrapper = {...gsap}
 
 gsapWrapper.to = (
@@ -76,6 +75,6 @@ gsapWrapper.fromTo = (
     return gsap.fromTo(target, {
         ...fromVars,
     }, options)
-
 }
+
 export default gsapWrapper

@@ -32,3 +32,4 @@ gsap-bonus.tgz
 *.pages
 .env.*
 package-lock.json
+.vite-ssg-temp

@@ -34,7 +34,6 @@ import App from "@/stores/app"
 import PhygitalStore from "@/stores/phygital"
 import AztechGridCell from "@/components/aztech/grid-cell.vue"
 import gsap from "@/services/gsap-wrapper"
-import { TextPlugin } from "gsap/TextPlugin"
 
 export default defineComponent ({ 
     name: "purchaseWork",
@@ -66,7 +65,6 @@ export default defineComponent ({
     mounted() {
         document.title = "Phygital - About" 
         this.app.activeView = ""
-        gsap.registerPlugin(TextPlugin)
 
         this.$nextTick(()=> {
             this.fadeIn()

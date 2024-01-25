@@ -67,7 +67,6 @@ import { RouteLocationNormalized } from "vue-router"
 import App from "@/stores/app"
 import sculptureThumbnail from "@/components/sculpture-thumbnail.vue"
 import AztechGridCell from "@/components/aztech/grid-cell.vue"
-import { TextPlugin } from "gsap/TextPlugin"
 import gsap from "@/services/gsap-wrapper"
 import Icon from "@/components/icon.vue"
 
@@ -328,7 +327,6 @@ export default defineComponent ({
         }
     },
     mounted() {
-        gsap.registerPlugin(TextPlugin)
         document.title = "Phygital - Sculptures" 
         this.app.activeView = ""
         
@@ -777,7 +775,7 @@ export default defineComponent ({
     right: 0;
     bottom: 0;
     display: flex;
-    z-index: 1990;
+    z-index: 2023;
     align-items: center;
     justify-content: center;
     pointer-events: none;
@@ -800,6 +798,7 @@ export default defineComponent ({
     aspect-ratio: 9/16;
     max-height: calc(100vh - 180px);
     position: relative;
+    min-width: 240px;
     
     .aztech-grid-cell {
         display: block;
