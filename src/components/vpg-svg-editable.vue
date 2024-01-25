@@ -247,12 +247,13 @@ export default defineComponent({
             }
         },
         onClickEvent(event: MouseEvent) {
+            
             // No changes when not in edit mode
             if (!this.app.editMode) return
 
             const target = event.target as HTMLElement
 
-            if (target.classList.contains("vpg-line")) {
+            if (target.classList.contains("vpg-line") && this.newLine.length == 0) {
                 this.removeLine(target)
                 event.preventDefault()
                 return
