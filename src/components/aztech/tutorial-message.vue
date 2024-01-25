@@ -79,11 +79,13 @@ export default defineComponent({
             if (!this.visible) {
                 gsap.to(this.$el, {
                     opacity: 0,
+                    pointerEvents: "none",
                     duration: .4
                 })
             } else {
                 gsap.to(this.$el, {
                     opacity: 1,
+                    pointerEvents: "all",
                     duration: .4
                 })
             }

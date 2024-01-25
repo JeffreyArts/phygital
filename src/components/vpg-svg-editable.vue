@@ -410,34 +410,7 @@ export default defineComponent({
                 opacity: 1,
                 ...pointOptions
             })
-            if (document.body.classList.contains("__isPortrait")) {
-                gsap.to(".grid-point .center-ring", {
-                    r: 2,
-                    ...pointOptions
-                })
-                gsap.to(".grid-point .inner-ring", {
-                    r: 4,
-                    ...pointOptions
-                })
-                gsap.to(".grid-point .outer-ring", {
-                    r: 6,
-                    ...pointOptions
-                })
-            } else {
-                gsap.to(".grid-point .center-ring", {
-                    r: 4,
-                    ...pointOptions
-                })
-                gsap.to(".grid-point .inner-ring", {
-                    r: 8,
-                    ...pointOptions
-                })
-                gsap.to(".grid-point .outer-ring", {
-                    r: 12,
-                    ...pointOptions
-                })
-            }
-
+            
             gsap.to(".vpg-line", {
                 strokeWidth: this.strokeWidth,
                 strokeLinecap: "round",
