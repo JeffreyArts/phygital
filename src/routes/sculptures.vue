@@ -1,7 +1,7 @@
 <template>
     <div class="sculptures">
         <header class="sculptures-header">
-            <h1>_ sculptures</h1>
+            <h1><span>_ </span> sculptures</h1>
             
             <p>| Collection of physicalized objects</p>
         </header>
@@ -687,15 +687,19 @@ export default defineComponent ({
 .sculptures {
     width: 100%;
     height: calc(100% - 16px);
-    padding-top: 24px;
     display: flex;
     flex-flow: column;
 
     h1 {
         font-family: $accentFont;
-        margin: 0;
         font-size: 32px;
+        margin: 0;
+        width: 100%;
+        display: inline-block;
+        line-height: 0.7;
+        
         @media all and (min-width: 512px) {
+            line-height: 1;
             font-size: 40px;
         }
         @media all and (min-width: 720px) {
@@ -713,9 +717,6 @@ export default defineComponent ({
     }
 }
 
-.sculptures-header {
-    padding-left: 24px;
-}
 .sculptures-container-wrapper {
     grid-template-columns: 1fr;
     gap: 32px;
@@ -903,6 +904,22 @@ export default defineComponent ({
 }
 
 .__isPortrait {
+    .sculptures { 
+        padding-top: 24px;
+        
+        h1 {
+            margin-top: 11px;
+            text-align: center;
+            > span {
+                display: none;
+            }
+        }
+    }
+
+    .sculptures-header {
+        padding-left: 24px;
+    }
+    
     .sculpture-details-container {
         padding-right: 16px;
         padding-left: 16px;

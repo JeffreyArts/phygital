@@ -279,6 +279,7 @@ export default defineComponent ({
         line-height: 0.7;
 
         @media all and (min-width: 512px) {
+            line-height: 1;
             font-size: 40px;
         }
         @media all and (min-width: 720px) {
