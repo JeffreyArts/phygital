@@ -26,7 +26,7 @@
                 </router-link>
             </li>
             <li>
-                <a href="mailto:contact@jeffreyarts.nl" class="link" @mouseenter="mouseEnterEvent" @mouseleave="mouseLeaveEvent">
+                <router-link to="/contact" class="link" @mouseenter="mouseEnterEvent" @mouseleave="mouseLeaveEvent">
                     <svg class="list-icon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 118.7 180" style="enable-background:new 0 0 118.7 180;" xml:space="preserve">
                         <polygon class="icon"/>
                         <polygon class="icon-line" points="0,161.6 9.2,152.4 109.5,152.4 118.7,161.6 118.7,180 107.1,180 8.2,180 0,180"/>
@@ -35,7 +35,7 @@
                     <span class="text">
                         Contact<span class="vague">@jeffreyarts.nl</span>
                     </span>
-                </a>
+                </router-link>
             </li>
             <li>
                 <a href="https://github.com/JeffreyArts/phygital" target="_blank" class="link" @mouseenter="mouseEnterEvent" @mouseleave="mouseLeaveEvent">
