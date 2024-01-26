@@ -8,9 +8,10 @@
                 <section class="contact-page-footer-block" @mouseenter="hoverIn" @mouseleave="hoverOut">
                     <section class="contact-page-footer-text">
                         <div class="contact-page-footer-text-wrapper">
-                            <h3 class="contact-page-footer-header">online</h3>
+                            <h3 class="contact-page-footer-header">physical</h3>
                             <p>
-                                <a href="https://www.jeffreyarts.nl" target="_blank">www.jeffreyarts.nl</a>
+                                Vinkenstraat 70 <br>
+                                3036 XT, Rotterdam
                             </p>
                         </div>
                     </section>
@@ -53,10 +54,9 @@
                 <section class="contact-page-footer-block" @mouseenter="hoverIn" @mouseleave="hoverOut">
                     <section class="contact-page-footer-text">
                         <div class="contact-page-footer-text-wrapper">
-                            <h3 class="contact-page-footer-header">physical</h3>
+                            <h3 class="contact-page-footer-header">online</h3>
                             <p>
-                                Vinkenstraat 70 <br>
-                                3036 XT, Rotterdam
+                                <a href="https://www.jeffreyarts.nl" target="_blank">www.jeffreyarts.nl</a>
                             </p>
                         </div>
                     </section>
@@ -274,6 +274,8 @@ export default defineComponent ({
         font-family: $accentFont;
         margin: 0;
         font-size: 48px;
+        margin-top: 32px;
+        margin-left: 24px;
     }
 
     a {
@@ -310,21 +312,6 @@ export default defineComponent ({
     justify-content: space-between;
 }
 
-.__isPortrait {
-    .contact-page-container {
-        align-items: flex-start;
-    }
-     
-    .contact-page-footer-svg {
-        opacity: 0!important;
-    }   
-        
-    .contact-page-footer {
-        flex-flow: column;
-        padding-left: 60px;
-        padding-top: 40px;
-    }
-}
 
 
 .contact-page-footer-header {
@@ -342,10 +329,11 @@ export default defineComponent ({
     flex-flow: column;
     justify-content: space-between;
     position: relative;
-
+    
     p {
-        margin: 0 0 24px;
         line-height: 1.4;
+        margin: 0;
+
     }
 }
 
@@ -353,18 +341,45 @@ export default defineComponent ({
     height: 9px;
     position: absolute;
     left: -4px;
-    bottom: 0;
+    bottom: -8px;
     opacity: 0;
-
+    
     .block {
         fill: $black;
     }
-
+    
     .line {
         fill: none;
         stroke: $black;
         stroke-width: 1;
     }
 }
+.__isLandscape {
+    h1 {
+        margin: 0;
+    }
+}
 
+.__isPortrait {
+    .contact-page-container {
+        align-items: center;
+        justify-content: center;
+    }
+     
+    .contact-page-footer-svg {
+        opacity: 0!important;
+    }   
+        
+    .contact-page-footer {
+        flex-flow: column-reverse;
+        width:180px;
+        padding-top: 32px;
+        // padding-left: 86px;
+        // padding-top: 40px;
+    }
+
+    .contact-page-footer-text {
+        margin-bottom: 40px;
+    }
+}
 </style>

@@ -19,7 +19,11 @@
             </div>
 
             <p id="section3">With this project, I want to open up my work process to other individuals, cause I believe that (technological) advancements should be made collectively. That is why you are free to use this technology (including its source code) for personal use. If you're interested in what I do and would like to stay up to date on future endeavors or would like to get in touch with me. You can find me online at <a href="https://www.instagram.com/jeffrey.arts/">Instagram</a>, <a href="https://www.jeffreyarts.nl">JeffreyArts.nl</a> or <a href="https://www.artmajeur.com/jeffrey-arts">Artmajeur</a>.</p>
-            <p id="section4">Special thanks go out to <a href="https://fontforzula.gumroad.com" target="_blank">fontforzula</a>, who made the visual assets that I have used to create this digital interface.</p>
+            <p id="section4">Special thanks go out to <a href="https://fontforzula.gumroad.com" target="_blank">fontforzula</a>, who made the visual assets that I have used to create this digital interface. Also special thanks to <a href="https://www.simpleanalytics.com/?referral=huqat">Simple Analytics</a> for providing analytics for this website while respecting your privacy!</p>
+            <p id="section5">
+                <a href="https://simpleanalytics.com/interphygital.nl?referral=huqat&utm_source=interphygital.nl&utm_content=badge" referrerpolicy="origin" target="_blank"><picture><source srcset="https://simpleanalyticsbadges.com/interphygital.nl?mode=light" media="(prefers-color-scheme: light)" /><img class="simple-analytics-badge" src="https://simpleanalyticsbadges.com/interphygital.nl?mode=light&background=transparent" loading="lazy" referrerpolicy="no-referrer" crossorigin="anonymous" /></picture></a>
+            </p>
+
         </div>
         <div class="bottom-shadow"></div>
         <div class="top-shadow"></div>
@@ -249,14 +253,19 @@ export default defineComponent ({
             margin-top: 24px;
         }
     }
-    a {
-        color: #091B3D;
-        text-decoration: underline;
-        transition: ease .5 all;
-        &:hover,
-        &:focus {
-            text-decoration: none;
-            opacity: .5;
+    #section1,
+    #section2,
+    #section3,
+    #section4 {
+        a {
+            color: #091B3D;
+            text-decoration: underline;
+            transition: ease .5 all;
+            &:hover,
+            &:focus {
+                text-decoration: none;
+                opacity: .5;
+            }
         }
     }
     h1 {
@@ -308,6 +317,29 @@ export default defineComponent ({
         padding-bottom: 64px;
     }
 }
+
+
+#section5 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 64px;
+    .simple-analytics-badge {
+        height: 32px;
+        mix-blend-mode: darken;
+        filter: grayscale(100%);
+        opacity: .2;
+        transition: .4s ease all;
+        
+        &:hover {
+            opacity: 1;
+            filter: grayscale(0%);
+            height: 64px;
+        }
+    }
+}
+
 .about-content {
     margin-top: 56px;
     margin-bottom: 64px;

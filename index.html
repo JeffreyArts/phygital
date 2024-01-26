@@ -10,12 +10,10 @@
   <body>
     <div id="app" class="dashboard"></div>
     
-    <script>
-        // PouchDB polyfill
-        window.process = window.process || {env: {NODE_DEBUG:undefined, DEBUG:undefined}}; window.global = window;
-    </script>
     <script type="module" src="/src/main.ts"></script>
     
+    <script async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <noscript><img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" /></noscript>
   </body>
   
 </html>
