@@ -1,6 +1,6 @@
 <template>
     <div class="contact-page">
-        <h1>_ contact</h1>
+        <h1><span>_ </span>contact</h1>
 
         <div class="contact-page-container">
             <footer class="contact-page-footer">
@@ -272,10 +272,18 @@ export default defineComponent ({
 
     h1 {
         font-family: $accentFont;
+        font-size: 32px;
         margin: 0;
-        font-size: 48px;
-        margin-top: 32px;
-        margin-left: 24px;
+        width: 100%;
+        display: inline-block;
+        line-height: 0.7;
+
+        @media all and (min-width: 512px) {
+            font-size: 40px;
+        }
+        @media all and (min-width: 720px) {
+            font-size: 48px;
+        }
     }
 
     a {
@@ -330,11 +338,20 @@ export default defineComponent ({
     flex-flow: column;
     justify-content: space-between;
     position: relative;
+
+    &:first-child {
+        .contact-page-footer-text {
+            margin-bottom: 0;
+        }
+    }
     
     p {
         line-height: 1.4;
         margin: 0;
-
+        -webkit-user-select: all; /* Safari */        
+        -moz-user-select: all; /* Firefox */
+        -ms-user-select: all; /* IE10+/Edge */
+        user-select: all; /* Standard */
     }
 }
 
@@ -355,15 +372,21 @@ export default defineComponent ({
         stroke-width: 1;
     }
 }
-.__isLandscape {
-    h1 {
-        margin: 0;
-    }
-}
 
 .__isPortrait {
+    .contact-page { 
+        h1 {
+
+            margin-top: 34px;
+            text-align: center;
+            > span {
+                display: none;
+            }
+        }
+    }
+
     .contact-page-container {
-        align-items: center;
+        align-items: flex-end;
         justify-content: center;
     }
      
@@ -373,10 +396,9 @@ export default defineComponent ({
         
     .contact-page-footer {
         flex-flow: column-reverse;
-        width:180px;
+        width: 100%;
+        padding-left: 56px;
         padding-top: 32px;
-        // padding-left: 86px;
-        // padding-top: 40px;
     }
 
     .contact-page-footer-text {
