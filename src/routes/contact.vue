@@ -109,7 +109,7 @@ export default defineComponent ({
         }
     },
     mounted() {
-        document.title = "Phygital - Other projects" 
+        document.title = "Phygital - Contact" 
         this.app.activeView = ""
 
         this.$nextTick(()=> {
@@ -117,7 +117,7 @@ export default defineComponent ({
         })
 
         this.$router.beforeResolve(guard => {
-            if (this.$router.currentRoute.value.name != "Other projects" || this.fadedOut) {
+            if (this.$router.currentRoute.value.name != "Contact" || this.fadedOut) {
                 return
             }
             this.fadeOut(guard)
@@ -308,6 +308,7 @@ export default defineComponent ({
 
 .contact-page-footer {
     width: 100%;
+    max-width: 960px;
     display: flex;
     justify-content: space-between;
 }
