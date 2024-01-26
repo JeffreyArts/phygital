@@ -2,8 +2,8 @@
     <div class="surface-dimensions-section" ref="container">
 
         <div class="surface-dimensions">
-            <aztech-input-number v-model="width" label="width" @update="modifyWidth" @increase="modifyWidth" @decrease="modifyWidth"/>
-            <aztech-input-number v-model="height" label="height" @update="modifyHeight" @increase="modifyHeight" @decrease="modifyHeight"/>
+            <aztech-input-number v-model="width" min="2" max="24" label="width" @update="modifyWidth" @increase="modifyWidth" @decrease="modifyWidth"/>
+            <aztech-input-number v-model="height" min="2" max="24" label="height" @update="modifyHeight" @increase="modifyHeight" @decrease="modifyHeight"/>
         </div>
         <aztech-alert :options="options" :open="alertOpen" @close="closeAlert" >
             Changing this property will make you lose all of your changes. Are you sure you want to continue?
@@ -18,15 +18,13 @@ import PhygitalStore from "@/stores/phygital"
 import AppStore from "@/stores/app"
 import AztechAlert from "@/components/aztech/alert.vue"
 import AztechInputNumber from "@/components/aztech/input-number.vue"
-import AztechInputToggle from "@/components/aztech/input-toggle.vue"
 import type { AztechAlertOption } from "@/types/aztech-alert"
 
 export default defineComponent({
     name: "surface-dimensions",
     components: {
         AztechAlert,
-        AztechInputNumber,
-        AztechInputToggle
+        AztechInputNumber
     },
     props: {
         character: {

@@ -3,7 +3,15 @@
         <div class="aztec-input-number-text-container">
             <label class="aztech-input-number-text-label">{{ label }}</label>
             <div class="aztech-input-number-text-value-container">
-                <svg class="aztech-input-number-svg __isDown" @click="onClick($event, -1)" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"  viewBox="0 0 8 8" xml:space="preserve">
+                <svg class="aztech-input-number-svg __isDown" @click="onClick($event, -1)"
+                     :class="[min && parseInt(value.toString(),10)-1 < parseInt(min,10) ? '__isDisabled' : '']"
+                      version="1.1"
+                      xmlns="http://www.w3.org/2000/svg"
+                      xmlns:xlink="http://www.w3.org/1999/xlink"
+                      x="0px"
+                      y="0px"
+                       viewBox="0 0 8 8"
+                      xml:space="preserve">
                     <polygon class="aztech-input-number-up" points="0,0 8,0 4,8 "/>
                 </svg>
                 <span class="aztech-input-number-text-value">
@@ -12,7 +20,16 @@
                 <span class="aztech-input-number-text-unit" v-if="unit">
                     {{ unit }}
                 </span>
-                <svg class="aztech-input-number-svg __isUp" @click="onClick($event, 1)" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"  viewBox="0 0 8 8" xml:space="preserve">
+                <svg class="aztech-input-number-svg __isUp"
+                     @click="onClick($event, 1)"
+                     :class="[max && parseInt(value.toString(),10)+1 > parseInt(max,10) ? '__isDisabled' : '']"
+                     version="1.1"
+                     xmlns="http://www.w3.org/2000/svg"
+                     xmlns:xlink="http://www.w3.org/1999/xlink"
+                     x="0px"
+                     y="0px"
+                     viewBox="0 0 8 8"
+                     xml:space="preserve">
                     <polygon class="aztech-input-number-up" points="0,8 4,0 8,8 "/>
                 </svg>
             </div>
@@ -42,6 +59,12 @@ export default defineComponent({
             required: true,
         },
         unit: {
+            type: String,
+        },
+        max: {
+            type: String,
+        },
+        min: {
             type: String,
         },
     },
@@ -86,7 +109,10 @@ export default defineComponent({
         onClick(event:MouseEvent, value = 0) {
             const svgEl = event.currentTarget as HTMLElement
             if (!svgEl) return
-            
+            if (svgEl.classList.contains("__isDisabled")) {
+                return
+            }
+
             if (value > 0) {
                 this.increase(value)
             } else {
@@ -95,19 +121,23 @@ export default defineComponent({
         },
         increase(value = 1) {
             if (this.disabled) return
-            this.$emit("increase", this.modelValue + value)
-        },
-        updateValue() {
-            const value = parseInt(this.modelValueClone, 10)
-            if (value <= 1) {
-                return this.$emit("update", 2)
-            } else if (value > 32) {
-                return this.$emit("update", 32)
+
+            if (this.max) {
+                if (this.modelValue + value > parseInt(this.max, 10)) {
+                    return
+                }
             }
-            this.$emit("update", value)
+            
+            this.$emit("increase", this.modelValue + value)
         },
         decrease(value = -1) {
             if (this.disabled) return
+            
+            if (this.min) {
+                if (this.modelValue + value < parseInt(this.min, 10)) {
+                    return
+                }
+            }
             this.$emit("decrease", this.modelValue + value)
         },
     }
@@ -135,8 +165,12 @@ export default defineComponent({
     position: absolute;
     left: 0;
     top: 8px;
+    transition: opacity .32s ease;
     &.__isDown {
         top: 20px;
+    }
+    &.__isDisabled {
+        opacity: .32;
     }
 }
 
