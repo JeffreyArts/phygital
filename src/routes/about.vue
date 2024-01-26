@@ -1,6 +1,6 @@
 <template>
     <div class="about-page" ref="container">
-        <h1>_ about</h1>
+        <h1><span>_ </span> about</h1>
 
         <div class="about-page-offset" >
             
@@ -268,12 +268,22 @@ export default defineComponent ({
             }
         }
     }
+
     h1 {
         font-family: $accentFont;
+        font-size: 32px;
         margin: 0;
-        font-size: 48px;
-        margin-top: 16px;
-        margin-left: 24px;
+        width: 100%;
+        display: inline-block;
+        line-height: 0.7;
+        
+        @media all and (min-width: 512px) {
+            line-height: 1;
+            font-size: 40px;
+        }
+        @media all and (min-width: 720px) {
+            font-size: 48px;
+        }
     }
 
     @media all and (min-width: 800px) {
@@ -299,6 +309,18 @@ export default defineComponent ({
     @media all and (min-width: 800px) {
         padding-left: 58px;
         background-image:url("/images/vertical-line.svg");
+    }
+}
+
+.__isPortrait {
+    .about-page { 
+        h1 {
+            margin-top: 34px;
+            text-align: center;
+            > span {
+                display: none;
+            }
+        }
     }
 }
 
