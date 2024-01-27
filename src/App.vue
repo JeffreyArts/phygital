@@ -22,7 +22,7 @@ export default defineComponent ({
     setup() {
         const app = App()
 
-        return { app}
+        return { app }
     },
 		
     data: () => {

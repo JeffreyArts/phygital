@@ -332,6 +332,11 @@ export default defineComponent ({
         
         this.$nextTick(()=> {
             this.fadeIn()
+            gsap.to(".top-shadow, .bottom-shadow", {
+                opacity: .8,
+                duration: .4,
+                ease: "power3.in"
+            })
         })
         
         this.$router.beforeResolve(guard => {
@@ -750,12 +755,12 @@ export default defineComponent ({
     
     &.__isTop {
         .top-shadow {
-            opacity: 0;
+            opacity: 0 !important;
         }
     }
     &.__isBottom {
         .bottom-shadow {
-            opacity: 0;
+            opacity: 0 !important;
         }
     }
 
@@ -955,7 +960,7 @@ export default defineComponent ({
     top: -4px;
     background-color: #1c1c1e;
     filter: blur(16px);
-    opacity: .8;
+    opacity: 0;
     position: sticky;
     pointer-events: none;
     z-index: 1990;
@@ -970,7 +975,7 @@ export default defineComponent ({
     bottom: - 4px;
     background-color: #1c1c1e;
     filter: blur(16px);
-    opacity: .8;
+    opacity: 0;
     position: sticky;
     pointer-events: none;
     z-index: 1990;
