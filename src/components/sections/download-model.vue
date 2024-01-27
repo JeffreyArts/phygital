@@ -75,12 +75,9 @@ export default defineComponent({
                 ease: "power2.in"
             })
         },
-        downloadModel() {
-            let filename=  this.phygital.seed + ""
-            const seedDom = document.querySelector(".seed-value") as HTMLElement
-            if (seedDom) {
-                filename = seedDom.innerText
-            }
+        downloadModel(e: Event) {
+            let filename=  this.phygital.seed
+            
             this.clickAnimation()
             const model = new THREE.Group() as SculptureGroup
             model.name = "sculpture"
