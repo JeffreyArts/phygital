@@ -84,6 +84,8 @@ export default defineComponent({
                 duration: .32,
                 ease: "linear",
                 onComplete: () => {
+
+                    window.dispatchEvent(new Event("resize"))
                     setTimeout(()=> {
                         this.cornersFadeOut().then(() => {
                             this.fadeOut()
@@ -93,6 +95,7 @@ export default defineComponent({
             })
         },
         killAll() {
+            window.dispatchEvent(new Event("resize"))
             gsap.killTweensOf(".do-c")
             gsap.killTweensOf(".do-c line")
             gsap.killTweensOf(".do-c polyline")
