@@ -19,6 +19,8 @@ export const AppState = defineStore({
         orentation: "landscape",
         activeSurface: "front",
         editMode: false,
+        maxSurfaceWidth: 24,
+        maxSurfaceHeight: 24,
         showTips: Cookies.get("showTips") == "false" ? false : true,
         showAnimations: Cookies.get("showAnimations") == "false" ? false : true,
         tutMessages: {

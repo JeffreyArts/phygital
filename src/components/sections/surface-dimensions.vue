@@ -2,8 +2,8 @@
     <div class="surface-dimensions-section" ref="container">
 
         <div class="surface-dimensions">
-            <aztech-input-number v-model="width" min="2" max="24" label="width" @update="modifyWidth" @increase="modifyWidth" @decrease="modifyWidth"/>
-            <aztech-input-number v-model="height" min="2" max="24" label="height" @update="modifyHeight" @increase="modifyHeight" @decrease="modifyHeight"/>
+            <aztech-input-number v-model="width" min="2" :max="app.maxSurfaceWidth" label="width" @update="modifyWidth" @increase="modifyWidth" @decrease="modifyWidth"/>
+            <aztech-input-number v-model="height" min="2" :max="app.maxSurfaceHeight" label="height" @update="modifyHeight" @increase="modifyHeight" @decrease="modifyHeight"/>
         </div>
         <aztech-alert :options="options" :open="alertOpen" @close="closeAlert" >
             Changing this property will make you lose all of your changes. Are you sure you want to continue?

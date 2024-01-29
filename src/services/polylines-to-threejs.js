@@ -493,6 +493,9 @@ const patternToThreejsService = (pattern, options = {
     })
 
     Grid.loop(map, (x,y) => {
+        if (!map[y]) {
+            return
+        }
         var obj = map[y][x]
         cutPart(parts, pattern, obj.char, {
             thickness: radius*2,

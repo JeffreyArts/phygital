@@ -426,6 +426,20 @@ export default defineComponent({
                 this.cancelNewLine()
             }
 
+            if (this.$el) {
+                let i = 2
+                while (Math.round(this.$el.clientHeight / i) > 48) {
+                    this.app.maxSurfaceHeight = i
+                    i++
+                }
+
+                i = 2
+                while (Math.round(this.$el.clientWidth / i) > 48) {
+                    this.app.maxSurfaceWidth = i
+                    i++
+                }
+            }
+
             this.defineGrid()
             this.definePolylines()       
             
