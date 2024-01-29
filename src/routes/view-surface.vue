@@ -1,5 +1,79 @@
 <template>
     <div class="view-section-container" ref="container">
+        <aztechInfoBox id="help-section" label="?" :visible="app.showTips">
+            <header class="how-it-works-container">
+                <h3>How it works</h3>
+                <div class="how-it-works">
+                    <svg class="dots-preview" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 50 50" xml:space="preserve">
+                        <g id="dot1.1">
+                            <circle class="outer-ring" cx="5" cy="5" r="4.5"></circle>
+                        </g>
+                        <g id="dot1.2">
+                            <circle class="inner-ring" cx="25" cy="5" r="3"></circle>
+                            <circle class="outer-ring" cx="25" cy="5" r="4.5"></circle>
+                        </g>
+                        <g id="dot1.3">
+                            <circle class="outer-ring" cx="45" cy="5" r="4.5"></circle>
+                        </g>
+
+
+                        <g id="dot2.1">
+                            <circle class="inner-ring" cx="5" cy="25" r="3"></circle>
+                            <circle class="outer-ring" cx="5" cy="25" r="4.5"></circle>
+                        </g>
+                        <g id="dot2.2">
+                            <circle class="inner-ring" cx="25" cy="25" r="3"></circle>
+                            <circle class="outer-ring" cx="25" cy="25" r="4.5"></circle>
+                        </g>
+                        <g id="dot2.3">
+                            <circle class="inner-ring" cx="45" cy="25" r="3"></circle>
+                            <circle class="outer-ring" cx="45" cy="25" r="4.5"></circle>
+                        </g>
+
+                        <g id="dot3.1">
+                            <circle class="outer-ring" cx="5" cy="45" r="4.5"></circle>
+                        </g>
+                        <g id="dot3.2">
+                            <circle class="inner-ring" cx="25" cy="45" r="3"></circle>
+                            <circle class="outer-ring" cx="25" cy="45" r="4.5"></circle>
+                        </g>
+                        <g id="dot3.3">
+                            <circle class="outer-ring" cx="45" cy="45" r="4.5"></circle>
+                        </g>
+
+                    </svg>
+                    
+                    <ul>
+                        <li>No diagonal lines</li>
+                        <li>Adjacent dots only</li>
+                        <li>Only dashed dots</li>
+                    </ul>
+                </div>
+            </header>
+            <section>
+                <div>
+                    <h4>Adding lines</h4>
+                    <aztech-hr />
+                    <p>
+                        Add a new line by clicking on a dot with a dashed circle, then click one of the adjacent dashed dots next to it.
+                    </p>
+                </div>
+                <div>
+                    <h4>Removing lines</h4>
+                    <aztech-hr />
+                    <p>
+                        Remove lines by clicking on them.
+                    </p>
+                </div>
+                <div>
+                    <h4>Mirror edit</h4>
+                    <aztech-hr />
+                    <p>
+                        When enabled, lines that are being added or removed from the surface will also be removed or added from the opposite surface
+                    </p>
+                </div>
+            </section>
+        </aztechInfoBox>
         <vpg-svg-editable class="svg-container" />
     </div>
 </template>
@@ -10,12 +84,16 @@ import {defineComponent} from "vue"
 import {RouteLocationNormalized} from "vue-router"
 import AppStore from "@/stores/app"
 import vpgSvgEditable from "@/components/vpg-svg-editable.vue"
+import aztechInfoBox from "@/components/aztech/info-box.vue"
+import aztechHr from "@/components/aztech/line-1.vue"
 import gsap from "@/services/gsap-wrapper"
 
 export default defineComponent ({ 
     name: "routeViewSection",
     components: {
-        vpgSvgEditable
+        vpgSvgEditable,
+        aztechInfoBox,
+        aztechHr
     },
     props: [],
     setup() {
@@ -39,6 +117,7 @@ export default defineComponent ({
     mounted() {
         document.title = "Phygital - Surface editor" 
         this.app.activeView = "view-surfaces"
+        gsap.set("#help-section", { opacity: 0}) 
 
         this.$nextTick(()=> {
             this.fadeIn()
@@ -98,6 +177,13 @@ export default defineComponent ({
                 delay: .24,
                 ease: "power2.out",
             })
+
+            // Help section
+            gsap.to("#help-section", {
+                duration: .4,
+                opacity: 0,
+                ease: "power2.out",
+            }) 
 
             // Main
             gsap.to(".vpg-svg-editable", {
@@ -165,6 +251,15 @@ export default defineComponent ({
                     ease: "power2.out",
                 })
             }
+
+            if (this.app.editMode) {
+                // Help section
+                gsap.to("#help-section", {
+                    duration: .4,
+                    opacity: 1,
+                    ease: "power2.out",
+                }) 
+            }
             
             // MAIN
             gsap.set(".vpg-svg-editable svg", {
@@ -203,4 +298,77 @@ export default defineComponent ({
     height: 100%;
 }
 
+#help-section {
+    top: 80px;
+
+    h3 {
+        margin: 0 0 8px;
+        font-family: $accentFont;
+        text-transform: lowercase;
+    }
+
+    h4 {
+        margin: 0;
+    }
+
+    p  {
+        margin-top: 4px;
+        margin-bottom: 24px;
+        font-size: 12px;
+    }
+
+    .aztech-info-box-text-container {
+        max-height: calc(100vh - 80px);
+        overflow-y: auto;
+        padding: 24px 16px;
+    }
+    .aztech-line-1 {
+        width: calc(100% + 24px);
+        margin-left: -24px;
+        opacity: 0.48;
+        margin-top: -4px;
+    }
+    
+    .how-it-works-container {
+        margin-bottom: 16px;
+    }
+
+    .how-it-works {
+        display: flex;
+        flex-flow: row;
+            
+        li {
+            list-style-type: none;
+            &:before {
+                content: "*";
+                padding-right: 4px;
+            }
+        }
+        ul {
+            margin: 0;
+            padding: 0;
+            display: inline-block;
+            width: calc(100% - 64px);
+            margin-left: 8px;
+            line-height: 25px;
+            font-size: 14px;
+        }
+    }
+
+    .dots-preview {
+        width: 64px;
+
+        .outer-ring {
+            fill: transparent;
+            stroke: currentColor;
+            stroke-width: 1px;
+        }
+        .inner-ring {
+            fill: transparent;
+            stroke: currentColor;
+            stroke-width: .5px;
+            stroke-dasharray: 1.6 0.6 0 0;
+        }
+    }
+}
 </style>

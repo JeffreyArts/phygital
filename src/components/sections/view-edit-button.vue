@@ -94,7 +94,8 @@ export default defineComponent({
             gsap.set(".view-edit-deco-bottom-right #fill > *", {fill: "#1c1c1e"})
             gsap.set(".view-edit-deco-top-left #fill > *", {fill: "#1c1c1e"})
             gsap.set("#s-edit-options", { opacity: 1})
-
+            gsap.set("#help-section", { opacity: 1})
+            
         } else {
             // gsap.set(viewEl, {opacity: 1, x: 0})
             gsap.set(editEl, {opacity: 0, x: -16})
@@ -102,6 +103,7 @@ export default defineComponent({
             gsap.set(".view-edit-deco-bottom-right #fill > *", {fill: "transparent"})
             gsap.set(".view-edit-deco-top-left #fill > *", {fill: "transparent"})
             gsap.set("#s-edit-options", { opacity: 0})
+            gsap.set("#help-section", { opacity: 0})
             
             if (this.app.showAnimations) {
                 setTimeout(this.wink, 1280)
@@ -148,6 +150,14 @@ export default defineComponent({
                     duration: 0.48,
                     ease:"power3.in"
                 })
+
+                if (this.app.showTips) {
+                    gsap.to("#help-section", {
+                        opacity: 1,
+                        duration: 0.48,
+                        ease:"power3.in"
+                    })
+                }
             } else {
                 // gsap.set("#hand", {morphSVG: "#eye-closed"})
                 gsap.to("#hand", {
@@ -176,6 +186,12 @@ export default defineComponent({
                 })
                 gsap.to("#s-edit-options", {
                     opacity: 0,
+                    duration: 0.48,
+                    ease:"power3.in"
+                })
+                gsap.to("#help-section", {
+                    opacity: 0,
+                    pointerEvents: "none",
                     duration: 0.48,
                     ease:"power3.in"
                 })
