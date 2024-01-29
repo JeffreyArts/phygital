@@ -217,7 +217,7 @@ export default defineComponent({
 }
 .dashboard-overlay-by {
     fill: currentColor;
-    scale: .32;
+    scale: .5;
     height: 1em; 
     margin: .5em 0;
 }

@@ -3,15 +3,15 @@
         <h1><span>_ </span>contact</h1>
 
         <div class="contact-page-container">
-            <footer class="contact-page-footer">
+            <footer class="contact-page-footer" itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
 
                 <section class="contact-page-footer-block" @mouseenter="hoverIn" @mouseleave="hoverOut">
                     <section class="contact-page-footer-text">
                         <div class="contact-page-footer-text-wrapper">
                             <h3 class="contact-page-footer-header">physical</h3>
                             <p>
-                                Vinkenstraat 70 <br>
-                                3036 XT, Rotterdam [NL]
+                                <span itemprop="streetAddress">Vinkenstraat 70</span> <br>
+                                <span itemprop="postalCode">3036 XT</span>, <span itemprop="addressLocality">Rotterdam [NL]</span>
                             </p>
                         </div>
                     </section>
@@ -33,7 +33,7 @@
                         <div class="contact-page-footer-text-wrapper">
                             <h3 class="contact-page-footer-header">digital</h3>
                             <p>
-                                <a href="mailto:contact@jeffreyarts.nl">contact@jeffreyarts.nl</a> <br/>
+                                <a href="mailto:contact@jeffreyarts.nl"><span itemprop="email">contact@jeffreyarts.nl</span></a> <br/>
                                 <a href="https://www.instagram.com/jeffreyarts" target="_blank">Instagram</a>
                             </p>
                         </div>
@@ -107,7 +107,7 @@ export default defineComponent ({
                 name: "Contact",
                 content: "contact@jeffreyarts.nl | www.jeffreyarts.nl | Vinkenstraat 70, 3036 XT, Rotterdam (The Netherlands)",
             },
-        ],
+        ]
     },
     computed: {
         isDev() {

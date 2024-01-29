@@ -75,6 +75,21 @@ interface Sculpture {
     images: Array<string>
 }
 
+const schema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Phygital sculptures",
+    "description": "Collection of physicalized objects",
+    "image": "https://www.interphygital.nl/images/PT-1128.jpg",
+    "offers": {
+        "@type": "AggregateOffer",
+        "highPrice": "1040",
+        "lowPrice": "800",
+        "priceCurrency": "EUR"
+    }
+}
+    
+
 export default defineComponent ({ 
     name: "sculptures-overview",
     components: {
@@ -326,6 +341,13 @@ export default defineComponent ({
                 content: "An overview of concrete poured sculptures made via the Interphygital process",
             },
         ],
+        script: [
+            {
+                hid: "breadcrumbs-json-ld",
+                type: "application/ld+json",
+                textContent: JSON.stringify(schema)
+            },
+        ]
     },
     computed: {
         isDev() {
