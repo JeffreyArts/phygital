@@ -2,6 +2,7 @@ import { ViteSSG } from "vite-ssg"
 import App from "./App.vue"
 import {routerOptions} from "@/routes"
 import { createPinia } from "pinia"
+import { VueHeadMixin } from "@unhead/vue"
 import "./assets/scss/index.scss"
 import gsap from "gsap"
 import { MorphSVGPlugin } from "gsap/dist/MorphSVGPlugin"
@@ -16,6 +17,8 @@ export const createApp = ViteSSG(
     ({ app, router, routes, isClient, initialState }) => {
         const pinia = createPinia()
         app.use(pinia)
+        app.mixin(VueHeadMixin)
+
         if (typeof gsap.registerPlugin === "function") {
             gsap.registerPlugin(MorphSVGPlugin)
             gsap.registerPlugin(TextPlugin)

@@ -318,6 +318,15 @@ export default defineComponent ({
             ] as Array<Sculpture>
         }
     },
+    head: { 
+        title: "Interphygital - Sculptures",
+        meta: [
+            {
+                name: "Sculptures overview",
+                content: "An overview of concrete poured sculptures made via the Interphygital process",
+            },
+        ],
+    },
     computed: {
         isDev() {
             return import.meta.env.DEV
@@ -327,7 +336,6 @@ export default defineComponent ({
         }
     },
     mounted() {
-        document.title = "Phygital - Sculptures" 
         this.app.activeView = ""
         
         this.$nextTick(()=> {

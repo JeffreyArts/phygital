@@ -464,7 +464,7 @@
   dependencies:
     "@unhead/schema" "1.8.10"
 
-"@unhead/vue@^1.8.9":
+"@unhead/vue@^1.8.10", "@unhead/vue@^1.8.9":
   version "1.8.10"
   resolved "https://registry.yarnpkg.com/@unhead/vue/-/vue-1.8.10.tgz#ee1b8cda7fc77de0c43fa5fc7c081528e31ec9cb"
   integrity sha512-KF8pftHnxnlBlgNpKXWLTg3ZUtkuDCxRPUFSDBy9CtqRSX/qvAhLZ26mbqRVmHj8KigiRHP/wnPWNyGnUx20Bg==

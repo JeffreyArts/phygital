@@ -11,7 +11,7 @@
                             <h3 class="contact-page-footer-header">physical</h3>
                             <p>
                                 Vinkenstraat 70 <br>
-                                3036 XT, Rotterdam
+                                3036 XT, Rotterdam [NL]
                             </p>
                         </div>
                     </section>
@@ -100,6 +100,15 @@ export default defineComponent ({
             textWidth: 0
         }
     },
+    head: { 
+        title: "Interphygital - Contact",
+        meta: [
+            {
+                name: "Contact",
+                content: "contact@jeffreyarts.nl | www.jeffreyarts.nl | Vinkenstraat 70, 3036 XT, Rotterdam (The Netherlands)",
+            },
+        ],
+    },
     computed: {
         isDev() {
             return import.meta.env.DEV
@@ -109,7 +118,6 @@ export default defineComponent ({
         }
     },
     mounted() {
-        document.title = "Phygital - Contact" 
         this.app.activeView = ""
 
         this.$nextTick(()=> {

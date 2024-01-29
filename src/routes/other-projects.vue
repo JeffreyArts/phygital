@@ -32,6 +32,15 @@ export default defineComponent ({
             fadedOut: false
         }
     },
+    head: { 
+        title: "Interphygital - Other projects",
+        meta: [
+            {
+                name: "Other projects",
+                content: "View other projects by Jeffrey Arts",
+            },
+        ],
+    },  
     computed: {
         isDev() {
             return import.meta.env.DEV
@@ -41,7 +50,6 @@ export default defineComponent ({
         }
     },
     mounted() {
-        document.title = "Phygital - Other projects" 
         this.app.activeView = ""
 
         this.$nextTick(()=> {

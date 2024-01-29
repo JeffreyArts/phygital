@@ -30,6 +30,15 @@ export default defineComponent ({
             fadedOut: false
         }
     },
+    head: { 
+        title: "Interphygital - 3D View",
+        meta: [
+            {
+                name: "3D view",
+                content: "Viewport of 3D Phygital model",
+            },
+        ],
+    },
     computed: {
         isDev() {
             return import.meta.env.DEV
@@ -39,7 +48,6 @@ export default defineComponent ({
         }
     },
     mounted() {
-        document.title = "Phygital - 3D View" 
         this.app.activeView = "view-3d"
 
         this.$nextTick(()=> {

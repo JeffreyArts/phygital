@@ -58,6 +58,15 @@ export default defineComponent ({
             isOpen: true,
         }
     },
+    head: { 
+        title: "Interphygital - About",
+        meta: [
+            {
+                name: "About phygital",
+                content: "Phygital is an artistic research project in which I explore how a generative computer algorithm can be used to create three-dimensional physical objects.",
+            },
+        ],
+    },
     computed: {
         isDev() {
             return import.meta.env.DEV
@@ -67,7 +76,6 @@ export default defineComponent ({
         }
     },
     mounted() {
-        document.title = "Phygital - About" 
         this.app.activeView = ""
 
         this.$nextTick(()=> {

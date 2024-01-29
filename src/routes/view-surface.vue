@@ -106,6 +106,15 @@ export default defineComponent ({
             fadedOut: false
         }
     },
+    head: { 
+        title: "Interphygital - Surface editor",
+        meta: [
+            {
+                name: "Surface editor",
+                content: "Viewport of 3D Phygital surface",
+            },
+        ],
+    },
     computed: {
         isDev() {
             return import.meta.env.DEV
@@ -115,7 +124,6 @@ export default defineComponent ({
         }
     },
     mounted() {
-        document.title = "Phygital - Surface editor" 
         this.app.activeView = "view-surfaces"
         gsap.set("#help-section", { opacity: 0}) 
 
