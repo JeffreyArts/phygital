@@ -37,8 +37,14 @@ export default {
             renderer: null as null | vpg3dRenderer,
             camera: null as null | THREE.PerspectiveCamera,
             orbitControls: null as any,
-            model: null as null | SculptureGroup
+            model: null as null | SculptureGroup,
+            startingModel: null as null | SculptureGroup,
         }
+    },
+    computed: {
+        isDev() {
+            return import.meta.env.DEV
+        },
     },
     watch: {
         "phygital.surfaces.top.polylines": {
@@ -85,7 +91,23 @@ export default {
             this.define3dEnvironment()
     
             this.updateCanvasSize()
-            this.updateModel()
+            setTimeout(() => {
+                if (this.model) {
+                    _.each(this.model.children, surface => {
+                        const children = surface.children as Array<THREE.Mesh>
+                        _.each(children, part => {
+                            if (_.isArray(part.material)) {
+                                return
+                            }
+                            part.material.opacity = 1
+                        })
+                    })
+                }
+                this.updateModel()
+            })
+            if (!this.model) {
+                return
+            }
         })
 
         window.addEventListener("phygital:seed", this.phygitalSeedEvent)
@@ -114,20 +136,31 @@ export default {
         this.camera = null
         this.orbitControls = null
 
+        // Overwrite model with startingModel to prevent animation from breaking original model
+        this.model = this.startingModel
         window.removeEventListener("resize", this.updateCanvasSize)
     },
     methods: {
-
         phygitalSeedEvent(e : Event) {
             const event = e as phygitalSeedEvent   
             if (event.detail == "prepareChange") {   
                 Promise.all([
                     this.fadeOut()
                 ]).then(() => {
-                    setTimeout(() => {
-                        window.dispatchEvent(new CustomEvent("phygital:seed", {detail: "changed"}))
-                    }, this.app.showAnimations ? 320 : 0) 
+                    // setTimeout(() => {
+                    window.dispatchEvent(new CustomEvent("phygital:seed", {detail: "changed"}))
+                    // }, this.app.showAnimations ? 320 : 0) 
 
+                })
+            } else if (event.detail == "changed") {  
+                setTimeout(() => {
+                    if (!this.model) {
+                        return
+                    }
+
+                    const model = this.sortModel() as Array<THREE.Mesh>
+                    this.startingModel = this.model.clone()
+                    this.implodeSurfaceAnimation(model)
                 })
             }
         },
@@ -145,9 +178,9 @@ export default {
             if (this.renderer) {
                 this.$el.append( this.renderer.domElement )
             }
-            
+
             if (this.camera) {
-                this.camera.position.set(20, 8, -2)
+                this.camera.position.set(24, 24, -4)
                 this.camera.zoom = 1.5
                 this.camera.updateProjectionMatrix()
             }
@@ -180,12 +213,30 @@ export default {
                 return new Error("updateModelSurface: Missing model")
             }
 
-            this.phygital.update3DModel(this.model, surfaceSide)
+            this.phygital.update3DModel(this.model, surfaceSide)            
         },
         explodeSurfaceAnimation(lineObjects: Array<THREE.Mesh>) {
             return new Promise(resolve => {
                 const promises = [] as Array<Promise<unknown>>
                 let delay = 0
+
+                if (this.camera && this.model) {
+                    const target = new THREE.Vector3(this.model.width / 2 - 0.75, this.model.height / 2 + 0.5, this.model.depth / 2 - 0.75)
+
+                    gsap.to(this.camera.position, {
+                        duration: 2.4, // Duration in seconds
+                        x: this.model.width * 2.8,
+                        y: this.model.height * 1.6,
+                        z: -this.model.height * 2.8,
+                        ease: "power1.inOut",
+                        onUpdate: () => {
+                            if (!this.camera) return
+
+                            this.camera.lookAt(target)
+                        },
+                    })
+                }
+                
                 _.each(lineObjects, childObject => {
                     promises.push( new Promise(resolve => {
 
@@ -205,9 +256,9 @@ export default {
                         }
                         
                         childObject.material = childObject.material as THREE.MeshLambertMaterial
-                        const material = childObject.material.clone()
-                        material.transparent = true
-                        childObject.material = material as THREE.MeshLambertMaterial
+                        childObject.material.transparent = true
+                        // const material = childObject.material.clone()
+                        // material.transparent = true
                         
                         let childAnimation = {
                             delay,
@@ -248,6 +299,7 @@ export default {
                                 const material = childObject.material as THREE.MeshLambertMaterial
                                 material.depthWrite = false
                                 material.depthTest = false
+                                material.transparent = true
 
                                 material.needsUpdate = true
                                 material.needsUpdate = true
@@ -262,13 +314,129 @@ export default {
                         })
                     }))
                 }) 
+                
+                Promise.all(promises).then(resolve)
+            })
+                    
+            // side: "top" | "bottom" | "back" | "front" | "left" | "right"
+        },
+        implodeSurfaceAnimation(lineObjects: Array<THREE.Mesh>) {
+            return new Promise(resolve => {
+                if (!this.model) {
+                    console.warn("implodeSurfaceAnimation: Missing model")
+                    return
+                }   
+                
+                this.setCameraToStartPosition()
 
+                const promises = [] as Array<Promise<unknown>>
+                let delay = 0
+                _.each(lineObjects, childObject => {
+                    promises.push( new Promise(resolve => {
+
+                        if (!this.model) {
+                            return
+                        }
+                
+                        const size = this.model.width*this.model.height*this.model.depth
+                        if (size > 220) {
+                            delay += .0064
+                        } else if (size > 128) {
+                            delay += .008
+                        } else if (size > 64) {
+                            delay += .012
+                        } else {
+                            delay += .024
+                        }
+                        delay = 0.01
+                        
+                        childObject.material = childObject.material as THREE.MeshLambertMaterial
+                        childObject.material.transparent = true
+                        // const material = childObject.material.clone()
+                        // childObject.material = material as THREE.MeshLambertMaterial
+                        
+                        let childAnimation = {
+                            delay,
+                            duration: .96,
+                            ease: "power3.out"
+                        } as {
+                            delay: number,
+                            duration: number,
+                            ease: string,
+                            x?: string | number,
+                            // y?: string | number,
+                            z?: string | number,
+                        }
+                        let startPos = "0"
+                        
+                        const surface = childObject.parent
+                        if (!surface) {
+                            return
+                        }
+
+                        if(surface.name.endsWith("bottom") || surface.name.endsWith("back") ) {
+                            startPos = `-=${Math.random()*1 + .48}`
+                            // childAnimation.y = childObject.position.y
+
+                        } else if(surface.name.endsWith("front") || surface.name.endsWith("left") || surface.name.endsWith("right")) {
+                            startPos = `+=${Math.random()*1 + .24}`
+                        } else if(surface.name.endsWith("top")) {
+                            startPos = `+=${Math.random()*1 + .64}`
+                        } 
+
+                        const endPos = childObject.position.y
+
+                        gsap.set(childObject.position, {
+                            y: startPos
+                        })
+
+                        gsap.to(childObject.position, {
+                            ...childAnimation,
+                            y: endPos,
+                            // delay: 0,
+                        })
+                        
+                        const opacityAnimation = gsap.to(childObject.material, {
+                            ...childAnimation,
+                            delay: 0,
+                            duration: .24,
+                            opacity: 1,
+                            onUpdate: () => {
+                                const material = childObject.material as THREE.MeshLambertMaterial
+                                material.depthWrite = false
+                                material.depthTest = false
+                                if (material.opacity > .8) {
+                                }
+                                material.depthWrite = true
+                                material.depthTest = true
+                                material.transparent = true
+                            },
+                            onComplete: () => {
+                                const material = childObject.material as THREE.MeshLambertMaterial
+                                material.opacity = 1 // Ensure opacity is set to 0 when animation completes
+                                material.depthWrite = true
+                                material.depthTest = true
+                                material.transparent = true
+                                material.needsUpdate = true
+                                resolve(true)
+                            },
+                            ease: "none",
+                        })
+                    }))
+                }) 
+                
                 Promise.all(promises).then(resolve)
             })
                     
             // side: "top" | "bottom" | "back" | "front" | "left" | "right"
         },
         updateModel() {
+
+            if (!this.model) {
+                console.error("UpdateModel: missing model")
+                return
+            }
+
             // Changing this order might cause unexpected behaviour
             this.updateModelSurface("top")
             this.updateModelSurface("bottom")
@@ -276,8 +444,13 @@ export default {
             this.updateModelSurface("right")
             this.updateModelSurface("front")
             this.updateModelSurface("back")
+            
+            this.startingModel = this.model.clone()
+            const model = this.sortModel() as Array<THREE.Mesh>
 
-            this.fadeIn()
+            this.implodeSurfaceAnimation(model)
+            // Animate camera position and lookAt using GSAP
+            this.setCameraToStartPosition()
         },
         setCameraToStartPosition() {
             if (!this.camera || !this.model) {
@@ -291,8 +464,8 @@ export default {
                 duration: 1.28, // Duration in seconds
                 x: this.model.width * 2.8,
                 y: this.model.height * 1.6,
-                z: this.model.height * 2.8,
-                ease: "power1.inOut",
+                z: -this.model.height * 2.8,
+                ease: "elastic.out(1.01,0.99)",
                 onUpdate: () => {
                     if (!this.camera) return
 
@@ -322,40 +495,87 @@ export default {
                 const surfaces = _.find(this.scene.children, child => {
                     return child.name == "sculpture"
                 })
-                this.setCameraToStartPosition()
+
                 if (!surfaces) {
                     return reject()
                 }
 
-                const surfaceLines = [] as Array<THREE.Mesh>
-                _.each(surfaces.children, surface => {
-                    _.each(surface.children, c => {
-                        const childObject = c as THREE.Mesh
-                        surfaceLines.push(childObject)
-                    })
-                })
+                const surfaceLines = this.sortModel() as Array<THREE.Mesh>
                 this.explodeSurfaceAnimation(_.shuffle(surfaceLines))
                     .then(resolve)
             })
         },
-        fadeIn() { 
-            if (!this.camera) {
-                return
+        sortModel() {
+            if (!this.model) {
+                return 
+            }
+            // Internal helper function for calculating vertical position
+            const getPosition = (position: number) => {
+                if (!this.model || typeof position === "undefined") {
+                    return 0
+                }
+                return Math.round(((this.model.height - 2) - position ) * 10) / 10 
             }
 
-            // No support for this feature
-            // if (!this.phygital.openCube) {
-            //     const box = new THREE.BoxGeometry(this.model.width-1.5, this.model.height-1.5, this.model.depth-1.5)
-            //     if (this.phygital.surfaces.top.model3D) {
-            //         const mesh = new THREE.Mesh(box, this.phygital.surfaces.top.model3D.material)
-            //         mesh.name = "innerCube"
-            //         mesh.position.set((this.model.width-1.5)/2, (this.model.height-1.5)/2 + 1.25, (this.model.depth-1.5)/2)
-            //         this.model.add(mesh)   
-            //     }
-            // }
+            // Internal helper function to get angle of Object3D
+            const getAngleBetweenPoints = (axis: {x: number, y: number}, point: {x: number, y: number}) => {
+                // Calculate the angle in radians
+                const angleRadians = Math.atan2(point.y - axis.y, point.x - axis.x)
+                const res = angleRadians < 0 ? angleRadians + 2 * Math.PI : angleRadians
+                return res /  Math.PI * 180 // Ensure the angle is positive (between 0 and 360)
+            }
 
-            // Animate camera position and lookAt using GSAP
-            this.setCameraToStartPosition()
+            // Create partList with vertical position of all objects
+            const partList = [] as Array<{position: number, part: THREE.Mesh, angle: number}>
+            
+            _.each(this.model.children, childObject => {
+                if (!this.model) {
+                    return
+                }
+
+                const surface = childObject.name.replace("surface-", "")
+                const axis = {x: this.model.width / 2 + .25, y: this.model.depth / 2 + .25 }
+                const children = childObject.children as Array<THREE.Mesh>
+                _.each(children, part => {
+
+                    // Calculate boundingSphere when THREE.JS has not done that in time
+                    if (!part.geometry.boundingSphere) {
+                        part.geometry.computeBoundingSphere()
+                    }
+
+                    if (!part.geometry || !part.geometry.boundingSphere) {
+                        return
+                    }
+                    const newPart = {
+                        part,
+                        position: getPosition(part.geometry.boundingSphere.center.z),
+                        angle: getAngleBetweenPoints(axis, {x: part.geometry.boundingSphere.center.x, y:part.geometry.boundingSphere.center.y})
+                    }
+                    if (!this.model) {
+                        return
+                    }
+                    
+                    
+                    if (surface == "top") {
+                        newPart.position = this.model.height - 1
+                    } else if (surface == "bottom") {
+                        newPart.position = 0
+                    } else if (surface == "left") {
+                        newPart.angle = 0
+                    } else if (surface == "right") {
+                        newPart.angle = 180
+                    } else if (surface == "front") {
+                        newPart.angle = 90
+                    } else if (surface == "back") {
+                        newPart.angle = 270
+                        
+                    } 
+                    partList.push(newPart)
+                })
+            })
+            
+            
+            return _.map(_.sortBy(partList, ["position", "angle"]), "part")
         },
         cancelCameraAnimation() {
             if (!this.camera) return

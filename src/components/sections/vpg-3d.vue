@@ -49,11 +49,11 @@ export default {
         "phygital.surfaces.top.polylines": {
             handler() {
                 this.updateModelSurface("top")
-                this.updateModelSurface("bottom")
-                this.updateModelSurface("left")
-                this.updateModelSurface("right")
-                this.updateModelSurface("front")
-                this.updateModelSurface("back")
+                // this.updateModelSurface("bottom")
+                // this.updateModelSurface("left")
+                // this.updateModelSurface("right")
+                // this.updateModelSurface("front")
+                // this.updateModelSurface("back")
                 
             },
             deep:true,
@@ -102,7 +102,9 @@ export default {
             this.define3dEnvironment()
     
             this.updateCanvasSize()
-            this.updateModel()
+            setTimeout(() => {
+                this.updateModel()
+            })
         })
 
         window.addEventListener("phygital:seed", this.phygitalSeedEvent)
@@ -188,11 +190,26 @@ export default {
             }
         },
         updateModelSurface(surfaceSide: "top" | "bottom" | "left" | "right" |  "front" | "back") {
-            if (!this.model) {
+            if (!this.model || !this.camera) {
                 return
             }
             
             this.phygital.update3DModel(this.model, surfaceSide)
+
+            if (this.model) {
+                _.each(this.model.children, surface => {
+                    if (surface.name.endsWith(surfaceSide)) {
+                        const children = surface.children as Array<THREE.Mesh>
+                        _.each(children, part => {
+                            if (_.isArray(part.material)) {
+                                return
+                            }
+                            part.material.opacity = 1
+                        })
+                    }
+                })
+            }
+
             this.redefineOrbitControls()
         },
         explodeSurfaceAnimation(lineObjects: Array<THREE.Mesh>) {
@@ -340,44 +357,21 @@ export default {
 
             this.redefineOrbitControls()
         },
-        fadeOut() {
-            return new Promise ((resolve, reject) => {
-
-                if (!this.model) {
-                    console.error("fadeOut: Missing model")
-                    return reject(false)
-                }
-
-                if (!this.scene) {
-                    console.error("fadeOut: Missing scene")
-                    return reject(false)
-                }
-
-                // Create array with all the parts
-                const surfaces = _.find(this.scene.children, child => {
-                    return child.name == "sculpture"
-                })
-                this.setCameraToStartPosition()
-                if (!surfaces) {
-                    return reject()
-                }
-
-                const surfaceLines = [] as Array<THREE.Mesh>
-                _.each(surfaces.children, surface => {
-                    _.each(surface.children, c => {
-                        const childObject = c as THREE.Mesh
-                        surfaceLines.push(childObject)
-                    })
-                })
-                this.explodeSurfaceAnimation(_.shuffle(surfaceLines))
-                    .then(resolve)
-            })
-        },
         fadeIn() { 
             if (!this.camera) {
                 return
             }
-
+            if (this.model) {
+                _.each(this.model.children, surface => {
+                    const children = surface.children as Array<THREE.Mesh>
+                    _.each(children, part => {
+                        if (_.isArray(part.material)) {
+                            return
+                        }
+                        part.material.opacity = 1
+                    })
+                })
+            }
             // No support for this feature
             // if (!this.phygital.openCube) {
             //     const box = new THREE.BoxGeometry(this.model.width-1.5, this.model.height-1.5, this.model.depth-1.5)

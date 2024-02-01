@@ -398,7 +398,20 @@ export const PhygitalStore = defineStore({
                 return false
             })
             
-            // Add new
+            // Make all parts hidden by default
+            const parts = mergedObject.children as Array<THREE.Mesh>
+            _.each(parts, (part) => {
+                
+                if (part.material && !_.isArray(part.material)) {
+                    const material = part.material.clone()
+                    material.transparent = true
+                    material.opacity = 0
+                    part.material = material as THREE.MeshLambertMaterial
+                }
+                
+            })
+            
+            // Add new surface
             mergedObject.updateMatrix()
             model.add(mergedObject)
             return model

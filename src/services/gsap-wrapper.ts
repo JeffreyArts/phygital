@@ -34,6 +34,12 @@ gsapWrapper.to = (
             options.stagger.each = 0
         } 
     }
+
+    // Fix for vite-ssg
+    if (typeof gsap.to == "undefined") {
+        return null as any as gsap.core.Tween
+    }
+    
     return gsap.to(target, options)
 }
 
