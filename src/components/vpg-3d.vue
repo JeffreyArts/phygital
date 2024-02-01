@@ -231,12 +231,11 @@ export default {
                         ease: "power1.inOut",
                         onUpdate: () => {
                             if (!this.camera) return
-
                             this.camera.lookAt(target)
                         },
                     })
                 }
-                
+
                 _.each(lineObjects, childObject => {
                     promises.push( new Promise(resolve => {
 
@@ -246,13 +245,13 @@ export default {
                 
                         const size = this.model.width*this.model.height*this.model.depth
                         if (size > 220) {
-                            delay += .0064
+                            delay += .0032
                         } else if (size > 128) {
-                            delay += .008
+                            delay += .004
                         } else if (size > 64) {
-                            delay += .012
+                            delay += .06
                         } else {
-                            delay += .024
+                            delay += .012
                         }
                         
                         childObject.material = childObject.material as THREE.MeshLambertMaterial
@@ -375,13 +374,13 @@ export default {
                         }
 
                         if(surface.name.endsWith("bottom") || surface.name.endsWith("back") ) {
-                            startPos = `-=${Math.random()*1 + .48}`
+                            startPos = `-=${Math.random()*.32 + .24}`
                             // childAnimation.y = childObject.position.y
 
                         } else if(surface.name.endsWith("front") || surface.name.endsWith("left") || surface.name.endsWith("right")) {
-                            startPos = `+=${Math.random()*1 + .24}`
+                            startPos = `+=${Math.random()*.32 + .16}`
                         } else if(surface.name.endsWith("top")) {
-                            startPos = `+=${Math.random()*1 + .64}`
+                            startPos = `+=${Math.random()*.32 + .32}`
                         } 
 
                         const endPos = childObject.position.y
