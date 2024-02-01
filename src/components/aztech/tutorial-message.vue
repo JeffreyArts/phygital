@@ -178,7 +178,7 @@ export default defineComponent({
 
             const tl = gsap.timeline({ repeat: -1 })
             tl.to(dot, {
-                fill: "#000",
+                fill: "#1c1c1e",
                 ease: "power2.out",
                 duration: .64,
             })
@@ -188,7 +188,7 @@ export default defineComponent({
                 duration: .64,
             })
             tl.to(dot, {
-                fill: "#000",
+                fill: "#1c1c1e",
                 ease: "power2.out",
                 duration: .64,
             })

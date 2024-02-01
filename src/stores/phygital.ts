@@ -331,7 +331,7 @@ export const PhygitalStore = defineStore({
                 color: "#777",
                 tubeThickness: .0125,
             })
-            const mergedObject = new THREE.Group()
+            const mergedObject = new THREE.Object3D() as THREE.Mesh
             
             
             _.each(pattern3D, (mesh: any, i:number) => {
