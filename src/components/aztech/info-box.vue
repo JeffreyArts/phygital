@@ -148,12 +148,14 @@ export default defineComponent({
     position: fixed;
     left: 0;
     width: calc(240px) + 40px;
-    display: flex;
+    display: block;
     z-index: 2023;
 }
 
 .aztech-info-pull {
-    position: relative;
+    position: absolute;
+    top:0;
+    right: -24px;
     width: 24px;
     height: 36px;
     svg {
@@ -187,7 +189,7 @@ export default defineComponent({
 }
 
 .aztech-info-box-text-container {
-    width: calc(100% - 24px);
+    width: 100%;
     border: 1px solid currentColor;
     background-color: #fff;
     border-left: 0 none transparent;

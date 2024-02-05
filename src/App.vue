@@ -68,6 +68,7 @@ export default defineComponent ({
                     const downloadSection = document.querySelector("#s-download") as HTMLElement
                     if (downloadSection) {
                         downloadSection.style.opacity = "0"
+                        downloadSection.style.pointerEvents = "none"
                     }
                 }
 
@@ -83,6 +84,7 @@ export default defineComponent ({
                 const downloadSection = document.querySelector("#s-download") as HTMLElement
                 if (downloadSection.style.opacity == "0") {
                     downloadSection.style.opacity = "1"
+                    downloadSection.style.pointerEvents = "all"
                 }
                 
                 if ((this.$route.name != "3D View" && this.$route.name != "Section View")) {

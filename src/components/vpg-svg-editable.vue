@@ -113,6 +113,7 @@ export default defineComponent({
             manualUpdate: false,
             disableNewLine: false,
 
+            mouseDownTimeout: 0,
             mouseX: 0,
             mouseY: 0,
             mousePointX: 0,
@@ -252,11 +253,11 @@ export default defineComponent({
                 y: 0
             }
             
-            if (event instanceof TouchEvent) {
-                const { touches, changedTouches } = event.originalEvent ?? event
+            if (typeof TouchEvent !== "undefined" && event instanceof TouchEvent) {
+                const { touches, changedTouches } = event
                 pos.x =  event.touches[0].clientX
                 pos.y =  event.touches[0].clientY
-            } else {
+            } else if (typeof MouseEvent !== "undefined" && event instanceof MouseEvent) {
                 pos.x = event.clientX
                 pos.y = event.clientY
             }
@@ -270,8 +271,16 @@ export default defineComponent({
             this.mousePointY = (this.mouseY - this.cellSize/2) / this.cellSize
         },
         mouseDown(event: MouseEvent | TouchEvent) {
-            
+            if (this.mouseDownTimeout) {
+                return
+            }
+        
+            this.mouseDownTimeout = setTimeout(() => {
+                clearTimeout(this.mouseDownTimeout)
+                this.mouseDownTimeout = 0
+            }, 240)
             this.updateMousePosition(event)
+
             // No changes when not in edit mode
             if (!this.app.editMode) return
 
@@ -283,7 +292,6 @@ export default defineComponent({
                 return
             }
             
-            
             if (this.newLine.length == 0) {
                 // Start new line
                 const gridPoint = this.getGridPoint(this.mousePointX, this.mousePointY) as HTMLElement | null
@@ -294,12 +302,14 @@ export default defineComponent({
                         return
                     }
                 }
-
             } else if (this.newLine.length == 2) {
                 this.processNewLineEntry()
             }
         },
         mouseUp(event: MouseEvent | TouchEvent) {
+            if (this.mouseDownTimeout) {
+                return
+            }
             if (this.newLine.length == 2) {
                 this.processNewLineEntry()
             }
