@@ -8,7 +8,7 @@ use the .vpg-svg-content for styling the content inside the box. Best way is to 
          '__isBlock'
         ]">
 
-        <figure ref="vpgSVGcontainer" @mousedown="onClickEvent" @mousemove="mouseMoveEvent">
+        <figure ref="vpgSVGcontainer" @mousedown="mouseDown" @touchstart="mouseDown" @mouseup="mouseUp" @touchend="mouseUp" @mousemove="mouseMove" @touchmove="mouseMove">
             <svg 
                 :viewBox="`0,0, ${Math.round(cellSize * horizontalLines)},  ${Math.round(cellSize * verticalLines)}`"
                 :width="Math.round(cellSize * horizontalLines)"
@@ -246,8 +246,32 @@ export default defineComponent({
                 this.cancelNewLine()
             }
         },
-        onClickEvent(event: MouseEvent) {
+        updateMousePosition(event:TouchEvent | MouseEvent){
+            const pos =  {
+                x: 0,
+                y: 0
+            }
             
+            if (event instanceof TouchEvent) {
+                const { touches, changedTouches } = event.originalEvent ?? event
+                pos.x =  event.touches[0].clientX
+                pos.y =  event.touches[0].clientY
+            } else {
+                pos.x = event.clientX
+                pos.y = event.clientY
+            }
+            
+            const svgElement = this.$refs["vpgSVG"] as SVGAElement
+            const rect = svgElement.getBoundingClientRect()
+            
+            this.mouseX = pos.x - rect.left
+            this.mousePointX = (this.mouseX - this.cellSize/2) / this.cellSize
+            this.mouseY = pos.y - rect.top
+            this.mousePointY = (this.mouseY - this.cellSize/2) / this.cellSize
+        },
+        mouseDown(event: MouseEvent | TouchEvent) {
+            
+            this.updateMousePosition(event)
             // No changes when not in edit mode
             if (!this.app.editMode) return
 
@@ -263,7 +287,7 @@ export default defineComponent({
             if (this.newLine.length == 0) {
                 // Start new line
                 const gridPoint = this.getGridPoint(this.mousePointX, this.mousePointY) as HTMLElement | null
-                
+
                 if (gridPoint) {   
                     if (gridPoint.classList.contains("__hasHover")) {
                         this.startNewLine(Math.round(this.mousePointX), Math.round(this.mousePointY))
@@ -272,54 +296,56 @@ export default defineComponent({
                 }
 
             } else if (this.newLine.length == 2) {
-                // Update newLine to clicked position because it is not updated by mousemove on touchscreens
-                this.newLine[1] = {x: this.mouseX, y: this.mouseY}
-
-                const newLinePoint = this.cordToPoint(this.newLine[1])
-                const targetGridPoint = this.getGridPoint(newLinePoint.x, newLinePoint.y) as SVGAElement | null
-                if (targetGridPoint) {
-                    if (targetGridPoint.classList.contains("__isOption")) {
-                        const newLine = [
-                            this.cordToPoint(this.newLine[0]),
-                            this.cordToPoint(this.newLine[1])
-                        ]
-                        
-                        // Prevent polylines to be added over each other
-                        const duplicate = this.$el.querySelector(`
-                                .vpg-line[dataX1="${newLine[0].x}"][dataY1="${newLine[0].y}"][dataX2="${newLine[1].x}"][dataY2="${newLine[1].y}"],
-                                .vpg-line[dataX1="${newLine[1].x}"][dataY1="${newLine[1].y}"][dataX2="${newLine[0].x}"][dataY2="${newLine[0].y}"]
-                            `)
-
-                        if (duplicate) {
-                            this.cancelNewLine()
-                            return
-                        }
-
-
-                        // Set manual update to prevent redraw of pattern
-                        this.manualUpdate = true
-                        this.phygital.addLine(_.map(newLine, line => {
-                            return {
-                                x: line.x - this.offset.x ,
-                                y: line.y - this.offset.y
-                            }
-                        }), this.app.activeSurface)
-
-                    }
-                } 
-                this.cancelNewLine()
+                this.processNewLineEntry()
             }
         },
-        mouseMoveEvent(event: MouseEvent) {
-            const svgElement = this.$refs["vpgSVG"] as SVGAElement
+        mouseUp(event: MouseEvent | TouchEvent) {
+            if (this.newLine.length == 2) {
+                this.processNewLineEntry()
+            }
+        },
+        processNewLineEntry() {
+            // Update newLine to clicked position because it is not updated by mousemove on touchscreens
+            this.newLine[1] = {x: this.mouseX, y: this.mouseY}
+
+            const newLinePoint = this.cordToPoint(this.newLine[1])
+            const targetGridPoint = this.getGridPoint(newLinePoint.x, newLinePoint.y) as SVGAElement | null
+            if (targetGridPoint) {
+                if (targetGridPoint.classList.contains("__isOption")) {
+                    const newLine = [
+                        this.cordToPoint(this.newLine[0]),
+                        this.cordToPoint(this.newLine[1])
+                    ]
+                    
+                    // Prevent polylines to be added over each other
+                    const duplicate = this.$el.querySelector(`
+                            .vpg-line[dataX1="${newLine[0].x}"][dataY1="${newLine[0].y}"][dataX2="${newLine[1].x}"][dataY2="${newLine[1].y}"],
+                            .vpg-line[dataX1="${newLine[1].x}"][dataY1="${newLine[1].y}"][dataX2="${newLine[0].x}"][dataY2="${newLine[0].y}"]
+                        `)
+
+                    if (duplicate) {
+                        this.cancelNewLine()
+                        return
+                    }
+
+
+                    // Set manual update to prevent redraw of pattern
+                    this.manualUpdate = true
+                    this.phygital.addLine(_.map(newLine, line => {
+                        return {
+                            x: line.x - this.offset.x ,
+                            y: line.y - this.offset.y
+                        }
+                    }), this.app.activeSurface)
+
+                }
+            } 
+            this.cancelNewLine()
+        },
+        mouseMove(event: MouseEvent | TouchEvent) {
             // sanitize mouse position to match svg element x &  y
-            const rect = svgElement.getBoundingClientRect()
-            
-            this.mouseX = event.clientX - rect.left
-            this.mousePointX = (this.mouseX - this.cellSize/2) / this.cellSize
-            this.mouseY = event.clientY - rect.top
-            this.mousePointY = (this.mouseY - this.cellSize/2) / this.cellSize
-            
+            this.updateMousePosition(event)
+
             // Add new line logic
             if (this.newLine.length == 2) {
                 if (this.disableNewLine) {
