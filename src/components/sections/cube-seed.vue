@@ -10,6 +10,14 @@
             
             <icon type="loader" class="seed-button" label="regenerate" ref="generateButton" @click="regenerateSeed"/>
         </label>
+        <aztech-tut-message direction="bl" class="seed-section-tut" :visible="app.tutMessages.seedSection">
+            <span v-if="app.orientation == 'landscape'">
+                You can generate new models by clicking the generate button below
+            </span>
+            <span v-if="app.orientation == 'portrait'">
+                You can generate new models by clicking the generate button above
+            </span>
+        </aztech-tut-message>
     </div>
 </template>
 
@@ -17,6 +25,7 @@
 <script lang="ts">
 import { defineComponent } from "vue"
 import icon from "@/components/icon.vue"
+import AztechTutMessage from "@/components/aztech/tutorial-message.vue"
 import AztechUnderline from "@/components/aztech/underline-1.vue"
 import gsap from "@/services/gsap-wrapper"
 import _ from "lodash"
@@ -28,7 +37,8 @@ export default defineComponent({
     name: "cube-seed",
     components: {
         icon, 
-        AztechUnderline
+        AztechUnderline,
+        AztechTutMessage
     },
     props: {
         character: {
@@ -294,6 +304,20 @@ export default defineComponent({
         transition: .24s opacity ease;
     }
 }
+.seed-section-tut {
+    position: absolute;
+    top: -4px;
+    right: 16px;
+}
+
+.__isPortrait {
+    .seed-section-tut {
+        right: -8px;
+        bottom: 0px;
+        top: auto;
+    }
+}
+
 
 @container seed-section-container (min-height: 44px) {
     .seed-value {
@@ -317,6 +341,9 @@ export default defineComponent({
         .icon-svg {
             height: 24px;
         }
+    }
+    .seed-section-tut {
+        right: 18px;
     }
 }
 
@@ -362,6 +389,9 @@ export default defineComponent({
             display: block;
             // font-family: $defaultFont;
         }
+    }
+    .seed-section-tut {
+        right: 8px;
     }
 }
 </style>

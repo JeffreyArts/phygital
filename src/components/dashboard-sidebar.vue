@@ -3,14 +3,6 @@
         <aside class="dashboard-sidebar">
             <section id="s-seed">
                 <section-seed/>
-                <aztech-tut-message direction="bl" class="seed-section-tut" :visible="app.tutMessages.seedSection">
-                    <span v-if="app.orientation == 'landscape'">
-                        You can generate new models by clicking the generate button below
-                    </span>
-                    <span v-if="app.orientation == 'portrait'">
-                        You can generate new models by clicking the generate button above
-                    </span>
-                </aztech-tut-message>
             </section>
             <section id="s-surfaces">
                 <section-surfaces :activeView="app.activeView"/>
@@ -212,6 +204,7 @@ export default defineComponent({
         #s-seed {
             grid-column: 2/4;
             grid-row: 1/2;
+            z-index: 10;
         }
         
         #s-download {
@@ -249,12 +242,6 @@ export default defineComponent({
         position: absolute;
         right: 6px;
         top: -12px;
-    }
-
-    .seed-section-tut {
-        position: absolute;
-        right: 4px;
-        top: 4px; 
     }
 
     .meta-dimensions-section-tut {
@@ -335,6 +322,7 @@ export default defineComponent({
         }
 
         #s-seed {
+            z-index: 10;
             position: fixed;
             top: 6px;
             right: 20px;
@@ -374,12 +362,6 @@ export default defineComponent({
         top: -16px;
     }
 
-    .seed-section-tut {
-        position: absolute;
-        right: -8px;
-        bottom: 0px;
-    }
-
     .meta-dimensions-section-tut {
         position: absolute;
         bottom: 0px;
@@ -390,6 +372,7 @@ export default defineComponent({
         }
     }
 }
+
 
 #s-cube3d {
     svg {

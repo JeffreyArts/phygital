@@ -1,4 +1,3 @@
-import { createWebHistory } from "vue-router"
 import About from "@/routes/about.vue"
 import OtherProjects from "@/routes/other-projects.vue"
 import Sculptures from "@/routes/sculptures.vue"
