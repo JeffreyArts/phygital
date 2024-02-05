@@ -40,7 +40,12 @@ import { defineComponent } from "vue"
 import gsap from "@/services/gsap-wrapper"
 import AztechButton from "@/components/aztech/button.vue"
 import warningIcon from  "@/assets/aztech/hand-explanation-mark.svg?raw"
-import type {AztechAlertOption} from "@/types/aztech-alert"
+
+export interface AztechAlertOption {
+    label: string
+    type: "primary" | "secondary" | ""
+    onClick: (arg0: any) => void
+}
 
 export default defineComponent({
     name: "aztech-alert",

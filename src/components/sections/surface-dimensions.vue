@@ -18,7 +18,7 @@ import PhygitalStore from "@/stores/phygital"
 import AppStore from "@/stores/app"
 import AztechAlert from "@/components/aztech/alert.vue"
 import AztechInputNumber from "@/components/aztech/input-number.vue"
-import type { AztechAlertOption } from "@/types/aztech-alert"
+import { AztechAlertOption } from "@/components/aztech/alert.vue"
 
 export default defineComponent({
     name: "surface-dimensions",

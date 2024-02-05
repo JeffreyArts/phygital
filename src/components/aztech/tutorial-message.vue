@@ -573,6 +573,9 @@ export default defineComponent({
         stroke-width: 2;
         fill:#eee;
     }
+    .question-mark {
+        fill: #1c1c1e;
+    }
 }
 .dot-test {
     background-color: $black;
