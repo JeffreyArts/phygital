@@ -15,13 +15,13 @@
             <div class="bottom-shadow"></div>
         </div>
 
-        <div class="sculpture-modal" ref="modal" :class="selectedSculpture ? '__isSelected' : ''" @click="closeModel">
+        <div class="sculpture-modal" ref="modal" :class="selectedSculpture ? '__isSelected' : ''" @click="closeModel" @mouseleave="arrowMouseLeave">
             <section class="sculpture-details-container" v-if="selectedSculpture">
                 <figure class="sculpture-details-main-image">
                     <AztechGridCell>
                         <img :src="selectedSculpture.images[selectedThumbnail]" />
                     </AztechGridCell>
-                    <svg class="sculpture-modal-previous" @click="previousSculpture()" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 40 40" style="enable-background:new 0 0 40 40;" xml:space="preserve">
+                    <svg class="sculpture-modal-previous" @click="previousSculpture()" @mouseenter="arrowMouseEnter" @mouseleave="arrowMouseLeave" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 40 40" style="enable-background:new 0 0 40 40;" xml:space="preserve">
                         <g>
                             <polygon points="20,0 22.5,0 22.5,5 21.2,5 16.7,17.5 15,18.7 15,21.2 16.7,22.5 21.3,35 22.5,35 22.5,40 20,40 17.5,37.5 17.5,35 5,22.5 5,17.5 17.5,5 17.5,2.5 20,0 	"/> 
                             <polygon points="37.5,0 40,0 40,5 38.7,5 34.2,17.5 32.5,18.7 32.5,21.2 34.2,22.5 38.8,35 40,35 40,40 37.5,40 35,37.5 35,35 22.5,22.5 22.5,17.5 35,5 35,2.5 37.5,0 	"/>
@@ -46,7 +46,7 @@
                         </div>
                     </AztechGridCell>
 
-                    <svg class="sculpture-modal-next" @click="nextSculpture()" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 40 40" style="enable-background:new 0 0 40 40;" xml:space="preserve">
+                    <svg class="sculpture-modal-next" @click="nextSculpture()" @mouseenter="arrowMouseEnter" @mouseleave="arrowMouseLeave" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 40 40" style="enable-background:new 0 0 40 40;" xml:space="preserve">
                         <g>
                             <polygon points="20,40 17.5,40 17.5,35 18.8,35 23.3,22.5 25,21.3 25,18.8 23.3,17.5 18.7,5 17.5,5 17.5,0 20,0 22.5,2.5 22.5,5 35,17.5 35,22.5 22.5,35 22.5,37.5 20,40 	"/>
                             <polygon points="2.5,40 0,40 0,35 1.3,35 5.8,22.5 7.5,21.3 7.5,18.8 5.8,17.5 1.2,5 0,5 0,0 2.5,0 5,2.5 5,5 17.5,17.5 17.5,22.5 5,35 5,37.5 2.5,40 	"/>
@@ -403,6 +403,33 @@ export default defineComponent ({
             }
 
             this.updateShadows(target) 
+        },
+        arrowMouseEnter(event: MouseEvent) {
+            const currentTarget = event.currentTarget as HTMLElement
+            if (!currentTarget) {
+                return
+            }
+            let x = 4
+            if (currentTarget.classList.contains("sculpture-modal-next")){
+                x = -4
+            }
+            gsap.to(currentTarget, {
+                x,
+                duration: .32,
+                ease: "power3.out"
+            })
+        },
+        arrowMouseLeave(event: MouseEvent) {
+            const currentTarget = event.currentTarget
+            if (!currentTarget) {
+                return
+            }
+            
+            gsap.to(currentTarget, {
+                x: 0,
+                duration: .32,
+                ease: "power3.out"
+            })
         },
         updateShadows(target: HTMLElement) {
 
@@ -930,7 +957,7 @@ export default defineComponent ({
 
 .sculpture-modal-next {
     position: absolute;
-    right: -48px;
+    right: -56px;
     top: 50%;
     height: 32px;
     margin-top: -16px;
@@ -939,7 +966,7 @@ export default defineComponent ({
 
 .sculpture-modal-previous {
     position: absolute;
-    left: -48px;
+    left: -56px;
     top: 50%;
     height: 32px;
     margin-top: -16px;
