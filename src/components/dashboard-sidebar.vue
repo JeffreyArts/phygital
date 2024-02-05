@@ -87,6 +87,7 @@ export default defineComponent({
     data: () => {
         return {
             selection: {x: 0, y:0},
+            selected3DView: false,
         }
     },
     computed: {
@@ -139,6 +140,10 @@ export default defineComponent({
         },
         select3dView() {
             if (this.selection.x !== 0 && this.selection.y !== 0) {
+                this.selected3DView = true
+                setTimeout(() => {
+                    this.selected3DView = false
+                }, 1000)
                 this.$router.replace("/3D-view")
             }
         },

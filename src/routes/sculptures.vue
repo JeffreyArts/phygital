@@ -608,9 +608,14 @@ export default defineComponent ({
             this.selectSculpture(this.sculptures[nextIndex], 0)
         },
         mouseEnterEvent(event: MouseEvent){ 
-            
+            const currentTarget = event.currentTarget as HTMLElement
+            if (!currentTarget) {
+                return
+            }
+
             document.querySelectorAll(".sculpture-thumbnail").forEach( (domElement, i) => {
-                if (domElement == event.currentTarget) {
+                gsap.killTweensOf(domElement)
+                if (domElement == currentTarget) {
                     setTimeout(() => {
                         gsap.to(domElement, {
                             opacity: 1,
@@ -626,11 +631,11 @@ export default defineComponent ({
                 gsap.to(domElement, {
                     blur: 4,
                     filter: "grayscale(100%)",
-                    duration: 5,
+                    duration: 2.4,
                     ease: "power4.out"
                 })
                 gsap.to(domElement, {
-                    opacity: .2,
+                    opacity: .16,
                     duration: .8,
                     ease: "power4.out"
                 })
@@ -643,8 +648,10 @@ export default defineComponent ({
                 ease: "power4.out"
             })
 
-            const dotsHeader = this.$el.querySelectorAll(".sculpture-thumbnail-header-svg .dot")
-            const dotsFooter = this.$el.querySelectorAll(".sculpture-thumbnail-footer-svg .dot")
+            const dotsHeader = currentTarget.querySelectorAll(".sculpture-thumbnail-header-svg .dot")
+            const dotsFooter = currentTarget.querySelectorAll(".sculpture-thumbnail-footer-svg .dot")
+            gsap.killTweensOf(dotsFooter)
+            gsap.killTweensOf(dotsHeader)
             if (dotsHeader) {    
                 gsap.to(dotsHeader, {
                     stagger: {
@@ -670,8 +677,11 @@ export default defineComponent ({
             }
         },
         mouseLeaveEvent(event: MouseEvent){
-            
-            const dotsHeader = this.$el.querySelectorAll(".sculpture-thumbnail-header-svg .dot")
+            const currentTarget = event.currentTarget as HTMLElement
+            if (!currentTarget) {
+                return
+            }
+            const dotsHeader = currentTarget.querySelectorAll(".sculpture-thumbnail-header-svg .dot")
             if (dotsHeader) {    
                 gsap.to(dotsHeader, {
                     stagger: {
@@ -684,7 +694,7 @@ export default defineComponent ({
                 })
             }
             
-            const dotsFooter = this.$el.querySelectorAll(".sculpture-thumbnail-footer-svg .dot")
+            const dotsFooter = currentTarget.querySelectorAll(".sculpture-thumbnail-footer-svg .dot")
             if (dotsFooter) {    
                 gsap.to(dotsFooter, {
                     stagger: {
@@ -698,6 +708,7 @@ export default defineComponent ({
             }
 
             document.querySelectorAll(".sculpture-thumbnail").forEach( (domElement) => {
+                gsap.killTweensOf(domElement)
                 gsap.to(domElement, {
                     opacity: 1,
                     duration: .96,
@@ -705,9 +716,6 @@ export default defineComponent ({
                     blur: 0,
                     ease: "power4.out"
                 })
-                if (domElement == event.currentTarget) {
-                    return
-                }
             })
         }
     }
